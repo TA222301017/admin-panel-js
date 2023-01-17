@@ -1,6 +1,6 @@
-import { Container, Nav, Navbar } from "react-bootstrap";
+import { Container, Nav, Navbar } from "react-bootstrap"
 
-const NavigationBar = () => {
+const NavigationBar = (props) => {
     return (
         <div>
         <Navbar>
@@ -9,6 +9,7 @@ const NavigationBar = () => {
                 <Nav>
                     <Nav.Link>Test 1</Nav.Link>
                     <Nav.Link>Test 2</Nav.Link>
+                    <Nav.Link>{props.name}</Nav.Link>
                 </Nav>
             </Container>
         </Navbar>
