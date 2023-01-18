@@ -1,21 +1,26 @@
-import Button from '@mui/material/Button';
-import Link from '@mui/material/Link';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import * as React from 'react';
-import Title from './Title';
+import Button from "@mui/material/Button";
+import Link from "@mui/material/Link";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import * as React from "react";
+import Title from "./Title";
 
 // Generate Order Data
-function createData(ID,Name, KeyID, Owner) {
-  return { ID,Name, KeyID, Owner };
+function createData(ID, Name, KeyID, Owner) {
+  return { ID, Name, KeyID, Owner };
 }
 
+// hardcode for temporary data
 const rows = [
-  createData(1,'Key 01',13219030,'Taruna'),
-  createData(2,"Key 01",13219050,'Elkhan')
+  createData(1, "Key 01", 13219030, "Taruna"),
+  createData(2, "Key 02", 13219050, "Elkhan"),
+  createData(3, "Key 03", 13219033, "Sidartha"),
+  createData(4, "Key 04", 13219030, "Taruna"),
+  createData(5, "Key 05", 13219050, "Elkhan"),
+  createData(6, "Key 06", 13219033, "Sidartha"),
 ];
 
 function preventDefault(event) {
@@ -44,13 +49,16 @@ export default function KeyList() {
               <TableCell>{row.Owner}</TableCell>
 
               <TableCell align="center">
-                <Button type="submit" variant="contained">Edit</Button>
+                <Button type="submit" variant="contained">
+                  Edit
+                </Button>
               </TableCell>
 
               <TableCell align="center">
-              <Button type="submit" variant="contained" >Locate</Button>
+                <Button type="submit" variant="contained">
+                  Locate
+                </Button>
               </TableCell>
-              
             </TableRow>
           ))}
         </TableBody>
