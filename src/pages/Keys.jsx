@@ -1,5 +1,6 @@
 import React from "react";
 import LoggedInLayout from "../layouts/LoggedInLayout";
+import KeyList from "../components/KeyList";
 
 const crumbs = [
   {
@@ -19,7 +20,7 @@ const Keys = () => {
       desc="Kelola kunci-kunci dalam sistem Anda"
       breadcrumbs={crumbs}
     >
-      <div>UNIMPLEMENTED</div>
+      <KeyList />
     </LoggedInLayout>
   );
 };

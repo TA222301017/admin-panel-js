@@ -7,6 +7,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import * as React from "react";
 import Title from "./Title";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
 
 // Generate Order Data
 function createData(ID, Name, IDNumber, Role) {
@@ -30,49 +32,57 @@ function preventDefault(event) {
 export default function PersonelList() {
   return (
     <React.Fragment>
-      <Title>Personel List</Title>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>ID Number</TableCell>
-            <TableCell>Role</TableCell>
-            <TableCell align="center">Edit</TableCell>
-            <TableCell align="center">Status</TableCell>
-            <TableCell align="center">Location</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.Name}</TableCell>
-              <TableCell>{row.IDNumber}</TableCell>
-              <TableCell>{row.Role}</TableCell>
+      <Grid item xs={12}>
+        <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell>ID Number</TableCell>
+                <TableCell>Role</TableCell>
+                <TableCell align="center">Edit</TableCell>
+                <TableCell align="center">Status</TableCell>
+                <TableCell align="center">Location</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell>{row.Name}</TableCell>
+                  <TableCell>{row.IDNumber}</TableCell>
+                  <TableCell>{row.Role}</TableCell>
 
-              <TableCell align="center">
-                <Button type="submit" variant="contained">
-                  Edit
-                </Button>
-              </TableCell>
+                  <TableCell align="center">
+                    <Button type="submit" variant="contained">
+                      Edit
+                    </Button>
+                  </TableCell>
 
-              <TableCell align="center">
-                <Button type="submit" variant="contained">
-                  Status
-                </Button>
-              </TableCell>
+                  <TableCell align="center">
+                    <Button type="submit" variant="contained">
+                      Status
+                    </Button>
+                  </TableCell>
 
-              <TableCell align="center">
-                <Button type="submit" variant="contained">
-                  Locate
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
-        See more Personels
-      </Link>
+                  <TableCell align="center">
+                    <Button type="submit" variant="contained">
+                      Locate
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <Link
+            color="primary"
+            href="#"
+            onClick={preventDefault}
+            sx={{ mt: 3 }}
+          >
+            See more Personels
+          </Link>
+        </Paper>
+      </Grid>
     </React.Fragment>
   );
 }

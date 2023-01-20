@@ -7,6 +7,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import * as React from "react";
 import Title from "./Title";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
 
 // Generate Order Data
 function createData(ID, Name, KeyID, Owner) {
@@ -30,42 +32,50 @@ function preventDefault(event) {
 export default function KeyList() {
   return (
     <React.Fragment>
-      <Title>Key List</Title>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell>Key</TableCell>
-            <TableCell>Key ID</TableCell>
-            <TableCell>Owner</TableCell>
-            <TableCell align="center">Edit</TableCell>
-            <TableCell align="center">Location</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.Name}</TableCell>
-              <TableCell>{row.KeyID}</TableCell>
-              <TableCell>{row.Owner}</TableCell>
+      <Grid item xs={12}>
+        <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>Key</TableCell>
+                <TableCell>Key ID</TableCell>
+                <TableCell>Owner</TableCell>
+                <TableCell align="center">Edit</TableCell>
+                <TableCell align="center">Location</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell>{row.Name}</TableCell>
+                  <TableCell>{row.KeyID}</TableCell>
+                  <TableCell>{row.Owner}</TableCell>
 
-              <TableCell align="center">
-                <Button type="submit" variant="contained">
-                  Edit
-                </Button>
-              </TableCell>
+                  <TableCell align="center">
+                    <Button type="submit" variant="contained">
+                      Edit
+                    </Button>
+                  </TableCell>
 
-              <TableCell align="center">
-                <Button type="submit" variant="contained">
-                  Locate
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
-        See more Keys
-      </Link>
+                  <TableCell align="center">
+                    <Button type="submit" variant="contained">
+                      Locate
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <Link
+            color="primary"
+            href="#"
+            onClick={preventDefault}
+            sx={{ mt: 3 }}
+          >
+            See more Keys
+          </Link>
+        </Paper>
+      </Grid>
     </React.Fragment>
   );
 }

@@ -11,8 +11,8 @@ const Copyright = (props) => {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link color="inherit" href="https://www.itb.ac.id/">
+        TA222301017
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
