@@ -1,4 +1,4 @@
-import http from "../client";
+import http from "../../utils/httpClient";
 
 export const fetchLogin = async (data) => {
   try {
