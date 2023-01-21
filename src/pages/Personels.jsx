@@ -1,5 +1,6 @@
 import React from "react";
 import LoggedInLayout from "../layouts/LoggedInLayout";
+import PersonelList from "../components/PersonelList";
 
 const crumbs = [
   {
@@ -19,7 +20,7 @@ const Personels = () => {
       desc="Kelola personel-personel yang menggunakan sistem Anda"
       breadcrumbs={crumbs}
     >
-      <div>UNIMPLEMENTED</div>
+      <PersonelList />
     </LoggedInLayout>
   );
 };

@@ -1,5 +1,5 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
 import AppBar from "@mui/material/AppBar";
@@ -15,6 +15,7 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import { useLocation, useNavigate } from "react-router-dom";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 import {
   DashboardSharp,
@@ -56,6 +57,11 @@ const navItems = [
     icon: <KeySharp />,
     name: "Keys List",
     path: "/key",
+  },
+  {
+    icon: <LogoutIcon />,
+    name: "Log Out",
+    path: "/#",
   },
 ];
 

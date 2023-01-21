@@ -1,5 +1,6 @@
 import React from "react";
 import LoggedInLayout from "../layouts/LoggedInLayout";
+import AccessLogsList from "../components/AccessLogsList";
 
 const crumbs = [
   {
@@ -19,6 +20,7 @@ const AccessLogs = () => {
       desc="Tinjau riwayat akses yang tercatat dalam sistem"
       breadcrumbs={crumbs}
     >
+      <AccessLogsList />
       <div>UNIMPLEMENTED</div>
     </LoggedInLayout>
   );
