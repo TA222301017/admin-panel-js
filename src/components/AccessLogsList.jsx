@@ -29,21 +29,6 @@ function preventDefault(event) {
   event.preventDefault();
 }
 
-function handleEditButton(id) {
-  // function when button edit clicked
-  console.log("button " + id);
-}
-
-function handleLocateButton(id) {
-  // function when button locate clicked
-  console.log("Locate " + id);
-}
-
-function handleStatusButton(id) {
-  // function when button status clicked
-  console.log("Status " + id);
-}
-
 export default function AccessLogsList() {
   return (
     <React.Fragment>
