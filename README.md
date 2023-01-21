@@ -1,8 +1,3 @@
-# Modul need install before run this Project
-
-This project need this modul
-    - React-bootstrap
-
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

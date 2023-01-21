@@ -11,18 +11,18 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 
 // Generate Order Data
-function createData(ID, Name, KeyID, Owner) {
-  return { ID, Name, KeyID, Owner };
+function createData(ID, Name, Location, Key, Time) {
+  return { ID, Name, Location, Key, Time };
 }
 
 // hardcode for temporary data
 const rows = [
-  createData(1, "Key 01", 13219030, "Taruna"),
-  createData(2, "Key 02", 13219050, "Elkhan"),
-  createData(3, "Key 03", 13219033, "Sidartha"),
-  createData(4, "Key 04", 13219030, "Taruna"),
-  createData(5, "Key 05", 13219050, "Elkhan"),
-  createData(6, "Key 06", 13219033, "Sidartha"),
+  createData(1, "Taruna", "Ruangan 1", "Key 01", "dump"),
+  createData(2, "Elkhan", "Ruangan 2", "Key 02", "dump"),
+  createData(3, "Sidartha", "Ruangan 3", "Key 03", "dump"),
+  createData(4, "Taruna", "Ruangan 4", "Key 04", "dump"),
+  createData(5, "Elkhan", "Ruangan 5", "Key 05", "dump"),
+  createData(6, "Sidartha", "Ruangan 6", "Key 06", "dump"),
 ];
 
 function preventDefault(event) {
@@ -39,7 +39,12 @@ function handleLocateButton(id) {
   console.log("Locate " + id);
 }
 
-export default function KeyList() {
+function handleStatusButton(id) {
+  // function when button status clicked
+  console.log("Status " + id);
+}
+
+export default function AccessLogsList() {
   return (
     <React.Fragment>
       <Grid item xs={12}>
@@ -47,39 +52,19 @@ export default function KeyList() {
           <Table size="small">
             <TableHead>
               <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell>Location</TableCell>
                 <TableCell>Key</TableCell>
-                <TableCell>Key ID</TableCell>
-                <TableCell>Owner</TableCell>
-                <TableCell align="center">Edit</TableCell>
-                <TableCell align="center">Location</TableCell>
+                <TableCell>TimeStamp</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {rows.map((row) => (
                 <TableRow key={row.id}>
                   <TableCell>{row.Name}</TableCell>
-                  <TableCell>{row.KeyID}</TableCell>
-                  <TableCell>{row.Owner}</TableCell>
-
-                  <TableCell align="center">
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      onClick={() => handleEditButton(row.Name)}
-                    >
-                      Edit
-                    </Button>
-                  </TableCell>
-
-                  <TableCell align="center">
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      onClick={() => handleLocateButton(row.Name)}
-                    >
-                      Locate
-                    </Button>
-                  </TableCell>
+                  <TableCell>{row.Location}</TableCell>
+                  <TableCell>{row.Key}</TableCell>
+                  <TableCell>{row.Time}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -90,7 +75,7 @@ export default function KeyList() {
             onClick={preventDefault}
             sx={{ mt: 3 }}
           >
-            See more Keys
+            See more Personels
           </Link>
         </Paper>
       </Grid>
