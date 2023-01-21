@@ -12,7 +12,11 @@ const initialState = {
   value: {
     personels: [{}],
     personel: {},
-    pagination: {},
+    pagination: {
+      page: 1,
+      limit: 20,
+      total: 1,
+    },
   },
 };
 

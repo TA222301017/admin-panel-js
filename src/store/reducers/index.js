@@ -12,9 +12,6 @@ export const baseState = {
 };
 
 export const baseReducers = {
-  clear: (state) => {
-    state = baseState;
-  },
   idlelize: (state) => {
     state.status = "idle";
   },

@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import AccessLogs from "./pages/AccessLogs";
 import KeyPosition from "./pages/KeyPosition";
@@ -12,29 +17,35 @@ import AddKey from "./pages/AddKey";
 import EditKey from "./pages/EditKey";
 import Keys from "./pages/Keys";
 import HealthcheckLogs from "./pages/HealthcheckLogs";
+import { nullLiteralTypeAnnotation } from "@babel/types";
 
 const AppRouter = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" exact element={<Login />} />
-
-        <Route path="/dashboard" exact element={<Dashboard />} />
-        <Route path="/access-log" exact element={<AccessLogs />} />
-        <Route path="/healthcheck-log" exact element={<HealthcheckLogs />} />
-
-        <Route path="/lock" exact element={<Locks />} />
-        <Route path="/lock/edit/:lockId" exact element={<EditLock />} />
-
-        <Route path="/personel" exact element={<Personels />} />
-        <Route path="/personel/add" exact element={<AddPersonel />} />
-        <Route path="/personel/edit/:personelId" element={<EditPersonel />} />
-
-        <Route path="/key" exact element={<Keys />} />
-        <Route path="/key/add" exact element={<AddKey />} />
-        <Route path="/key/edit/:keyId" exact element={<EditKey />} />
-        <Route path="/key/position" exact element={<KeyPosition />} />
       </Routes>
+
+      {localStorage.getItem("token") !== "" &&
+      localStorage.getItem("token") !== null ? (
+        <Routes>
+          <Route path="/dashboard" exact element={<Dashboard />} />
+          <Route path="/access-log" exact element={<AccessLogs />} />
+          <Route path="/healthcheck-log" exact element={<HealthcheckLogs />} />
+
+          <Route path="/lock" exact element={<Locks />} />
+          <Route path="/lock/edit/:lockId" exact element={<EditLock />} />
+
+          <Route path="/personel" exact element={<Personels />} />
+          <Route path="/personel/add" exact element={<AddPersonel />} />
+          <Route path="/personel/edit/:personelId" element={<EditPersonel />} />
+
+          <Route path="/key" exact element={<Keys />} />
+          <Route path="/key/add" exact element={<AddKey />} />
+          <Route path="/key/edit/:keyId" exact element={<EditKey />} />
+          <Route path="/key/position" exact element={<KeyPosition />} />
+        </Routes>
+      ) : null}
     </Router>
     // <div>
     //   <div className="border">

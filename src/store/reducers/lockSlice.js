@@ -7,7 +7,11 @@ const initialState = {
   value: {
     lock: {},
     locks: [{}],
-    pagination: {},
+    pagination: {
+      page: 1,
+      limit: 20,
+      total: 1,
+    },
   },
 };
 
@@ -20,39 +24,40 @@ export const EDIT_LOCK = createAsyncThunk("lock/EDIT_LOCK", editLockRequest);
 export const lockSlice = createSlice({
   name: "lock",
   initialState,
-  reducers: { ...baseReducers },
   extraReducers: (builder) => {
     builder.addCase(GET_LOCKS.pending, (state) => {
-      state.status = stateStatus.pending;
+      state.status = "pending";
     });
     builder.addCase(GET_LOCKS.fulfilled, (state, action) => {
-      state.status = stateStatus.fulfilled;
-      state.locks = action.payload.data;
+      state.status = "fulfilled";
+      state.value.locks = action.payload.data;
       state.pagination = action.payload.pagination;
     });
     builder.addCase(GET_LOCKS.rejected, (state, action) => {
+      state.status = "failed";
       state.error = action.payload.msg;
     });
 
     builder.addCase(GET_LOCK.pending, (state) => {
-      state.status = stateStatus.pending;
+      state.status = "pending";
     });
     builder.addCase(GET_LOCK.fulfilled, (state, action) => {
-      state.status = stateStatus.fulfilled;
-      state.lock = action.payload.data;
+      state.status = "fulfilled";
+      state.value.lock = action.payload.data;
     });
     builder.addCase(GET_LOCK.rejected, (state, action) => {
       state.error = action.payload.msg;
     });
 
     builder.addCase(EDIT_LOCK.pending, (state) => {
-      state.status = stateStatus.pending;
+      state.status = "pending";
     });
     builder.addCase(EDIT_LOCK.fulfilled, (state, action) => {
-      state.status = stateStatus.fulfilled;
-      state.lock = action.payload.data;
+      state.status = "fulfilled";
+      state.value.lock = action.payload.data;
     });
     builder.addCase(EDIT_LOCK.rejected, (state, action) => {
+      state.status = "failed";
       state.error = action.payload.msg;
     });
   },

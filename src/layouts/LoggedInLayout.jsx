@@ -25,6 +25,8 @@ import {
   KeySharp,
   PersonSharp,
 } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
+import { clearUser } from "../store/reducers/userSlice";
 const drawerWidth = 240;
 
 const navItems = [
@@ -58,16 +60,12 @@ const navItems = [
     name: "Keys List",
     path: "/key",
   },
-  {
-    icon: <LogoutIcon />,
-    name: "Log Out",
-    path: "/#",
-  },
 ];
 
 const LoggedInLayout = ({ children, title, breadcrumbs, desc }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -111,6 +109,21 @@ const LoggedInLayout = ({ children, title, breadcrumbs, desc }) => {
               </ListItemButton>
             </ListItem>
           ))}
+          <ListItem disablePadding>
+            <ListItemButton
+              onClick={() => {
+                localStorage.removeItem("token");
+                dispatch(clearUser());
+                navigate("/");
+              }}
+              disableRipple
+            >
+              <ListItemIcon>
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Log Out"} />
+            </ListItemButton>
+          </ListItem>
         </List>
       </Drawer>
       <Box
