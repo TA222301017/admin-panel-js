@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import LoggedInLayout from "../layouts/LoggedInLayout";
-import { asyncLogin } from "../store/user/userSlice";
-import Deposits from "../components/Deposits";
-import { Grid, Paper } from "@mui/material";
+import { LOGIN } from "../store/reducers/userSlice";
 
 const crumbs = [
   {
@@ -17,16 +15,15 @@ const Dashboard = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("ASDF");
-    if (user.status !== "fulfilled") {
-      dispatch(asyncLogin({ username: "username", password: "password" }));
-    }
+    // if (user.status !== "fulfilled") {
+    dispatch(LOGIN({ username: "username", password: "password" }));
+    // }
   }, []);
 
   return (
     <LoggedInLayout
       title="Dashboard"
-      desc="Selamat datang pada Admin-Panels Sistem Ta222301017"
+      desc="Selamat datang di Admin Panels Sistem TA222301017"
       breadcrumbs={crumbs}
     ></LoggedInLayout>
   );

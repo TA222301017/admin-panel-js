@@ -9,6 +9,9 @@ import * as React from "react";
 import Title from "./Title";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { GET_KEYS } from "../store/reducers/keySlice";
 
 // Generate Order Data
 function createData(ID, Name, KeyID, Owner) {
@@ -40,6 +43,13 @@ function handleLocateButton(id) {
 }
 
 export default function KeyList() {
+  const keys = useSelector((state) => state.key.value.keys);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(GET_KEYS({ page: 1, limit: 20, status: true, keyword: "" }));
+  }, []);
+
   return (
     <React.Fragment>
       <Grid item xs={12}>
@@ -55,11 +65,11 @@ export default function KeyList() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {keys.map((row) => (
                 <TableRow key={row.id}>
-                  <TableCell>{row.Name}</TableCell>
-                  <TableCell>{row.KeyID}</TableCell>
-                  <TableCell>{row.Owner}</TableCell>
+                  <TableCell>{row.name}</TableCell>
+                  <TableCell>{row.key_id}</TableCell>
+                  <TableCell>{row.owner}</TableCell>
 
                   <TableCell align="center">
                     <Button

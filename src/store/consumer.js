@@ -1,6 +1,6 @@
 import http from "../utils/httpClient";
 
-const handleError = (err) => {
+export const handleError = (err) => {
   if (err.response) {
     return err.response.data;
   } else {
@@ -9,16 +9,16 @@ const handleError = (err) => {
   }
 };
 
-export const login = async ({ username, password }) => {
+export const loginRequest = async ({ username, password }) => {
   try {
-    let res = await http.post(`in`, { username, password });
+    let res = await http.post(`login`, { username, password });
     return res.data;
   } catch (err) {
     return handleError(err);
   }
 };
 
-export const getAccessRule = async ({ personelId }) => {
+export const getAccessRuleRequest = async ({ personelId }) => {
   try {
     let res = await http.get(`/access/${personelId}`);
     return res.data;
@@ -27,7 +27,7 @@ export const getAccessRule = async ({ personelId }) => {
   }
 };
 
-export const addAccessRule = async ({
+export const addAccessRuleRequest = async ({
   lockId,
   personelId,
   startsAt,
@@ -46,7 +46,7 @@ export const addAccessRule = async ({
   }
 };
 
-export const editAccessRule = async ({
+export const editAccessRuleRequest = async ({
   lockId,
   personelId,
   startsAt,
@@ -66,16 +66,16 @@ export const editAccessRule = async ({
   }
 };
 
-export const deleteAccessRule = async ({ accessRuleId }) => {
+export const deleteAccessRuleRequest = async ({ accessRuleId }) => {
   try {
     let res = await http.delete(`/access/${accessRuleId}`);
     return res.data;
-  } catch (error) {
+  } catch (err) {
     return handleError(err);
   }
 };
 
-export const getAccessLog = async ({
+export const getAccessLogRequest = async ({
   page,
   limit,
   startDate,
@@ -95,39 +95,259 @@ export const getAccessLog = async ({
       },
     });
     return res.data;
-  } catch (error) {
+  } catch (err) {
     return handleError(err);
   }
 };
 
-export const getHealthcheckLog = async () => {};
+export const getHealthcheckLogRequest = async ({
+  page,
+  limit,
+  startDate,
+  endDate,
+  personel,
+  location,
+}) => {
+  try {
+    let res = await http.get(`/log/healthcheck`, {
+      params: {
+        page: page,
+        limit: limit,
+        startdate: timeToAPIDateString(startDate),
+        enddate: timeToAPIDateString(endDate),
+        personel: personel,
+        location: location,
+      },
+    });
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
 
-export const getRSSILog = async () => {};
+export const getRSSILogRequest = async ({
+  personelId,
+  page,
+  limit,
+  startDate,
+  endDate,
+  personel,
+  location,
+}) => {
+  try {
+    let res = await http.get(`/log/rssi/${personelId}`, {
+      params: {
+        page: page,
+        limit: limit,
+        startdate: timeToAPIDateString(startDate),
+        enddate: timeToAPIDateString(endDate),
+        personel: personel,
+        location: location,
+      },
+    });
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
 
-export const getLocks = async () => {};
+export const getLocksRequest = async ({ page, limit, status, keyword }) => {
+  try {
+    let res = await http.get(`/device/lock`, {
+      params: {
+        page: page,
+        limit: limit,
+        status: status,
+        keyword: keyword,
+      },
+    });
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
 
-export const getLock = async () => {};
+export const getLockRequest = async ({ lockId }) => {
+  try {
+    let res = await http.get(`/device/lock/${lockId}`);
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
 
-export const editLock = async () => {};
+export const editLockRequest = async ({
+  lockId,
+  name,
+  description,
+  location,
+}) => {
+  try {
+    let res = await http.patch(`/device/lock/${lockId}`, {
+      name: name,
+      description: description,
+      location: location,
+    });
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
 
-export const getKeys = async () => {};
+export const getKeysRequest = async ({ page, limit, status, keyword }) => {
+  try {
+    let res = await http.get(`/device/key`, {
+      params: {
+        page: page,
+        limit: limit,
+        status: status,
+        keyword: keyword,
+      },
+    });
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
 
-export const getKey = async () => {};
+export const getKeyRequest = async ({ keyId }) => {
+  try {
+    let res = await http.get(`/device/key/${keyId}`);
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
 
-export const addKey = async () => {};
+export const addKeyRequest = async ({ keyId, name, status, description }) => {
+  try {
+    let res = await http.post(`/device/key`, {
+      key_id: keyId,
+      name: name,
+      status: status,
+      description: description,
+    });
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
 
-export const editKey = async () => {};
+export const editKeyRequest = async ({
+  id,
+  keyId,
+  name,
+  status,
+  description,
+}) => {
+  try {
+    let res = await http.patch(`/device/key/${id}`, {
+      key_id: keyId,
+      name: name,
+      status: status,
+      description: description,
+    });
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
 
-export const checkLocks = async () => {};
+export const checkLocksRequest = async () => {
+  try {
+    let res = await http.get(`/device/lock/check`);
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
 
-export const checkLock = async () => {};
+export const checkLockRequest = async ({ lockId }) => {
+  try {
+    let res = await http.get(`/device/lock/check/${lockId}`);
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
 
-export const getPersonels = async () => {};
+export const getPersonelsRequest = async ({ page, limit, status, keyword }) => {
+  try {
+    let res = await http.get(`/personel`, {
+      params: {
+        page: page,
+        limit: limit,
+        status: status,
+        keyword: keyword,
+      },
+    });
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
 
-export const getPersonel = async () => {};
+export const getPersonelRequest = async ({ personelId }) => {
+  try {
+    let res = await http.get(`/personel/${personelId}`);
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
 
-export const addPersonel = async () => {};
+export const addPersonelRequest = async ({
+  name,
+  personelId,
+  roleId,
+  keyId,
+  status,
+  description,
+}) => {
+  try {
+    let res = await http.post(`/personel`, {
+      name: name,
+      personel_id: personelId,
+      role_id: roleId,
+      key_id: keyId,
+      status: status,
+      description: description,
+    });
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
 
-export const editPersonel = async () => {};
+export const editPersonelRequest = async ({
+  id,
+  name,
+  personelId,
+  roleId,
+  keyId,
+  status,
+  description,
+}) => {
+  try {
+    let res = await http.patch(`/personel/${id}`, {
+      name: name,
+      personel_id: personelId,
+      role_id: roleId,
+      key_id: keyId,
+      status: status,
+      description: description,
+    });
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
 
-export const dashboard = async () => {};
+export const dashboardRequest = async () => {
+  try {
+    let res = await http.get(`/dashboard`);
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};

@@ -9,6 +9,9 @@ import * as React from "react";
 import Title from "./Title";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { GET_PERSONELS } from "../store/reducers/personelSlice";
 
 // Generate Order Data
 function createData(ID, Name, IDNumber, Role) {
@@ -45,6 +48,13 @@ function handleStatusButton(id) {
 }
 
 export default function PersonelList() {
+  const personels = useSelector((state) => state.personel.value.personels);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(GET_PERSONELS({ page: 1, limit: 20, status: true, keyword: "" }));
+  }, []);
+
   return (
     <React.Fragment>
       <Grid item xs={12}>
@@ -61,17 +71,17 @@ export default function PersonelList() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {personels.map((row) => (
                 <TableRow key={row.id}>
-                  <TableCell>{row.Name}</TableCell>
-                  <TableCell>{row.IDNumber}</TableCell>
-                  <TableCell>{row.Role}</TableCell>
+                  <TableCell>{row.name}</TableCell>
+                  <TableCell>{row.personel_id}</TableCell>
+                  <TableCell>{row.role}</TableCell>
 
                   <TableCell align="center">
                     <Button
                       type="submit"
                       variant="contained"
-                      onClick={() => handleEditButton(row.Name)}
+                      onClick={() => handleEditButton(row.name)}
                     >
                       Edit
                     </Button>
@@ -81,7 +91,7 @@ export default function PersonelList() {
                     <Button
                       type="submit"
                       variant="contained"
-                      onClick={() => handleStatusButton(row.Name)}
+                      onClick={() => handleStatusButton(row.name)}
                     >
                       Status
                     </Button>
@@ -91,7 +101,7 @@ export default function PersonelList() {
                     <Button
                       type="submit"
                       variant="contained"
-                      onClick={() => handleLocateButton(row.Name)}
+                      onClick={() => handleLocateButton(row.name)}
                     >
                       Locate
                     </Button>
