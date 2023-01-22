@@ -1,85 +1,156 @@
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { Grid } from "@mui/material";
+import { Grid, Tooltip } from "@mui/material";
+import MenuItem from "@mui/material/MenuItem";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import Select from "@mui/material/Select";
+import { CopyAllSharp } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
+import { toastInfo } from "../store/reducers/toastSlice";
 
-const FormEditLock = () => {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      Location: data.get("Location"),
-      IPAddress: data.get("IPAddress"),
-      LockID: data.get("LockID"),
-      PublicKey: data.get("PublicKey"),
-      Keterangan: data.get("Keterangan"),
-    });
-  };
-
+const FormEditLock = ({ lockData, handleSubmit }) => {
+  const dispatch = useDispatch();
   return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit}
-      sx={{
-        "& .MuiTextField-root": { m: 2, width: "50ch" },
-      }}
-      noValidate
-      autoComplete="off"
-    >
-      <Grid
-        container
-        direction="column"
-        alignItems="baseline"
-        justifyContent="center"
+    lockData.name && (
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        noValidate
+        autoComplete="off"
       >
-        <TextField
-          required
-          id="Location"
-          name="Location"
-          label="Location Keys"
-          helperText="Berisikan Lokasi Kunci"
-        />
+        <Grid container spacing={5}>
+          <Grid
+            item
+            xs={6}
+            direction="column"
+            style={{
+              display: "flex",
+              flexFlow: "column wrap",
+              gap: "20px",
+              paddingTop: 0,
+              marginTop: "60px",
+            }}
+          >
+            <TextField
+              fullWidth
+              size="small"
+              required
+              id="label"
+              name="label"
+              label="Label"
+              helperText="Berisikan Label/Nama Lock"
+              inputProps={{ defaultValue: lockData.name }}
+            />
 
-        <TextField
-          required
-          id="IPAddress"
-          name="IPAddress"
-          label="IP Address"
-          helperText="Berisikan IP Address Kunci Terpasang"
-        />
+            <TextField
+              fullWidth
+              size="small"
+              required
+              id="location"
+              name="location"
+              label="Location"
+              helperText="Berisikan Lokasi Lock"
+              inputProps={{ defaultValue: lockData.location }}
+            />
 
-        <TextField
-          required
-          id="LockID"
-          name="LockID"
-          label="Lock ID"
-          helperText="Berisikan ID Kunci"
-        />
+            <TextField
+              fullWidth
+              size="small"
+              required
+              id="ip_address"
+              name="ip_address"
+              label="IP Address"
+              helperText="Berisikan IP Address Lock yang Terpasang"
+              inputProps={{ defaultValue: lockData.ip_address, readOnly: true }}
+            />
 
-        <TextField
-          required
-          id="PublicKey"
-          name="PublicKey"
-          label="Public Key"
-          helperText="Berisikan Public Key Kunci"
-        />
+            <TextField
+              fullWidth
+              size="small"
+              required
+              id="LockID"
+              name="LockID"
+              label="Lock ID"
+              helperText="Berisikan ID Lock"
+              inputProps={{ defaultValue: lockData.lock_id, readOnly: true }}
+            />
+            <TextField
+              fullWidth
+              size="small"
+              required
+              id="public_key"
+              name="public_key"
+              label="Public Key"
+              helperText="Berisikan Public Key Kunci"
+              inputProps={{
+                defaultValue: lockData.public_key,
+                readOnly: true,
+              }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end" ti>
+                    <Tooltip title="Copy Public Key to Clipboard">
+                      <IconButton
+                        onClick={() => {
+                          navigator.clipboard.writeText(lockData.public_key);
+                          dispatch(toastInfo("Copied to Clipboard!"));
+                        }}
+                        edge="end"
+                      >
+                        <CopyAllSharp />
+                      </IconButton>
+                    </Tooltip>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            direction="column"
+            style={{
+              display: "flex",
+              flexFlow: "column wrap",
+              gap: "20px",
+              paddingTop: 0,
+              marginTop: "60px",
+            }}
+          >
+            <FormControl sx={{ minWidth: 150 }} size="small" fullWidth>
+              <InputLabel id="status-select-label">Status</InputLabel>
+              <Select
+                labelId="status-select-label"
+                label="Status"
+                name="status"
+                defaultValue={lockData.status}
+              >
+                <MenuItem value={true}>Active</MenuItem>
+                <MenuItem value={false}>Not Active</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              fullWidth
+              multiline
+              rows={10}
+              size="small"
+              id="description"
+              name="description"
+              label="Keterangan lebih lanjut"
+              inputProps={{ defaultValue: lockData.description }}
+            />
 
-        <TextField
-          id="Keterangan"
-          name="Keterangan"
-          label="Keterangan lebih lanjut"
-        />
-
-        <Button
-          type="submit"
-          variant="outlined"
-          color="inherit"
-          sx={{ m: 2, width: "57ch" }}
-        >
-          SIMPAN
-        </Button>
-      </Grid>
-    </Box>
+            <Button type="submit" variant="outlined" color="inherit" fullWidth>
+              SIMPAN
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
+    )
   );
 };
 

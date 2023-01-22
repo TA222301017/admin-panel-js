@@ -47,50 +47,54 @@ export const personelSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(GET_PERSONELS.pending, (state) => {
       state.status = "pending";
+      state.error = "";
     });
     builder.addCase(GET_PERSONELS.fulfilled, (state, action) => {
       state.value.personels = action.payload.data;
       state.value.pagination = action.payload.pagination;
       state.status = "fulfilled";
+      state.error = action.payload.error;
     });
-    builder.addCase(GET_PERSONELS.rejected, (state, action) => {
-      state.error = action.payload.msg;
+    builder.addCase(GET_PERSONELS.rejected, (state) => {
       state.status = "failed";
     });
 
     builder.addCase(GET_PERSONEL.pending, (state) => {
       state.status = "pending";
+      state.error = "";
     });
     builder.addCase(GET_PERSONEL.fulfilled, (state, action) => {
       state.value.personel = action.payload.data;
       state.status = "fulfilled";
+      state.error = action.payload.error;
     });
-    builder.addCase(GET_PERSONEL.rejected, (state, action) => {
-      state.error = action.payload.msg;
+    builder.addCase(GET_PERSONEL.rejected, (state) => {
       state.status = "failed";
     });
 
     builder.addCase(ADD_PERSONEL.pending, (state) => {
       state.status = "pending";
+      state.error = "";
     });
     builder.addCase(ADD_PERSONEL.fulfilled, (state, action) => {
       state.value.personel = action.payload.data;
       state.status = "fulfilled";
+      state.error = action.payload.error;
     });
-    builder.addCase(ADD_PERSONEL.rejected, (state, action) => {
-      state.error = action.payload.msg;
+    builder.addCase(ADD_PERSONEL.rejected, (state) => {
       state.status = "failed";
     });
 
     builder.addCase(EDIT_PERSONEL.pending, (state) => {
       state.status = "pending";
+      state.error = "";
     });
     builder.addCase(EDIT_PERSONEL.fulfilled, (state, action) => {
       state.value.personel = action.payload.data;
       state.status = "fulfilled";
+      state.error = action.payload.error;
     });
-    builder.addCase(EDIT_PERSONEL.rejected, (state, action) => {
-      state.error = action.payload.msg;
+    builder.addCase(EDIT_PERSONEL.rejected, (state) => {
       state.status = "failed";
     });
   },

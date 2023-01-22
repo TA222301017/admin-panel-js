@@ -19,11 +19,12 @@ export const userSlice = createSlice({
     builder
       .addCase(LOGIN.pending, (state) => {
         state.status = "loading";
+        state.error = "";
       })
       .addCase(LOGIN.fulfilled, (state, action) => {
         state.user = action.payload.data;
         state.token = action.payload.token;
-        state.error = "";
+        state.error = action.payload.error;
         state.status = "fulfilled";
       });
   },

@@ -35,51 +35,55 @@ export const keySlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(GET_KEYS.pending, (state) => {
       state.status = "pending";
+      state.error = "";
     });
     builder.addCase(GET_KEYS.fulfilled, (state, action) => {
       state.status = "fulfilled";
       state.value.keys = action.payload.data;
       state.value.pagination = action.payload.pagination;
+      state.error = action.payload.error;
     });
-    builder.addCase(GET_KEYS.rejected, (state, action) => {
+    builder.addCase(GET_KEYS.rejected, (state) => {
       state.status = "failed";
-      state.error = action.payload.msg;
     });
 
     builder.addCase(GET_KEY.pending, (state) => {
       state.status = "pending";
+      state.error = "";
     });
     builder.addCase(GET_KEY.fulfilled, (state, action) => {
       state.status = "fulfilled";
       state.value.key = action.payload.data;
+      state.error = action.payload.error;
     });
-    builder.addCase(GET_KEY.rejected, (state, action) => {
+    builder.addCase(GET_KEY.rejected, (state) => {
       state.status = "failed";
-      state.error = action.payload.msg;
     });
 
     builder.addCase(EDIT_KEY.pending, (state) => {
       state.status = "pending";
+      state.error = "";
     });
     builder.addCase(EDIT_KEY.fulfilled, (state, action) => {
       state.status = "fulfilled";
       state.value.key = action.payload.data;
+      state.error = action.payload.error;
     });
-    builder.addCase(EDIT_KEY.rejected, (state, action) => {
+    builder.addCase(EDIT_KEY.rejected, (state) => {
       state.status = "failed";
-      state.error = action.payload.msg;
     });
 
     builder.addCase(ADD_KEY.pending, (state) => {
       state.status = "pending";
+      state.error = "";
     });
     builder.addCase(ADD_KEY.fulfilled, (state, action) => {
       state.status = "fulfilled";
       state.value.key = action.payload.data;
+      state.error = action.payload.error;
     });
-    builder.addCase(ADD_KEY.rejected, (state, action) => {
+    builder.addCase(ADD_KEY.rejected, (state) => {
       state.status = "failed";
-      state.error = action.payload.msg;
     });
   },
 });

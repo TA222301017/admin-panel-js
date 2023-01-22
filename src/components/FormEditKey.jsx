@@ -3,25 +3,20 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Grid } from "@mui/material";
+import MenuItem from "@mui/material/MenuItem";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
-const FormEditKey = () => {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      KeyID: data.get("KeyID"),
-      Label: data.get("Label"),
-      Status: data.get("Status"),
-      Keterangan: data.get("Keterangan"),
-    });
-  };
+const FormEditKey = ({ keyData, handleSubmit }) => {
   return (
     <Box
+      style={{ padding: "20px 0 0 0", width: "50ch" }}
       component="form"
       onSubmit={handleSubmit}
-      sx={{
-        "& .MuiTextField-root": { m: 2, width: "50ch" },
-      }}
+      // sx={{
+      //   "& .MuiTextField-root": { width: "50ch" },
+      // }}
       noValidate
       autoComplete="off"
     >
@@ -29,41 +24,59 @@ const FormEditKey = () => {
         container
         direction="column"
         alignItems="baseline"
-        justifyContent="center"
+        style={{ display: "flex", flexFlow: "column wrap", gap: "20px" }}
       >
         <TextField
+          fullWidth
+          size="small"
           required
-          id="KeyID"
-          name="KeyID"
+          id="key_id"
+          name="key_id"
           label="Key ID"
           helperText="Berisikan ID Kunci"
+          inputProps={{ defaultValue: keyData?.key_id }}
         />
         <TextField
+          fullWidth
+          size="small"
           required
-          id="Label"
-          name="Label"
+          id="label"
+          name="label"
           label="Label"
           helperText="Berisikan Label Kunci"
+          inputProps={{ defaultValue: keyData?.name }}
+          autoFocus={true}
         />
-        <TextField
-          required
-          id="Status"
-          name="Status"
-          label="Status"
-          helperText="Berisikan Status Kunci"
-        />
+        <FormControl sx={{ minWidth: 150 }} size="small" fullWidth>
+          <InputLabel id="status-select-label">Status</InputLabel>
+          <Select
+            labelId="status-select-label"
+            label="Status"
+            name="status"
+            defaultValue={keyData?.status}
+          >
+            <MenuItem value={true}>Active</MenuItem>
+            <MenuItem value={false}>Not Active</MenuItem>
+          </Select>
+        </FormControl>
 
         <TextField
-          id="Keterangan"
-          name="Keterangan"
+          fullWidth
+          size="small"
+          id="description"
+          name="description"
+          multiline
+          rows={5}
           label="Keterangan lebih lanjut"
+          inputProps={{ defaultValue: keyData?.description }}
         />
 
         <Button
           type="submit"
           variant="outlined"
           color="inherit"
-          sx={{ m: 2, width: "57ch" }}
+          size="medium"
+          sx={{ mt: 2, width: "57ch" }}
         >
           SIMPAN
         </Button>
