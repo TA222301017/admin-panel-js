@@ -65,7 +65,7 @@ const HealthcheckLogs = () => {
   ];
 
   const handlePageChange = (pageNum) => {
-    setPage(pageNum);
+    setPage(pageNum + 1);
     dispatch(
       GET_HEALTHCHECK_LOG({
         page: pageNum + 1,
@@ -146,14 +146,14 @@ const HealthcheckLogs = () => {
       <DataTable
         onPageChange={handlePageChange}
         onPageSizeChange={handlePageSizeChange}
-        page={page}
+        page={page - 1}
         limit={limit}
         loading={status === "pending"}
         total={pagination.total}
         columns={columnDef}
         rows={healthcheck.map((e, i) => ({
           ...e,
-          index: page * limit + i + 1,
+          index: (page - 1) * limit + i + 1,
         }))}
       />
     </LoggedInLayout>

@@ -14,9 +14,6 @@ const FormEditKey = ({ keyData, handleSubmit }) => {
       style={{ padding: "20px 0 0 0", width: "50ch" }}
       component="form"
       onSubmit={handleSubmit}
-      // sx={{
-      //   "& .MuiTextField-root": { width: "50ch" },
-      // }}
       noValidate
       autoComplete="off"
     >

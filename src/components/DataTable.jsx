@@ -14,7 +14,7 @@ const DataTable = ({
   return (
     <DataGrid
       autoHeight
-      getRowId={(row) => page * limit + row.index}
+      getRowId={(row) => row.index}
       paginationMode="server"
       rowCount={total}
       loading={loading}

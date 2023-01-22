@@ -61,7 +61,7 @@ const AccessLogs = () => {
   ];
 
   const handlePageChange = (pageNum) => {
-    setPage(pageNum);
+    setPage(pageNum + 1);
     dispatch(
       GET_ACCESS_LOG({
         page: pageNum + 1,
@@ -138,14 +138,17 @@ const AccessLogs = () => {
         </Button>
       </DataTableFilterForm>
       <DataTable
-        page={page}
+        page={page - 1}
         limit={limit}
         total={pagination.total}
         loading={status === "pending"}
         onPageChange={handlePageChange}
         onPageSizeChange={handlePageSizeChange}
         columns={columnDef}
-        rows={access.map((el, i) => ({ ...el, index: page * limit + i + 1 }))}
+        rows={access.map((el, i) => ({
+          ...el,
+          index: (page - 1) * limit + i + 1,
+        }))}
       />
     </LoggedInLayout>
   );

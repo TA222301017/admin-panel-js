@@ -1,5 +1,4 @@
 export const timeToAPIDateString = (time) => {
-  console.log(time);
   let d = time;
   let year = d.getFullYear();
   let month = (d.getMonth() + 1).toString().padStart(2, "0");
