@@ -1,10 +1,8 @@
 import React from "react";
 import LoggedInLayout from "../layouts/LoggedInLayout";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import { Card, MenuItem } from "@mui/material";
 import { Grid } from "@mui/material";
 import FormEditPersonel from "../components/FormEditPersonel";
+import CardPersonel from "../components/CardPersonel";
 
 const crumbs = [
   {
@@ -21,7 +19,6 @@ const crumbs = [
   },
 ];
 
-
 const EditPersonel = () => {
   return (
     <LoggedInLayout
@@ -29,13 +26,39 @@ const EditPersonel = () => {
       desc="Ubah data personel yang terdaftar dalam sistem"
       breadcrumbs={crumbs}
     >
-      <Grid container direction="row" spacing={1} columns={16}>
-        <Grid>
+      <Grid container direction="row" spacing={5}>
+        <Grid
+          item
+          xs={"auto"}
+          direction="column"
+          style={{
+            display: "flex",
+            flexFlow: "column wrap",
+            gap: "20px",
+            paddingTop: 0,
+            marginTop: "60px",
+          }}
+        >
           <FormEditPersonel />
         </Grid>
 
-        <Grid>
-          <div>test</div>
+        <Grid
+          item
+          xs={6}
+          direction="column"
+          style={{
+            display: "flex",
+            flexFlow: "column wrap",
+            gap: "20px",
+            paddingTop: 0,
+            marginTop: "75px",
+          }}
+        >
+          <CardPersonel />
+          <CardPersonel />
+          <CardPersonel />
+          <CardPersonel />
+          <CardPersonel />
         </Grid>
       </Grid>
     </LoggedInLayout>
