@@ -1,5 +1,6 @@
 import React from "react";
 import LoggedInLayout from "../layouts/LoggedInLayout";
+import FormEditKey from "../components/FormEditKey";
 
 const crumbs = [
   {
@@ -23,7 +24,7 @@ const EditKey = () => {
       desc="Ubah data kunci yang ada dalam sistem"
       breadcrumbs={crumbs}
     >
-      <div>EditKey</div>
+      <FormEditKey />
     </LoggedInLayout>
   );
 };
