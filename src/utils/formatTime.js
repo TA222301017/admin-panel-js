@@ -1,7 +1,8 @@
-const timeToAPIDateString = (time) => {
+export const timeToAPIDateString = (time) => {
+  console.log(time);
   let d = time;
   let year = d.getFullYear();
-  let month = d.getMonth().toString().padStart(2, "0");
+  let month = (d.getMonth() + 1).toString().padStart(2, "0");
   let day = d.getDate().toString().padStart(2, "0");
   let hour = d.getHours().toString().padStart(2, "0");
   let minute = d.getMinutes().toString().padStart(2, "0");
@@ -14,7 +15,7 @@ const timeToAPIDateString = (time) => {
   return `${year}-${month}-${day}T${hour}:${minute}:${second}${offset}`;
 };
 
-const timeStringToAPIDateString = (timeString) => {
+export const timeStringToAPIDateString = (timeString) => {
   let d = new Date(timeString);
   return timeString(d);
 };

@@ -31,7 +31,7 @@ export const lockSlice = createSlice({
     builder.addCase(GET_LOCKS.fulfilled, (state, action) => {
       state.status = "fulfilled";
       state.value.locks = action.payload.data;
-      state.pagination = action.payload.pagination;
+      state.value.pagination = action.payload.pagination;
     });
     builder.addCase(GET_LOCKS.rejected, (state, action) => {
       state.status = "failed";

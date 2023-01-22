@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import LoggedInLayout from "../layouts/LoggedInLayout";
+import Button from "@mui/material/Button";
 import { useNavigate } from "react-router";
 import { CheckSharp, EditSharp } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,6 +23,7 @@ const crumbs = [
 const Locks = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
+  const [filter, setFilter] = useState({ keyword: "", status: true });
 
   const {
     value: { locks, pagination },
@@ -74,8 +76,8 @@ const Locks = () => {
       GET_LOCKS({
         page: pageNum + 1,
         limit: limit,
-        status: true,
-        keyword: "",
+        status: filter.status,
+        keyword: filter.keyword,
       })
     );
   };
@@ -87,8 +89,8 @@ const Locks = () => {
       GET_LOCKS({
         page: 1,
         limit: pageSize,
-        status: true,
-        keyword: "",
+        status: filter.status,
+        keyword: filter.keyword,
       })
     );
   };
@@ -96,7 +98,11 @@ const Locks = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     let data = new FormData(e.target);
-    console.log(data);
+    setFilter({
+      keyword: data.get("keyword"),
+      status: data.get("status"),
+    });
+
     dispatch(
       GET_LOCKS({
         page: 1,
@@ -112,8 +118,8 @@ const Locks = () => {
       GET_LOCKS({
         page: pagination.page,
         limit: pagination.limit,
-        status: true,
-        keyword: "",
+        status: filter.status,
+        keyword: filter.keyword,
       })
     );
   }, []);
@@ -124,7 +130,11 @@ const Locks = () => {
       desc="Kelola lock-lock dalam sistem Anda"
       breadcrumbs={crumbs}
     >
-      <DataTableFilterForm handleSearch={handleSearch} />
+      <DataTableFilterForm handleSearch={handleSearch}>
+        <Button type="button" size="medium" variant="outlined">
+          Export
+        </Button>
+      </DataTableFilterForm>
 
       <DataTable
         onPageChange={handlePageChange}

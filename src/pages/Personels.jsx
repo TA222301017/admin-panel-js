@@ -3,6 +3,7 @@ import LoggedInLayout from "../layouts/LoggedInLayout";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
 import { GET_PERSONELS } from "../store/reducers/personelSlice";
+import Button from "@mui/material/Button";
 import DataTable from "../components/DataTable";
 import { useNavigate } from "react-router";
 import { EditSharp, LocationSearchingSharp } from "@mui/icons-material";
@@ -22,6 +23,7 @@ const crumbs = [
 const Personels = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
+  const [filter, setFilter] = useState({ keyword: "", status: true });
 
   const {
     value: { personels, pagination },
@@ -69,8 +71,8 @@ const Personels = () => {
       GET_PERSONELS({
         page: pageNum + 1,
         limit: limit,
-        status: true,
-        keyword: "",
+        status: filter.status,
+        keyword: filter.keyword,
       })
     );
   };
@@ -82,8 +84,8 @@ const Personels = () => {
       GET_PERSONELS({
         page: 1,
         limit: pageSize,
-        status: true,
-        keyword: "",
+        status: filter.status,
+        keyword: filter.keyword,
       })
     );
   };
@@ -91,7 +93,10 @@ const Personels = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     let data = new FormData(e.target);
-    console.log(data);
+    setFilter({
+      status: data.get("status"),
+      keyword: data.get("keyword"),
+    });
     dispatch(
       GET_PERSONELS({
         page: 1,
@@ -107,8 +112,8 @@ const Personels = () => {
       GET_PERSONELS({
         page: pagination.page,
         limit: pagination.limit,
-        status: true,
-        keyword: "",
+        status: filter.status,
+        keyword: filter.keyword,
       })
     );
   }, []);
@@ -119,7 +124,20 @@ const Personels = () => {
       desc="Kelola personel-personel yang menggunakan sistem Anda"
       breadcrumbs={crumbs}
     >
-      <DataTableFilterForm handleSearch={handleSearch} />
+      <DataTableFilterForm handleSearch={handleSearch}>
+        <Button type="button" size="medium" variant="outlined">
+          Export
+        </Button>
+
+        <Button
+          type="button"
+          size="medium"
+          variant="outlined"
+          onClick={() => navigate("/personel/add")}
+        >
+          Tambah
+        </Button>
+      </DataTableFilterForm>
 
       <DataTable
         onPageChange={handlePageChange}
