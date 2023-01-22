@@ -1,5 +1,6 @@
 import React from "react";
 import LoggedInLayout from "../layouts/LoggedInLayout";
+import FormEditLock from "../components/FormEditLock";
 
 const crumbs = [
   {
@@ -23,7 +24,7 @@ const EditLock = () => {
       desc="Ubah data lock yang ada dalam sistem"
       breadcrumbs={crumbs}
     >
-      <div>UNIMPLEMENTED</div>
+      <FormEditLock />
     </LoggedInLayout>
   );
 };
