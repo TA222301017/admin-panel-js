@@ -1,3 +1,4 @@
+import React, { useState, useMemo } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -17,33 +18,48 @@ import AddKey from "./pages/AddKey";
 import EditKey from "./pages/EditKey";
 import Keys from "./pages/Keys";
 import HealthcheckLogs from "./pages/HealthcheckLogs";
-import { nullLiteralTypeAnnotation } from "@babel/types";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useSelector } from "react-redux";
 
 const AppRouter = () => {
+  const mode = useSelector((state) => state.color.value);
+
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode]
+  );
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/" exact element={<Login />} />
-      </Routes>
+    <ThemeProvider theme={theme}>
+      <Router>
+        <Routes>
+          <Route path="/" exact element={<Login />} />
+        </Routes>
 
-      <Routes>
-        <Route path="/dashboard" exact element={<Dashboard />} />
-        <Route path="/access-log" exact element={<AccessLogs />} />
-        <Route path="/healthcheck-log" exact element={<HealthcheckLogs />} />
+        <Routes>
+          <Route path="/dashboard" exact element={<Dashboard />} />
+          <Route path="/access-log" exact element={<AccessLogs />} />
+          <Route path="/healthcheck-log" exact element={<HealthcheckLogs />} />
 
-        <Route path="/lock" exact element={<Locks />} />
-        <Route path="/lock/edit/:lockId" exact element={<EditLock />} />
+          <Route path="/lock" exact element={<Locks />} />
+          <Route path="/lock/edit/:lockId" exact element={<EditLock />} />
 
-        <Route path="/personel" exact element={<Personels />} />
-        <Route path="/personel/add" exact element={<AddPersonel />} />
-        <Route path="/personel/edit/:personelId" element={<EditPersonel />} />
+          <Route path="/personel" exact element={<Personels />} />
+          <Route path="/personel/add" exact element={<AddPersonel />} />
+          <Route path="/personel/edit/:personelId" element={<EditPersonel />} />
 
-        <Route path="/key" exact element={<Keys />} />
-        <Route path="/key/add" exact element={<AddKey />} />
-        <Route path="/key/edit/:keyId" exact element={<EditKey />} />
-        <Route path="/key/position" exact element={<KeyPosition />} />
-      </Routes>
-    </Router>
+          <Route path="/key" exact element={<Keys />} />
+          <Route path="/key/add" exact element={<AddKey />} />
+          <Route path="/key/edit/:keyId" exact element={<EditKey />} />
+          <Route path="/key/position" exact element={<KeyPosition />} />
+        </Routes>
+      </Router>
+    </ThemeProvider>
     // <div>
     //   <div className="border">
     //     <Dashboard />

@@ -7,6 +7,7 @@ import logReducers from "./reducers/logSlice";
 import roleReducers from "./reducers/roleSlice";
 import toastReducers from "./reducers/toastSlice";
 import accessRuleReducers from "./reducers/accessRuleSlice";
+import colorReducers from "./reducers/colorSlice";
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
     role: roleReducers,
     toast: toastReducers,
     accessRule: accessRuleReducers,
+    color: colorReducers,
   },
 });
 

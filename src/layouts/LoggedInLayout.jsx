@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Box } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
 import Toolbar from "@mui/material/Toolbar";
@@ -23,10 +23,13 @@ import {
   LockSharp,
   KeySharp,
   PersonSharp,
+  Brightness7Sharp,
+  Brightness4Sharp,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUser } from "../store/reducers/userSlice";
 import { toastClose } from "../store/reducers/toastSlice";
+import { toggleColor } from "../store/reducers/colorSlice";
 const drawerWidth = 240;
 
 const navItems = [
@@ -68,6 +71,7 @@ const LoggedInLayout = ({ children, title, breadcrumbs, desc }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+  const color = useSelector((state) => state.color.value);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -122,6 +126,21 @@ const LoggedInLayout = ({ children, title, breadcrumbs, desc }) => {
         component="main"
         sx={{ flexGrow: 1, bgcolor: "background.default", p: 5 }}
       >
+        <IconButton
+          onClick={() => {
+            console.log(color);
+            dispatch(toggleColor());
+          }}
+          color="inherit"
+          style={{ float: "right" }}
+          size="large"
+        >
+          {color === "dark" ? (
+            <Brightness7Sharp fontSize="inherit" />
+          ) : (
+            <Brightness4Sharp fontSize="inherit" />
+          )}
+        </IconButton>
         <Typography variant="h3">{title}</Typography>
         <Typography variant="h7">{desc}</Typography>
         <br />

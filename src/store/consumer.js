@@ -1,12 +1,24 @@
 import http from "../utils/httpClient";
 import { timeToAPIDateString } from "../utils/formatTime";
 
+const apiCallError = {
+  data: {},
+  error: "failed to call api",
+  msg: "failed to call api",
+  pagination: {
+    page: 1,
+    limit: 20,
+    total: 0,
+    last: 1,
+  },
+};
+
 export const handleError = (err) => {
   if (err.response) {
     return err.response.data;
   } else {
     console.log(err);
-    return {};
+    return apiCallError;
   }
 };
 

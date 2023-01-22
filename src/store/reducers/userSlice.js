@@ -1,13 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { loginRequest } from "../consumer";
+import { dashboardRequest, loginRequest } from "../consumer";
 import { baseReducers, baseState } from "./index";
 
 const initialState = {
   ...baseState,
-  value: {},
+  value: {
+    user: {},
+    dashboard: {},
+  },
 };
 
 export const LOGIN = createAsyncThunk("user/LOGIN", loginRequest);
+
+export const DASHBOARD = createAsyncThunk("user/DASHBOARD", dashboardRequest);
 
 export const userSlice = createSlice({
   name: "user",
@@ -23,7 +28,19 @@ export const userSlice = createSlice({
       })
       .addCase(LOGIN.fulfilled, (state, action) => {
         state.status = "fulfilled";
-        state.value = action.payload.data;
+        state.value.user = action.payload.data;
+        state.token = action.payload.token;
+        state.error = action.payload.error;
+      });
+
+    builder
+      .addCase(DASHBOARD.pending, (state) => {
+        state.status = "pending";
+        state.error = "";
+      })
+      .addCase(DASHBOARD.fulfilled, (state, action) => {
+        state.status = "fulfilled";
+        state.value.dashboard = action.payload.data;
         state.token = action.payload.token;
         state.error = action.payload.error;
       });

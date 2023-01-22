@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import LoggedInLayout from "../layouts/LoggedInLayout";
-import { LOGIN } from "../store/reducers/userSlice";
+import { DASHBOARD, LOGIN } from "../store/reducers/userSlice";
 import CardDashboard from "../components/CardDashboard";
 import { Grid } from "@mui/material";
 import { LockSharp, KeySharp, PersonSharp } from "@mui/icons-material";
+import LoaderCover from "../components/LoaderCover";
 
 const crumbs = [
   {
@@ -14,36 +15,49 @@ const crumbs = [
 ];
 
 const Dashboard = () => {
-  const user = useSelector((state) => state.user);
+  const {
+    value: { dashboard },
+    status,
+  } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // if (user.status !== "fulfilled") {
-    dispatch(LOGIN({ username: "username", password: "password" }));
-    // }
+    dispatch(DASHBOARD());
   }, []);
 
   return (
     <LoggedInLayout
       title="Dashboard"
       desc="Selamat datang di Admin Panels Sistem TA222301017"
-      breadcrumbs={crumbs}
+      // breadcrumbs={crumbs}
     >
-      <Grid container direction={"row"} spacing={2}>
-        <Grid item xs={3} md={4}>
-          <CardDashboard Title={"Keys"} Value={123} Icon={<KeySharp />} />
+      <LoaderCover show={status === "pending"} />
+
+      {status === "fulfilled" && (
+        <Grid container direction={"row"} spacing={5}>
+          <Grid item xs={3} md={4}>
+            <CardDashboard
+              title={"Keys"}
+              value={dashboard.key_cnt}
+              icon={<KeySharp />}
+            />
+          </Grid>
+          <Grid item xs={3} md={4}>
+            <CardDashboard
+              title={"Locks"}
+              value={dashboard.lock_cnt}
+              icon={<LockSharp />}
+            />
+          </Grid>
+          <Grid item xs={3} md={4}>
+            <CardDashboard
+              title={"Personel"}
+              value={dashboard.personel_cnt}
+              icon={<PersonSharp />}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={3} md={4}>
-          <CardDashboard Title={"Device"} Value={123} Icon={<LockSharp />} />
-        </Grid>
-        <Grid item xs={3} md={4}>
-          <CardDashboard
-            Title={"Personel"}
-            Value={123}
-            Icon={<PersonSharp />}
-          />
-        </Grid>
-      </Grid>
+      )}
     </LoggedInLayout>
   );
 };
