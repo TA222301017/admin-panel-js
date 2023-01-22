@@ -37,7 +37,8 @@ const Personels = () => {
   const columnDef = [
     { field: "index", headerName: "No.", width: 10, flex: 0.2 },
     { field: "name", headerName: "Name", flex: 0.5 },
-    { field: "personel_id", headerName: "ID Number", flex: 1 },
+    { field: "personel_id", headerName: "ID Number", flex: 0.8 },
+    { field: "role", headerName: "Role", flex: 0.5 },
     {
       field: "status",
       type: "boolean",
@@ -52,7 +53,7 @@ const Personels = () => {
           icon={<EditSharp />}
           label="Edit"
           title="Edit"
-          onClick={() => navigate(`/personel/edit/${params.id}`)}
+          onClick={() => navigate(`/personel/edit/${params.row.id}`)}
           showInMenu
         />,
         <GridActionsCellItem

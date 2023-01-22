@@ -26,10 +26,9 @@ const EditLock = () => {
   const {
     value: { lock },
     status,
-    error,
   } = useSelector((state) => state.lock);
-  const { lockId } = useParams();
 
+  const { lockId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -65,7 +64,7 @@ const EditLock = () => {
     >
       <LoaderCover show={status === "pending"} />
 
-      {lock.name && (
+      {status === "fulfilled" && (
         <FormEditLock lockData={lock} handleSubmit={handleSubmit} />
       )}
     </LoggedInLayout>

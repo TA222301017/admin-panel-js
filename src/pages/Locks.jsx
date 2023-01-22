@@ -57,13 +57,13 @@ const Locks = () => {
           icon={<EditSharp />}
           label="Edit"
           title="Edit"
-          onClick={() => navigate(`/lock/edit/${params.id}`)}
+          onClick={() => navigate(`/lock/edit/${params.row.id}`)}
           showInMenu
         />,
         <GridActionsCellItem
           icon={<CheckSharp />}
           label="Check"
-          onClick={() => handleCheckLock(params.id)}
+          onClick={() => handleCheckLock(params.row.id)}
           showInMenu
         />,
       ],

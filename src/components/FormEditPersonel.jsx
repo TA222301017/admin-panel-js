@@ -1,9 +1,13 @@
-import React from "react";  
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { MenuItem } from "@mui/material";
 import { Grid } from "@mui/material";
+import CardPersonel from "./CardPersonel";
+import { useDispatch, useSelector } from "react-redux";
+import { GET_KEYS } from "../store/reducers/keySlice";
+import { GET_ROLES } from "../store/reducers/roleSlice";
 
 const peran = [
   { value: "Value Peran1", label: "Peran1" },
@@ -11,89 +15,137 @@ const peran = [
   { value: "Value Peran3", label: "Peran3" },
 ];
 
-const kunci = [
-  { value: "Value Kunci1", label: "Kunci1" },
-  { value: "Value Kunci2", label: "Kunci2" },
-  { value: "Value Kunci3", label: "Kunci3" },
-];
+const FormEditPersonel = ({ personelData, handleSubmit }) => {
+  const {
+    value: { keys },
+    status: keyStatus,
+  } = useSelector((state) => state.key);
 
-const status = [
-  { value: "Value Status1", label: "Status1" },
-  { value: "Value Status2", label: "Status2" },
-  { value: "Value Status3", label: "Status3" },
-];
+  const {
+    value: { roles },
+    status: roleStatus,
+  } = useSelector((state) => state.role);
 
-const FormEditPersonel = () => {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      Nama: data.get("Nama"),
-      IDKTP: data.get("IDKTP"),
-      Peran: data.get("Peran"),
-      kunci: data.get("kunci"),
-      status: data.get("status"),
-      Keterangan: data.get("Keterangan"),
-    });
-  };
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(
+      GET_KEYS({
+        page: 1,
+        limit: 1000,
+      })
+    );
+
+    dispatch(GET_ROLES());
+  }, []);
+
   return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit}
-      sx={{
-        "& .MuiTextField-root": { m: 2, width: "50ch" },
-      }}
-      noValidate
-      autoComplete="off"
-    >
-      <Grid
-        container
-        direction="column"
-        alignItems="baseline"
-        justifyContent="center"
-      >
-        <TextField required id="Nama" name="Nama" label="Nama" />
-
-        <TextField required id="IDKTP" name="IDKTP" label="No. KTP" />
-
-        <TextField id="Peran" name="Peran" select label="Peran">
-          {peran.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
-
-        <TextField id="kunci" name="kunci" select label="kunci">
-          {kunci.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
-
-        <TextField id="status" name="status" select label="status">
-          {status.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
-
-        <TextField
-          id="Keterangan"
-          name="Keterangan"
-          label="Keterangan lebih lanjut"
-        />
-
-        <Button
-          type="submit"
-          variant="outlined"
-          color="inherit"
-          sx={{ m: 2, width: "57ch" }}
+    <Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
+      <Grid container direction="row" spacing={5}>
+        <Grid
+          item
+          xs={6}
+          direction="column"
+          style={{
+            display: "flex",
+            flexFlow: "column wrap",
+            gap: "20px",
+            paddingTop: 0,
+            marginTop: "60px",
+          }}
         >
-          SIMPAN
-        </Button>
+          <TextField
+            size="small"
+            required
+            id="name"
+            name="name"
+            label="Nama"
+            inputProps={{ defaultValue: personelData?.name }}
+          />
+
+          <TextField
+            size="small"
+            required
+            id="personel_id"
+            name="personel_id"
+            label="No. KTP"
+            inputProps={{ defaultValue: personelData?.personel_id }}
+          />
+
+          {roleStatus === "fulfilled" && (
+            <TextField
+              size="small"
+              id="role_id"
+              name="role_id"
+              select
+              label="Peran"
+              inputProps={{ defaultValue: personelData?.role_id }}
+            >
+              {roles.map((el) => (
+                <MenuItem key={el.id} value={el.id}>
+                  {el.name}
+                </MenuItem>
+              ))}
+            </TextField>
+          )}
+
+          {keyStatus === "fulfilled" && (
+            <TextField
+              size="small"
+              id="key_id"
+              name="key_id"
+              select
+              label="Kunci"
+              inputProps={{ defaultValue: personelData?.key_id }}
+            >
+              {keys.map((el) => (
+                <MenuItem key={el.id} value={el.id}>
+                  {el.name}
+                </MenuItem>
+              ))}
+            </TextField>
+          )}
+
+          <TextField
+            size="small"
+            id="status"
+            name="status"
+            select
+            label="Status"
+            inputProps={{ defaultValue: personelData?.status }}
+          >
+            <MenuItem value={true}>Active</MenuItem>
+            <MenuItem value={false}>Not Active</MenuItem>
+          </TextField>
+
+          <TextField
+            multiline
+            rows={5}
+            size="small"
+            id="description"
+            name="description"
+            label="Keterangan lebih lanjut"
+            inputProps={{ defaultValue: personelData?.description }}
+          />
+
+          <Button type="submit" variant="outlined" color="inherit" fullWidth>
+            SIMPAN
+          </Button>
+        </Grid>
+        <Grid
+          item
+          xs={6}
+          direction="column"
+          style={{
+            display: "flex",
+            flexFlow: "column wrap",
+            gap: "20px",
+            paddingTop: 0,
+            marginTop: "60px",
+          }}
+        >
+          <CardPersonel />
+        </Grid>
       </Grid>
     </Box>
   );

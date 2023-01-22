@@ -5,6 +5,8 @@ import {
   getPersonelRequest,
   addPersonelRequest,
   editPersonelRequest,
+  getAccessRuleRequest,
+  getRolesRequest,
 } from "../consumer";
 
 const initialState = {
@@ -17,6 +19,8 @@ const initialState = {
       limit: 20,
       total: 1,
     },
+    access_rules: [],
+    roles: [],
   },
 };
 

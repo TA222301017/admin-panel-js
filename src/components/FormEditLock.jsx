@@ -11,9 +11,11 @@ import Select from "@mui/material/Select";
 import { CopyAllSharp } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { toastInfo } from "../store/reducers/toastSlice";
+import { useEffect } from "react";
 
 const FormEditLock = ({ lockData, handleSubmit }) => {
   const dispatch = useDispatch();
+
   return (
     <Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
       <Grid container spacing={5}>

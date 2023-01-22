@@ -67,7 +67,9 @@ const EditKey = () => {
     >
       <LoaderCover show={status === "pending"} />
 
-      {key.name && <FormEditKey keyData={key} handleSubmit={handleSubmit} />}
+      {status === "fulfilled" && (
+        <FormEditKey keyData={key} handleSubmit={handleSubmit} />
+      )}
     </LoggedInLayout>
   );
 };

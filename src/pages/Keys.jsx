@@ -53,7 +53,7 @@ const Keys = () => {
           icon={<EditSharp />}
           label="Edit"
           title="Edit"
-          onClick={() => navigate(`/key/edit/${params.id}`)}
+          onClick={() => navigate(`/key/edit/${params.row.id}`)}
           showInMenu
         />,
         <GridActionsCellItem

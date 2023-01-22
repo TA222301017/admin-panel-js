@@ -1,6 +1,11 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+import FormEditPersonel from "../components/FormEditPersonel";
+import LoaderCover from "../components/LoaderCover";
 import LoggedInLayout from "../layouts/LoggedInLayout";
-
+import { ADD_PERSONEL } from "../store/reducers/personelSlice";
+import { toastError, toastSuccess } from "../store/reducers/toastSlice";
 
 const crumbs = [
   {
@@ -18,13 +23,41 @@ const crumbs = [
 ];
 
 const AddPersonel = () => {
+  const { status } = useSelector((state) => state.personel);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    dispatch(
+      ADD_PERSONEL({
+        name: data.get("name"),
+        personelId: data.get("personel_id"),
+        roleId: Number(data.get("role_id")),
+        keyId: Number(data.get("key_id")),
+        status: Boolean(data.get("status")),
+        description: data.get("description"),
+      })
+    ).then((res) => {
+      if (res.payload.error) {
+        dispatch(toastError(res.payload.error));
+      } else {
+        dispatch(toastSuccess("Perubahan berhasil disimpan"));
+        navigate("/personel");
+      }
+    });
+  };
+
   return (
     <LoggedInLayout
       title="Add Personel"
       desc="Daftarkan personel baru ke dalam sistem"
       breadcrumbs={crumbs}
     >
-      <div>UNIMPLEMENTED</div>
+      <LoaderCover show={status === "pending"} />
+
+      <FormEditPersonel handleSubmit={handleSubmit} />
     </LoggedInLayout>
   );
 };

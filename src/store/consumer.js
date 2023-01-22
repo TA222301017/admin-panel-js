@@ -12,7 +12,16 @@ export const handleError = (err) => {
 
 export const loginRequest = async ({ username, password }) => {
   try {
-    let res = await http.post(`login`, { username, password });
+    let res = await http.post(`/login`, { username, password });
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
+
+export const getRolesRequest = async () => {
+  try {
+    let res = await http.get(`/personel/role`);
     return res.data;
   } catch (err) {
     return handleError(err);

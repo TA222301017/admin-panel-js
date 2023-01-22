@@ -37,63 +37,55 @@ const CardPersonel = () => {
   );
 
   return (
-    <Card variant="outlined">
-      <CardHeader title="Access Point xxx"></CardHeader>
+    <Card variant="outlined" style={{ marginTop: 0 }}>
+      <CardHeader title="Access Rule" />
       <CardContent>
-        <Grid container direction="row" spacing={2}>
-          <Grid
-            item
-            direction="column"
-            xs
-            style={{
-              display: "flex",
-              flexFlow: "column wrap",
-              paddingTop: 0,
-              marginTop: "20px",
-            }}
-          >
-            <Typography variant="inherit">Titik Akses</Typography>
-            <TextField fullWidth id="Peran" name="Peran" select label="Peran">
-              {titikAkses.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
+        <Grid container spacing={2} direction="column">
+          <Grid item>
+            <Grid item direction="column" xs>
+              <TextField
+                fullWidth
+                id="lock_id"
+                name="lock_id"
+                select
+                label="Lokasi"
+                size="small"
+              >
+                {titikAkses.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
           </Grid>
-
-          <Grid
-            item
-            direction="column"
-            xs
-            style={{
-              display: "flex",
-              flexFlow: "column wrap",
-              paddingTop: 0,
-              marginTop: "20px",
-            }}
-          >
-            <Typography variant="inherit">Waktu Mulai</Typography>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateTimePicker
-                value={startDate}
-                onChange={setStartDate}
-                ampm={false}
-                renderInput={(params) => (
-                  <TextField {...params} size="large" name="startdate" />
-                )}
-              />
-              <br></br>
-              <Typography variant="inherit">Waktu Berakhir</Typography>
-              <DateTimePicker
-                value={endDate}
-                onChange={setEndDate}
-                ampm={false}
-                renderInput={(params) => (
-                  <TextField {...params} size="large" name="enddate" />
-                )}
-              />
-            </LocalizationProvider>
+          <Grid item>
+            <Grid container spacing={2} direction="row">
+              <Grid item xs={6}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateTimePicker
+                    value={startDate}
+                    onChange={setStartDate}
+                    ampm={false}
+                    renderInput={(params) => (
+                      <TextField {...params} size="small" name="startdate" />
+                    )}
+                  />
+                </LocalizationProvider>
+              </Grid>
+              <Grid item xs={6}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateTimePicker
+                    value={endDate}
+                    onChange={setEndDate}
+                    ampm={false}
+                    renderInput={(params) => (
+                      <TextField {...params} size="small" name="enddate" />
+                    )}
+                  />
+                </LocalizationProvider>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </CardContent>

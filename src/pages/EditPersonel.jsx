@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import LoggedInLayout from "../layouts/LoggedInLayout";
 import { Grid } from "@mui/material";
 import FormEditPersonel from "../components/FormEditPersonel";
 import CardPersonel from "../components/CardPersonel";
+import { useNavigate, useParams } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { EDIT_PERSONEL, GET_PERSONEL } from "../store/reducers/personelSlice";
+import { toastError, toastSuccess } from "../store/reducers/toastSlice";
+import LoaderCover from "../components/LoaderCover";
 
-const crumbs = [
+const crumbs = (personelId) => [
   {
     name: "Home",
     path: "/dashboard",
@@ -14,53 +19,59 @@ const crumbs = [
     path: "/personel",
   },
   {
-    name: "Personel",
-    path: "/personel/edit",
+    name: "Edit",
+    path: `/personel/edit/${personelId}`,
   },
 ];
 
 const EditPersonel = () => {
+  const {
+    value: { personel },
+    status,
+  } = useSelector((state) => state.personel);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { personelId } = useParams();
+
+  useEffect(() => {
+    dispatch(GET_PERSONEL({ personelId: personelId }));
+  }, []);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    dispatch(
+      EDIT_PERSONEL({
+        id: personelId,
+        name: data.get("name"),
+        personelId: data.get("personel_id"),
+        roleId: Number(data.get("role_id")),
+        keyId: Number(data.get("key_id")),
+        status: Boolean(data.get("status")),
+        description: data.get("description"),
+      })
+    ).then((res) => {
+      if (res.payload.error) {
+        dispatch(toastError(res.payload.error));
+      } else {
+        dispatch(toastSuccess("Perubahan berhasil disimpan"));
+        navigate("/personel");
+      }
+    });
+  };
+
   return (
     <LoggedInLayout
       title="Edit Personel"
       desc="Ubah data personel yang terdaftar dalam sistem"
-      breadcrumbs={crumbs}
+      breadcrumbs={crumbs(personelId)}
     >
-      <Grid container direction="row" spacing={5}>
-        <Grid
-          item
-          xs={"auto"}
-          direction="column"
-          style={{
-            display: "flex",
-            flexFlow: "column wrap",
-            gap: "20px",
-            paddingTop: 0,
-            marginTop: "60px",
-          }}
-        >
-          <FormEditPersonel />
-        </Grid>
+      <LoaderCover show={status === "pending"} />
 
-        <Grid
-          item
-          xs={6}
-          direction="column"
-          style={{
-            display: "flex",
-            flexFlow: "column wrap",
-            gap: "20px",
-            paddingTop: 0,
-            marginTop: "75px",
-          }}
-        >
-          <CardPersonel />
-          <CardPersonel />
-          <CardPersonel />
-          <CardPersonel />
-          <CardPersonel />
-        </Grid>
-      </Grid>
+      {status === "fulfilled" && (
+        <FormEditPersonel handleSubmit={handleSubmit} personelData={personel} />
+      )}
     </LoggedInLayout>
   );
 };
