@@ -12,22 +12,20 @@ const DataTable = ({
   loading,
 }) => {
   return (
-    <div style={{ height: "100%", width: "100%" }}>
-      <DataGrid
-        autoHeight
-        getRowId={(row) => page * limit + row.index}
-        paginationMode="server"
-        rowCount={total}
-        loading={loading}
-        rows={rows}
-        columns={columns}
-        pageSize={limit}
-        page={page}
-        onPageChange={onPageChange}
-        onPageSizeChange={onPageSizeChange}
-        rowsPerPageOptions={[10, 20, 50, 100]}
-      />
-    </div>
+    <DataGrid
+      autoHeight
+      getRowId={(row) => page * limit + row.index}
+      paginationMode="server"
+      rowCount={total}
+      loading={loading}
+      rows={rows}
+      columns={columns}
+      pageSize={limit}
+      page={page}
+      onPageChange={onPageChange}
+      onPageSizeChange={onPageSizeChange}
+      rowsPerPageOptions={[10, 20, 50, 100]}
+    />
   );
 };
 

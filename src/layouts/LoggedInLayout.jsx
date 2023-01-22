@@ -2,7 +2,6 @@ import * as React from "react";
 import { Box } from "@mui/material";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
-import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
@@ -12,10 +11,10 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import { useLocation, useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 import {
   DashboardSharp,
@@ -25,8 +24,9 @@ import {
   KeySharp,
   PersonSharp,
 } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { clearUser } from "../store/reducers/userSlice";
+import { toastClose } from "../store/reducers/toastSlice";
 const drawerWidth = 240;
 
 const navItems = [
@@ -63,6 +63,8 @@ const navItems = [
 ];
 
 const LoggedInLayout = ({ children, title, breadcrumbs, desc }) => {
+  const toast = useSelector((state) => state.toast);
+
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -70,16 +72,6 @@ const LoggedInLayout = ({ children, title, breadcrumbs, desc }) => {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      {/* <AppBar
-        position="fixed"
-        sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
-      >
-        <Toolbar>
-          <Typography variant="h6" noWrap component="div">
-            {title}
-          </Typography>
-        </Toolbar>
-      </AppBar> */}
       <Drawer
         sx={{
           width: drawerWidth,
@@ -144,6 +136,21 @@ const LoggedInLayout = ({ children, title, breadcrumbs, desc }) => {
         </Breadcrumbs>
         {children}
       </Box>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        autoHideDuration={5000}
+        onClose={() => dispatch(toastClose())}
+        open={toast.show}
+        key="topcenter"
+      >
+        <Alert
+          severity={toast.variant}
+          sx={{ width: "100%" }}
+          onClose={() => dispatch(toastClose())}
+        >
+          {toast.value}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
