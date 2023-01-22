@@ -17,6 +17,7 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.7.0",
     "recharts": "^2.3.2",
+    "suspense-overlay": "^1.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
