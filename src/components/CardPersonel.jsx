@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import {
@@ -10,6 +10,9 @@ import {
   CardHeader,
 } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 const titikAkses = [
   { value: "Value titikAkses1", label: "titikAkses1" },
@@ -25,6 +28,13 @@ const CardPersonel = () => {
   const simpanButton = () => {
     console.log("simpan pushed");
   };
+
+  const [startDate, setStartDate] = useState(
+    new Date().toLocaleDateString() + " 00:00"
+  );
+  const [endDate, setEndDate] = useState(
+    new Date().toLocaleDateString() + " 23:59"
+  );
 
   return (
     <Card variant="outlined">
@@ -63,14 +73,27 @@ const CardPersonel = () => {
               marginTop: "20px",
             }}
           >
-            <Typography variant="inherit">Masa Aktif</Typography>
-            <TextField fullWidth id="Peran" name="Peran" select label="Peran">
-              {titikAkses.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
+            <Typography variant="inherit">Waktu Mulai</Typography>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateTimePicker
+                value={startDate}
+                onChange={setStartDate}
+                ampm={false}
+                renderInput={(params) => (
+                  <TextField {...params} size="large" name="startdate" />
+                )}
+              />
+              <br></br>
+              <Typography variant="inherit">Waktu Berakhir</Typography>
+              <DateTimePicker
+                value={endDate}
+                onChange={setEndDate}
+                ampm={false}
+                renderInput={(params) => (
+                  <TextField {...params} size="large" name="enddate" />
+                )}
+              />
+            </LocalizationProvider>
           </Grid>
         </Grid>
       </CardContent>
