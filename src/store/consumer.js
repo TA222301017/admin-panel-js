@@ -1,4 +1,5 @@
 import http from "../utils/httpClient";
+import { timeToAPIDateString } from "../utils/formatTime";
 
 export const handleError = (err) => {
   if (err.response) {
@@ -21,6 +22,7 @@ export const loginRequest = async ({ username, password }) => {
 export const getAccessRuleRequest = async ({ personelId }) => {
   try {
     let res = await http.get(`/access/${personelId}`);
+    if (res.data.data === null) res.data.data = [];
     return res.data;
   } catch (err) {
     return handleError(err);
@@ -94,6 +96,7 @@ export const getAccessLogRequest = async ({
         location: location,
       },
     });
+    if (res.data.data === null) res.data.data = [];
     return res.data;
   } catch (err) {
     return handleError(err);
@@ -105,7 +108,6 @@ export const getHealthcheckLogRequest = async ({
   limit,
   startDate,
   endDate,
-  personel,
   location,
 }) => {
   try {
@@ -115,10 +117,10 @@ export const getHealthcheckLogRequest = async ({
         limit: limit,
         startdate: timeToAPIDateString(startDate),
         enddate: timeToAPIDateString(endDate),
-        personel: personel,
         location: location,
       },
     });
+    if (res.data.data === null) res.data.data = [];
     return res.data;
   } catch (err) {
     return handleError(err);
@@ -145,6 +147,7 @@ export const getRSSILogRequest = async ({
         location: location,
       },
     });
+    if (res.data.data === null) res.data.data = [];
     return res.data;
   } catch (err) {
     return handleError(err);
@@ -161,6 +164,7 @@ export const getLocksRequest = async ({ page, limit, status, keyword }) => {
         keyword: keyword,
       },
     });
+    if (res.data.data === null) res.data.data = [];
     return res.data;
   } catch (err) {
     return handleError(err);
@@ -204,6 +208,7 @@ export const getKeysRequest = async ({ page, limit, status, keyword }) => {
         keyword: keyword,
       },
     });
+    if (res.data.data === null) res.data.data = [];
     return res.data;
   } catch (err) {
     return handleError(err);
@@ -281,6 +286,7 @@ export const getPersonelsRequest = async ({ page, limit, status, keyword }) => {
         keyword: keyword,
       },
     });
+    if (res.data.data === null) res.data.data = [];
     return res.data;
   } catch (err) {
     return handleError(err);

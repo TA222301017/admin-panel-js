@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import LoggedInLayout from "../layouts/LoggedInLayout";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
+import Button from "@mui/material/Button";
 import { GET_KEYS } from "../store/reducers/keySlice";
 import DataTable from "../components/DataTable";
 import { useNavigate } from "react-router";
@@ -22,6 +23,7 @@ const crumbs = [
 const Keys = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
+  const [filter, setFilter] = useState({ keyword: "", status: true });
 
   const {
     value: { keys, pagination },
@@ -70,8 +72,8 @@ const Keys = () => {
       GET_KEYS({
         page: pageNum + 1,
         limit: limit,
-        status: true,
-        keyword: "",
+        status: filter.status,
+        keyword: filter.keyword,
       })
     );
   };
@@ -83,8 +85,8 @@ const Keys = () => {
       GET_KEYS({
         page: 1,
         limit: pageSize,
-        status: true,
-        keyword: "",
+        status: filter.status,
+        keyword: filter.keyword,
       })
     );
   };
@@ -92,7 +94,10 @@ const Keys = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     let data = new FormData(e.target);
-    console.log(data);
+    setFilter({
+      status: data.get("status"),
+      keyword: data.get("keyword"),
+    });
     dispatch(
       GET_KEYS({
         page: 1,
@@ -108,8 +113,8 @@ const Keys = () => {
       GET_KEYS({
         page: pagination.page,
         limit: pagination.limit,
-        status: true,
-        keyword: "",
+        status: filter.status,
+        keyword: filter.keyword,
       })
     );
   }, []);
@@ -120,7 +125,20 @@ const Keys = () => {
       desc="Kelola kunci-kunci dalam sistem Anda"
       breadcrumbs={crumbs}
     >
-      <DataTableFilterForm handleSearch={handleSearch} />
+      <DataTableFilterForm handleSearch={handleSearch}>
+        <Button type="button" size="medium" variant="outlined">
+          Export
+        </Button>
+
+        <Button
+          type="button"
+          size="medium"
+          variant="outlined"
+          onClick={() => navigate("/key/add")}
+        >
+          Tambah
+        </Button>
+      </DataTableFilterForm>
 
       <DataTable
         onPageChange={handlePageChange}
