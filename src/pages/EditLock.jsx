@@ -47,9 +47,9 @@ const EditLock = () => {
         location: data.get("location"),
         name: data.get("label"),
       })
-    ).then(() => {
-      if (error) {
-        dispatch(toastError(error));
+    ).then((action) => {
+      if (action.payload.error) {
+        dispatch(toastError(action.payload.error));
       } else {
         dispatch(toastSuccess("Perubahan berhasil disimpan"));
         navigate("/lock");

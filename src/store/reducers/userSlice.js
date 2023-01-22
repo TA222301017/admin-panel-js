@@ -18,14 +18,14 @@ export const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(LOGIN.pending, (state) => {
-        state.status = "loading";
+        state.status = "pending";
         state.error = "";
       })
       .addCase(LOGIN.fulfilled, (state, action) => {
-        state.user = action.payload.data;
+        state.status = "fulfilled";
+        state.value = action.payload.data;
         state.token = action.payload.token;
         state.error = action.payload.error;
-        state.status = "fulfilled";
       });
   },
 });

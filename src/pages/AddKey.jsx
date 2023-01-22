@@ -42,9 +42,9 @@ const AddKey = () => {
         status: Boolean(data.get("status")),
         description: data.get("description"),
       })
-    ).then(() => {
-      if (error) {
-        dispatch(toastError(error));
+    ).then((action) => {
+      if (action.payload.error) {
+        dispatch(toastError(action.payload.error));
       } else {
         dispatch(toastSuccess("Perubahan berhasil disimpan"));
         navigate("/key");

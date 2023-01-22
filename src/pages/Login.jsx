@@ -13,21 +13,16 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Copyright from "../components/Copyright";
 import { useDispatch, useSelector } from "react-redux";
 import { LOGIN } from "../store/reducers/userSlice";
+import { toastSuccess } from "../store/reducers/toastSlice";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
 const theme = createTheme();
 
 export default function SignIn() {
-  const { status, error } = useSelector((state) => state.user);
+  const { user, status, error } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (error === "" && status === "fulfilled") {
-      navigate("/dashboard");
-    }
-  }, [status, error]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -37,7 +32,14 @@ export default function SignIn() {
         username: data.get("username"),
         password: data.get("password"),
       })
-    );
+    )
+      .then((action) => {
+        if (!action.payload.error) {
+          dispatch(toastSuccess("Login berhasil"));
+          navigate("/dashboard");
+        }
+      })
+      .catch(console.log);
   };
 
   return (
