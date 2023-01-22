@@ -67,7 +67,7 @@ const Keys = () => {
   ];
 
   const handlePageChange = (pageNum) => {
-    setPage(pageNum);
+    setPage(pageNum + 1);
     dispatch(
       GET_KEYS({
         page: pageNum + 1,
@@ -143,12 +143,12 @@ const Keys = () => {
       <DataTable
         onPageChange={handlePageChange}
         onPageSizeChange={handlePageSizeChange}
-        page={page}
+        page={page - 1}
         limit={limit}
         loading={status === "pending"}
         total={pagination.total}
         columns={columnDef}
-        rows={keys.map((e, i) => ({ ...e, index: page * limit + i + 1 }))}
+        rows={keys.map((e, i) => ({ ...e, index: (page - 1) * limit + i + 1 }))}
       />
     </LoggedInLayout>
   );

@@ -71,7 +71,7 @@ const Locks = () => {
   ];
 
   const handlePageChange = (pageNum) => {
-    setPage(pageNum);
+    setPage(pageNum + 1);
     dispatch(
       GET_LOCKS({
         page: pageNum + 1,
@@ -139,12 +139,15 @@ const Locks = () => {
       <DataTable
         onPageChange={handlePageChange}
         onPageSizeChange={handlePageSizeChange}
-        page={page}
+        page={page - 1}
         limit={limit}
         loading={status === "pending"}
         total={pagination.total}
         columns={columnDef}
-        rows={locks.map((e, i) => ({ ...e, index: page * limit + i + 1 }))}
+        rows={locks.map((e, i) => ({
+          ...e,
+          index: (page - 1) * limit + i + 1,
+        }))}
       />
     </LoggedInLayout>
   );

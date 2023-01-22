@@ -66,7 +66,7 @@ const Personels = () => {
   ];
 
   const handlePageChange = (pageNum) => {
-    setPage(pageNum);
+    setPage(pageNum + 1);
     dispatch(
       GET_PERSONELS({
         page: pageNum + 1,
@@ -142,12 +142,15 @@ const Personels = () => {
       <DataTable
         onPageChange={handlePageChange}
         onPageSizeChange={handlePageSizeChange}
-        page={page}
+        page={page - 1}
         limit={limit}
         loading={status === "pending"}
         total={pagination.total}
         columns={columnDef}
-        rows={personels.map((e, i) => ({ ...e, index: page * limit + i + 1 }))}
+        rows={personels.map((e, i) => ({
+          ...e,
+          index: (page - 1) * limit + i + 1,
+        }))}
       />
     </LoggedInLayout>
   );

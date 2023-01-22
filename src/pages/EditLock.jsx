@@ -65,7 +65,9 @@ const EditLock = () => {
     >
       <LoaderCover show={status === "pending"} />
 
-      <FormEditLock lockData={lock} handleSubmit={handleSubmit} />
+      {lock.name && (
+        <FormEditLock lockData={lock} handleSubmit={handleSubmit} />
+      )}
     </LoggedInLayout>
   );
 };
