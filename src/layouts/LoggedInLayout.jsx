@@ -25,6 +25,7 @@ import {
   PersonSharp,
   Brightness7Sharp,
   Brightness4Sharp,
+  RuleSharp,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUser } from "../store/reducers/userSlice";
@@ -37,6 +38,11 @@ const navItems = [
     icon: <DashboardSharp />,
     name: "Dashboard",
     path: "/dashboard",
+  },
+  {
+    icon: <RuleSharp />,
+    name: "Access Rule",
+    path: "/access-rule",
   },
   {
     icon: <AccessTimeSharp />,

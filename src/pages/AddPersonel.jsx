@@ -44,7 +44,7 @@ const AddPersonel = () => {
         dispatch(toastError(res.payload.error));
       } else {
         dispatch(toastSuccess("Perubahan berhasil disimpan"));
-        navigate("/personel");
+        navigate(`/personel/edit/${res.payload.data.id}`);
       }
     });
   };

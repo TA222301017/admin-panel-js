@@ -40,9 +40,38 @@ export const getRolesRequest = async () => {
   }
 };
 
-export const getAccessRuleRequest = async ({ personelId }) => {
+export const getAllAccessRuleRequest = async ({
+  page,
+  limit,
+  startDate,
+  endDate,
+  keyword,
+}) => {
   try {
-    let res = await http.get(`/access/${personelId}`);
+    let res = await http.get(`/access`, {
+      params: {
+        page: page,
+        limit: limit,
+        startdate: timeToAPIDateString(startDate),
+        enddate: timeToAPIDateString(endDate),
+        keyword: keyword,
+      },
+    });
+    if (res.data.data === null) res.data.data = [];
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
+
+export const getAccessRuleRequest = async ({ personelId, page, limit }) => {
+  try {
+    let res = await http.get(`/access/${personelId}`, {
+      params: {
+        page: page,
+        limit: limit,
+      },
+    });
     if (res.data.data === null) res.data.data = [];
     return res.data;
   } catch (err) {
@@ -59,7 +88,7 @@ export const addAccessRuleRequest = async ({
   try {
     let res = await http.post(`/access`, {
       lock_id: lockId,
-      personelId: personelId,
+      personel_id: personelId,
       starts_at: startsAt,
       ends_at: endsAt,
     });
@@ -79,7 +108,7 @@ export const editAccessRuleRequest = async ({
   try {
     let res = await http.patch(`/access/${accessRuleId}`, {
       lock_id: lockId,
-      personelId: personelId,
+      personel_id: personelId,
       starts_at: startsAt,
       ends_at: endsAt,
     });

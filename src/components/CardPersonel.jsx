@@ -13,21 +13,31 @@ import MenuItem from "@mui/material/MenuItem";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { GET_LOCKS } from "../store/reducers/lockSlice";
+import { toastError, toastSuccess } from "../store/reducers/toastSlice";
+import {
+  ADD_ACCESS_RULE,
+  EDIT_ACCESS_RULE,
+} from "../store/reducers/accessRuleSlice";
+import { timeToAPIDateString } from "../utils/formatTime";
+import { GET_PERSONELS } from "../store/reducers/personelSlice";
 
-const titikAkses = [
-  { value: "Value titikAkses1", label: "titikAkses1" },
-  { value: "Value titikAkses2", label: "titikAkses2" },
-  { value: "Value titikAkses3", label: "titikAkses3" },
-];
+const CardPersonel = ({
+  accessRule = null,
+  setModalOpen = () => null,
+  withPersonelSelection = false,
+}) => {
+  const {
+    value: { locks },
+  } = useSelector((state) => state.lock);
 
-const CardPersonel = () => {
-  const hapusButton = () => {
-    console.log("hapus pushed");
-  };
+  const {
+    value: { personel, personels },
+  } = useSelector((state) => state.personel);
 
-  const simpanButton = () => {
-    console.log("simpan pushed");
-  };
+  const dispatch = useDispatch();
 
   const [startDate, setStartDate] = useState(
     new Date().toLocaleDateString() + " 00:00"
@@ -35,28 +45,126 @@ const CardPersonel = () => {
   const [endDate, setEndDate] = useState(
     new Date().toLocaleDateString() + " 23:59"
   );
+  const [lockId, setLockId] = useState(accessRule ? accessRule.lock_id : 1);
+  const [personelId, setPersonelId] = useState(
+    accessRule ? accessRule.personel_id : 0
+  );
+
+  const simpanButton = () => {
+    if (accessRule === null) {
+      dispatch(
+        ADD_ACCESS_RULE({
+          lockId: lockId,
+          personelId: withPersonelSelection ? personelId : personel.id,
+          startsAt: timeToAPIDateString(new Date(startDate)),
+          endsAt: timeToAPIDateString(new Date(endDate)),
+        })
+      ).then((res) => {
+        if (res.payload.error) {
+          dispatch(toastError(res.payload.error));
+        } else {
+          dispatch(toastSuccess("Perubahan berhasil disimpan"));
+          setLockId(0);
+          setStartDate(new Date().toLocaleDateString() + " 00:00");
+          setEndDate(new Date().toLocaleDateString() + " 23:59");
+        }
+      });
+    } else {
+      dispatch(
+        EDIT_ACCESS_RULE({
+          accessRuleId: accessRule.id,
+          lockId: lockId,
+          personelId: withPersonelSelection ? personelId : personel.id,
+          startsAt: timeToAPIDateString(new Date(startDate)),
+          endsAt: timeToAPIDateString(new Date(endDate)),
+        })
+      ).then((res) => {
+        if (res.payload.error) {
+          dispatch(toastError(res.payload.error));
+        } else {
+          dispatch(toastSuccess("Perubahan berhasil disimpan"));
+          setModalOpen(false);
+        }
+      });
+    }
+  };
+
+  useEffect(() => {
+    dispatch(
+      GET_LOCKS({
+        page: 1,
+        limit: 1000,
+        keyword: "",
+        status: true,
+      })
+    );
+
+    if (withPersonelSelection) {
+      dispatch(
+        GET_PERSONELS({
+          page: 1,
+          limit: 1000,
+          keyword: "",
+          status: true,
+        })
+      );
+    }
+  }, []);
 
   return (
     <Card variant="outlined" style={{ marginTop: 0 }}>
-      <CardHeader title="Access Rule" />
+      <CardHeader title={accessRule ? "Edit Access Rule" : "Add Access Rule"} />
       <CardContent>
-        <Grid container spacing={2} direction="column">
+        <Grid container spacing={2} direction="column" component="form">
           <Grid item>
             <Grid item direction="column" xs>
-              <TextField
-                fullWidth
-                id="lock_id"
-                name="lock_id"
-                select
-                label="Lokasi"
-                size="small"
-              >
-                {titikAkses.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
+              {withPersonelSelection && personels.length && (
+                <TextField
+                  fullWidth
+                  id="personel_id"
+                  name="personel_id"
+                  select
+                  label="Personel"
+                  size="small"
+                  value={personelId}
+                  onChange={(e) => setPersonelId(e.target.value)}
+                  inputProps={
+                    accessRule ? { defaultValue: accessRule.personel_id } : null
+                  }
+                  disabled={accessRule}
+                >
+                  {personels.map((el, index) => (
+                    <MenuItem key={index} value={el.id}>
+                      {el.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              )}
+            </Grid>
+          </Grid>
+          <Grid item>
+            <Grid item direction="column" xs>
+              {locks.length && (
+                <TextField
+                  fullWidth
+                  id="lock_id"
+                  name="lock_id"
+                  select
+                  label="Lokasi"
+                  size="small"
+                  value={lockId}
+                  onChange={(e) => setLockId(e.target.value)}
+                  inputProps={
+                    accessRule ? { defaultValue: accessRule.lock_id } : null
+                  }
+                >
+                  {locks.map((el, index) => (
+                    <MenuItem key={index} value={el.id}>
+                      {el.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              )}
             </Grid>
           </Grid>
           <Grid item>
@@ -87,25 +195,18 @@ const CardPersonel = () => {
               </Grid>
             </Grid>
           </Grid>
+          <Grid item>
+            <Button
+              fullWidth
+              variant="outlined"
+              color="inherit"
+              onClick={() => simpanButton()}
+            >
+              Simpan
+            </Button>
+          </Grid>
         </Grid>
       </CardContent>
-      <CardActions>
-        <Button
-          variant="outlined"
-          color="inherit"
-          onClick={() => hapusButton()}
-        >
-          Hapus
-        </Button>
-
-        <Button
-          variant="outlined"
-          color="inherit"
-          onClick={() => simpanButton()}
-        >
-          Simpan
-        </Button>
-      </CardActions>
     </Card>
   );
 };

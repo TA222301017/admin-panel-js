@@ -7,6 +7,7 @@ import LoaderCover from "./components/LoaderCover";
 
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const AccessLogs = lazy(() => import("./pages/AccessLogs"));
+const AccessRule = lazy(() => import("./pages/AccessRule"));
 const KeyPosition = lazy(() => import("./pages/KeyPosition"));
 const Locks = lazy(() => import("./pages/Locks"));
 const EditLock = lazy(() => import("./pages/EditLock"));
@@ -42,6 +43,8 @@ const AppRouter = () => {
 
           <Routes>
             <Route path="/dashboard" exact element={<Dashboard />} />
+
+            <Route path="/access-rule" exact element={<AccessRule />} />
             <Route path="/access-log" exact element={<AccessLogs />} />
             <Route
               path="/healthcheck-log"
