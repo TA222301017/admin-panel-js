@@ -131,7 +131,7 @@ const Locks = () => {
       breadcrumbs={crumbs}
     >
       <DataTableFilterForm handleSearch={handleSearch}>
-        <Button type="button" size="medium" variant="outlined">
+        <Button type="button" size="medium" variant="outlined" color="inherit">
           Export
         </Button>
       </DataTableFilterForm>

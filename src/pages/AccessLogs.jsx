@@ -94,12 +94,15 @@ const AccessLogs = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     let data = new FormData(e.target);
+
+    setPage(1);
     setFilter({
       keyword: data.get("keyword"),
       status: data.get("status"),
       startDate: new Date(data.get("startdate")),
       endDate: new Date(data.get("enddate")),
     });
+
     dispatch(
       GET_ACCESS_LOG({
         page: 1,
@@ -133,7 +136,7 @@ const AccessLogs = () => {
       breadcrumbs={crumbs}
     >
       <DataTableFilterForm withDate withoutStatus handleSearch={handleSearch}>
-        <Button type="button" size="medium" variant="outlined">
+        <Button type="button" size="medium" variant="outlined" color="inherit">
           Export
         </Button>
       </DataTableFilterForm>

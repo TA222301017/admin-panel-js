@@ -138,7 +138,7 @@ const HealthcheckLogs = () => {
         withDate
         keywordLabel="Location"
       >
-        <Button type="button" size="medium" variant="outlined">
+        <Button type="button" size="medium" variant="outlined" color="inherit">
           Export
         </Button>
       </DataTableFilterForm>

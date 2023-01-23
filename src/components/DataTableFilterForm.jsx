@@ -77,7 +77,7 @@ const DataTableFilterForm = ({
         </FormControl>
       )}
 
-      <Button type="submit" size="medium" variant="outlined">
+      <Button type="submit" size="medium" variant="outlined" color="inherit">
         Cari
       </Button>
 

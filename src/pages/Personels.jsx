@@ -126,7 +126,7 @@ const Personels = () => {
       breadcrumbs={crumbs}
     >
       <DataTableFilterForm handleSearch={handleSearch}>
-        <Button type="button" size="medium" variant="outlined">
+        <Button type="button" size="medium" variant="outlined" color="inherit">
           Export
         </Button>
 
@@ -135,6 +135,7 @@ const Personels = () => {
           size="medium"
           variant="outlined"
           onClick={() => navigate("/personel/add")}
+          color="inherit"
         >
           Tambah
         </Button>

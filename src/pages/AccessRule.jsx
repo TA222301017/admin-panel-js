@@ -37,13 +37,12 @@ const AccessRule = () => {
   const [limit, setLimit] = useState(20);
   const [modalOpen, setModalOpen] = useState(false);
   const [accessRuleIndex, setAccessRuleIndex] = useState(-1);
-  const [keyword, setKeyword] = useState("");
-  const [startDate, setStartDate] = useState(
-    new Date().toLocaleDateString() + " 00:00"
-  );
-  const [endDate, setEndDate] = useState(
-    new Date().toLocaleDateString() + " 23:59"
-  );
+
+  const [filter, setFilter] = useState({
+    keyword: "",
+    startDate: new Date().toLocaleDateString() + " 00:00",
+    endDate: new Date().toLocaleDateString() + " 23:59",
+  });
 
   const dispatch = useDispatch();
 
@@ -134,9 +133,11 @@ const AccessRule = () => {
     let data = new FormData(e.currentTarget);
 
     setPage(1);
-    setStartDate(new Date(data.get("startdate")));
-    setEndDate(new Date(data.get("enddate")));
-    setKeyword(data.get("keyword"));
+    setFilter({
+      keyword: data.get("keyword"),
+      startDate: new Date(data.get("startdate")),
+      endDate: new Date(data.get("enddate")),
+    });
 
     dispatch(
       GET_ALL_ACCESS_RULES({
@@ -168,7 +169,7 @@ const AccessRule = () => {
       breadcrumbs={crumbs}
     >
       <DataTableFilterForm withDate withoutStatus handleSearch={handleSearch}>
-        <Button type="button" size="medium" variant="outlined">
+        <Button type="button" size="medium" variant="outlined" color="inherit">
           Export
         </Button>
         <Button
@@ -179,6 +180,7 @@ const AccessRule = () => {
             setAccessRuleIndex(-1);
             setModalOpen(true);
           }}
+          color="inherit"
         >
           Tambah
         </Button>
@@ -218,13 +220,7 @@ const AccessRule = () => {
         >
           <CardPersonel
             withPersonelSelection
-            accessRule={
-              accessRuleIndex === -1
-                ? null
-                : accessRules.length
-                ? accessRules[accessRuleIndex]
-                : null
-            }
+            accessRuleIndex={accessRuleIndex}
             setModalOpen={setModalOpen}
           />
         </Box>

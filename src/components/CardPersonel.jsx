@@ -1,14 +1,7 @@
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import {
-  Card,
-  Grid,
-  CardContent,
-  Typography,
-  CardActions,
-  CardHeader,
-} from "@mui/material";
+import { Card, Grid, CardContent, CardHeader } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -25,7 +18,7 @@ import { timeToAPIDateString } from "../utils/formatTime";
 import { GET_PERSONELS } from "../store/reducers/personelSlice";
 
 const CardPersonel = ({
-  accessRule = null,
+  accessRuleIndex = -1,
   setModalOpen = () => null,
   withPersonelSelection = false,
 }) => {
@@ -37,6 +30,10 @@ const CardPersonel = ({
     value: { personel, personels },
   } = useSelector((state) => state.personel);
 
+  const {
+    value: { accessRules },
+  } = useSelector((state) => state.accessRule);
+
   const dispatch = useDispatch();
 
   const [startDate, setStartDate] = useState(
@@ -45,13 +42,15 @@ const CardPersonel = ({
   const [endDate, setEndDate] = useState(
     new Date().toLocaleDateString() + " 23:59"
   );
-  const [lockId, setLockId] = useState(accessRule ? accessRule.lock_id : 1);
+  const [lockId, setLockId] = useState(
+    accessRuleIndex >= 0 ? accessRules[accessRuleIndex].lock_id : 1
+  );
   const [personelId, setPersonelId] = useState(
-    accessRule ? accessRule.personel_id : 0
+    accessRuleIndex >= 0 ? accessRules[accessRuleIndex].personel_id : 0
   );
 
   const simpanButton = () => {
-    if (accessRule === null) {
+    if (accessRuleIndex === -1) {
       dispatch(
         ADD_ACCESS_RULE({
           lockId: lockId,
@@ -72,11 +71,10 @@ const CardPersonel = ({
     } else {
       dispatch(
         EDIT_ACCESS_RULE({
-          accessRuleId: accessRule.id,
-          lockId: lockId,
-          personelId: withPersonelSelection ? personelId : personel.id,
+          accessRuleId: accessRules[accessRuleIndex].id,
           startsAt: timeToAPIDateString(new Date(startDate)),
           endsAt: timeToAPIDateString(new Date(endDate)),
+          lockId: lockId,
         })
       ).then((res) => {
         if (res.payload.error) {
@@ -113,7 +111,9 @@ const CardPersonel = ({
 
   return (
     <Card variant="outlined" style={{ marginTop: 0 }}>
-      <CardHeader title={accessRule ? "Edit Access Rule" : "Add Access Rule"} />
+      <CardHeader
+        title={accessRuleIndex >= 0 ? "Edit Access Rule" : "Add Access Rule"}
+      />
       <CardContent>
         <Grid container spacing={2} direction="column" component="form">
           <Grid item>
@@ -131,7 +131,7 @@ const CardPersonel = ({
                   inputProps={
                     accessRule ? { defaultValue: accessRule.personel_id } : null
                   }
-                  disabled={accessRule}
+                  disabled={accessRuleIndex >= 0}
                 >
                   {personels.map((el, index) => (
                     <MenuItem key={index} value={el.id}>
@@ -155,7 +155,9 @@ const CardPersonel = ({
                   value={lockId}
                   onChange={(e) => setLockId(e.target.value)}
                   inputProps={
-                    accessRule ? { defaultValue: accessRule.lock_id } : null
+                    accessRuleIndex >= 0
+                      ? { defaultValue: accessRules[accessRuleIndex].lock_id }
+                      : null
                   }
                 >
                   {locks.map((el, index) => (

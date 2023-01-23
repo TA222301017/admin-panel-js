@@ -1,4 +1,4 @@
-import { Box, Button, Pagination } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import React from "react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,13 +6,13 @@ import {
   DELETE_ACCESS_RULE,
   GET_ACCESS_RULES,
 } from "../store/reducers/accessRuleSlice";
+import { GridActionsCellItem } from "@mui/x-data-grid";
+import { DeleteForeverSharp, EditSharp } from "@mui/icons-material";
+import { toastError, toastSuccess } from "../store/reducers/toastSlice";
 import DataTableFilterForm from "./DataTableFilterForm";
 import DataTable from "./DataTable";
 import Modal from "@mui/material/Modal";
 import CardPersonel from "./CardPersonel";
-import { GridActionsCellItem } from "@mui/x-data-grid";
-import { DeleteForeverSharp, EditSharp } from "@mui/icons-material";
-import { toastError, toastSuccess } from "../store/reducers/toastSlice";
 
 const AccessRuleTable = ({ personelId }) => {
   const {
@@ -122,6 +122,7 @@ const AccessRuleTable = ({ personelId }) => {
             setAccessRuleIndex(-1);
             setModalOpen(true);
           }}
+          color="inherit"
         >
           Tambah
         </Button>
@@ -160,13 +161,7 @@ const AccessRuleTable = ({ personelId }) => {
           }}
         >
           <CardPersonel
-            accessRule={
-              accessRuleIndex === -1
-                ? null
-                : accessRules.length
-                ? accessRules[accessRuleIndex]
-                : null
-            }
+            accessRuleIndex={accessRuleIndex}
             setModalOpen={setModalOpen}
           />
         </Box>
