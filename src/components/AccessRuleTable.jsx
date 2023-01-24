@@ -24,6 +24,7 @@ const AccessRuleTable = ({ personelId }) => {
   const [limit, setLimit] = useState(20);
   const [modalOpen, setModalOpen] = useState(false);
   const [accessRuleIndex, setAccessRuleIndex] = useState(-1);
+  const [keyword, setKeyword] = useState("");
 
   const dispatch = useDispatch();
 
@@ -103,6 +104,21 @@ const AccessRuleTable = ({ personelId }) => {
     );
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    let data = new FormData(e.currentTarget);
+
+    setPage(1);
+    setKeyword(data.get("keyword"));
+    dispatch(
+      GET_ACCESS_RULES({
+        personelId,
+        page: 1,
+        limit: limit,
+      })
+    );
+  };
+
   useEffect(() => {
     dispatch(
       GET_ACCESS_RULES({
@@ -115,7 +131,7 @@ const AccessRuleTable = ({ personelId }) => {
 
   return (
     <>
-      <DataTableFilterForm withoutStatus>
+      <DataTableFilterForm handleSearch={handleSearch} withoutStatus>
         <Button
           variant="outlined"
           onClick={() => {

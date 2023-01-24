@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import LoggedInLayout from "../layouts/LoggedInLayout";
-import { Grid } from "@mui/material";
 import FormEditPersonel from "../components/FormEditPersonel";
-import CardPersonel from "../components/CardPersonel";
 import { useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { EDIT_PERSONEL, GET_PERSONEL } from "../store/reducers/personelSlice";

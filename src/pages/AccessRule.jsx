@@ -107,8 +107,8 @@ const AccessRule = () => {
       GET_ALL_ACCESS_RULES({
         page: pageNum + 1,
         limit: limit,
-        startDate: new Date(startDate),
-        endDate: new Date(endDate),
+        startDate: new Date(filter.startDate),
+        endDate: new Date(filter.endDate),
         keyword: keyword,
       })
     );
@@ -121,8 +121,8 @@ const AccessRule = () => {
       GET_ALL_ACCESS_RULES({
         page: 1,
         limit: pageSize,
-        startDate: new Date(startDate),
-        endDate: new Date(endDate),
+        startDate: new Date(filter.startDate),
+        endDate: new Date(filter.endDate),
         keyword: keyword,
       })
     );
@@ -155,8 +155,8 @@ const AccessRule = () => {
       GET_ALL_ACCESS_RULES({
         page: page,
         limit: limit,
-        startDate: new Date(startDate),
-        endDate: new Date(endDate),
+        startDate: new Date(filter.startDate),
+        endDate: new Date(filter.endDate),
         keyword: "",
       })
     );

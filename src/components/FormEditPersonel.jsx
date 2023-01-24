@@ -175,7 +175,6 @@ const FormEditPersonel = ({ personelData, handleSubmit }) => {
               >
                 SIMPAN
               </Button>
-              {/* <CardPersonel /> */}
             </Grid>
           </Grid>
         </Box>
