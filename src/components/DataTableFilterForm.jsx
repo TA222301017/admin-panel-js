@@ -69,10 +69,11 @@ const DataTableFilterForm = ({
             labelId="status-select-label"
             label="Status"
             name="status"
-            defaultValue={true}
+            defaultValue={"any"}
           >
-            <MenuItem value={true}>Active</MenuItem>
-            <MenuItem value={false}>Not Active</MenuItem>
+            <MenuItem value={"active"}>Active</MenuItem>
+            <MenuItem value={"notactive"}>Not Active</MenuItem>
+            <MenuItem value={"any"}>Any</MenuItem>
           </Select>
         </FormControl>
       )}

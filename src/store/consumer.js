@@ -1,5 +1,7 @@
 import http from "../utils/httpClient";
 import { timeToAPIDateString } from "../utils/formatTime";
+import store from "./store";
+import { toastError } from "./reducers/toastSlice";
 
 const apiCallError = {
   data: {},
@@ -14,11 +16,14 @@ const apiCallError = {
 };
 
 export const handleError = (err) => {
-  if (err.response) {
-    return err.response.data;
+  if (err.response.data?.msg) {
+    console.log(err);
+    store.dispatch(toastError(err.response.data.msg));
+    throw new Error(err);
   } else {
     console.log(err);
-    return apiCallError;
+    store.dispatch(toastError(err.message));
+    throw new Error(err);
   }
 };
 
@@ -159,6 +164,7 @@ export const getHealthcheckLogRequest = async ({
   startDate,
   endDate,
   location,
+  status,
 }) => {
   try {
     let res = await http.get(`/log/healthcheck`, {
@@ -168,6 +174,7 @@ export const getHealthcheckLogRequest = async ({
         startdate: timeToAPIDateString(startDate),
         enddate: timeToAPIDateString(endDate),
         location: location,
+        status: status,
       },
     });
     if (res.data.data === null) res.data.data = [];
@@ -178,23 +185,20 @@ export const getHealthcheckLogRequest = async ({
 };
 
 export const getRSSILogRequest = async ({
-  personelId,
   page,
   limit,
   startDate,
   endDate,
-  personel,
-  location,
+  keyword,
 }) => {
   try {
-    let res = await http.get(`/log/rssi/${personelId}`, {
+    let res = await http.get(`/log/rssi`, {
       params: {
         page: page,
         limit: limit,
         startdate: timeToAPIDateString(startDate),
         enddate: timeToAPIDateString(endDate),
-        personel: personel,
-        location: location,
+        keyword: keyword,
       },
     });
     if (res.data.data === null) res.data.data = [];

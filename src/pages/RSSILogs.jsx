@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import LoggedInLayout from "../layouts/LoggedInLayout";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,7 +6,7 @@ import DataTable from "../components/DataTable";
 import Button from "@mui/material/Button";
 import { CheckSharp } from "@mui/icons-material";
 import DataTableFilterForm from "../components/DataTableFilterForm";
-import { GET_HEALTHCHECK_LOG } from "../store/reducers/logSlice";
+import { GET_RSSI_LOG } from "../store/reducers/logSlice";
 
 const crumbs = [
   {
@@ -14,23 +14,22 @@ const crumbs = [
     path: "/dashboard",
   },
   {
-    name: "Healthcheck Logs",
-    path: "/healthcheck-log",
+    name: "Position Logs",
+    path: "/position-log",
   },
 ];
 
-const HealthcheckLogs = () => {
+const RSSILogs = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
   const [filter, setFilter] = useState({
     keyword: "",
-    status: "any",
     startDate: new Date(new Date().setHours(0, 0, 0, 0)),
     endDate: new Date(new Date().setHours(23, 59, 59, 0)),
   });
 
   const {
-    value: { healthcheck, pagination },
+    value: { rssi: access, pagination },
     status,
     error,
   } = useSelector((state) => state.log);
@@ -39,8 +38,16 @@ const HealthcheckLogs = () => {
 
   const columnDef = [
     { field: "index", headerName: "No.", width: 10, flex: 0.2 },
-    { field: "device", headerName: "Lock", flex: 0.5 },
+    { field: "personel", headerName: "Personel", flex: 0.5 },
+    { field: "lock", headerName: "Lock", flex: 0.5 },
+    { field: "key", headerName: "Key", flex: 0.5 },
     { field: "location", headerName: "Location", flex: 0.5 },
+    {
+      field: "rssi",
+      headerName: "RSSI",
+      flex: 0.5,
+      valueFormatter: (params) => `${params.row.rssi}dB`,
+    },
     {
       field: "timestamp",
       headerName: "Timestamp",
@@ -48,12 +55,6 @@ const HealthcheckLogs = () => {
       valueFormatter: (params) => {
         return new Date(params.value).toString();
       },
-    },
-    {
-      field: "status",
-      type: "boolean",
-      headerName: "Active",
-      flex: 0.2,
     },
     {
       field: "actions",
@@ -67,11 +68,10 @@ const HealthcheckLogs = () => {
   const handlePageChange = (pageNum) => {
     setPage(pageNum + 1);
     dispatch(
-      GET_HEALTHCHECK_LOG({
+      GET_RSSI_LOG({
         page: pageNum + 1,
         limit: limit,
-        location: filter.keyword,
-        status: filter.status,
+        keyword: filter.keyword,
         startDate: filter.startDate,
         endDate: filter.endDate,
       })
@@ -82,11 +82,10 @@ const HealthcheckLogs = () => {
     setLimit(pageSize);
     setPage(1);
     dispatch(
-      GET_HEALTHCHECK_LOG({
+      GET_RSSI_LOG({
         page: 1,
         limit: pageSize,
-        location: filter.keyword,
-        status: filter.status,
+        keyword: filter.keyword,
         startDate: filter.startDate,
         endDate: filter.endDate,
       })
@@ -96,18 +95,19 @@ const HealthcheckLogs = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     let data = new FormData(e.target);
+
+    setPage(1);
     setFilter({
       keyword: data.get("keyword"),
-      status: data.get("status"),
       startDate: new Date(data.get("startdate")),
       endDate: new Date(data.get("enddate")),
     });
+
     dispatch(
-      GET_HEALTHCHECK_LOG({
+      GET_RSSI_LOG({
         page: 1,
         limit: limit,
-        location: data.get("keyword"),
-        status: data.get("status"),
+        keyword: data.get("keyword"),
         startDate: new Date(data.get("startdate")),
         endDate: new Date(data.get("enddate")),
       })
@@ -116,43 +116,37 @@ const HealthcheckLogs = () => {
 
   useEffect(() => {
     dispatch(
-      GET_HEALTHCHECK_LOG({
+      GET_RSSI_LOG({
         page: pagination.page,
         limit: pagination.limit,
-        location: filter.keyword,
-        status: filter.status,
         startDate: filter.startDate,
         endDate: filter.endDate,
+        keyword: filter.keyword,
       })
     );
   }, []);
 
   return (
     <LoggedInLayout
-      title="Healthcheck Logs"
-      desc="Tinjau keadaan lock-lock dalam sistem Anda"
+      title="Position Logs"
+      desc="Tinjau riwayat posisi personel-personel dalam sistem"
       breadcrumbs={crumbs}
     >
-      <DataTableFilterForm
-        handleSearch={handleSearch}
-        withDate
-        keywordLabel="Location"
-      >
+      <DataTableFilterForm withDate withoutStatus handleSearch={handleSearch}>
         <Button type="button" size="medium" variant="outlined" color="inherit">
           Export
         </Button>
       </DataTableFilterForm>
-
       <DataTable
-        onPageChange={handlePageChange}
-        onPageSizeChange={handlePageSizeChange}
         page={page - 1}
         limit={limit}
-        loading={status === "pending"}
         total={pagination.total}
+        loading={status === "pending"}
+        onPageChange={handlePageChange}
+        onPageSizeChange={handlePageSizeChange}
         columns={columnDef}
-        rows={healthcheck.map((e, i) => ({
-          ...e,
+        rows={access.map((el, i) => ({
+          ...el,
           index: (page - 1) * limit + i + 1,
         }))}
       />
@@ -160,4 +154,4 @@ const HealthcheckLogs = () => {
   );
 };
 
-export default HealthcheckLogs;
+export default RSSILogs;

@@ -93,7 +93,7 @@ const CardPersonel = ({
         page: 1,
         limit: 1000,
         keyword: "",
-        status: true,
+        status: "any",
       })
     );
 
@@ -103,7 +103,7 @@ const CardPersonel = ({
           page: 1,
           limit: 1000,
           keyword: "",
-          status: true,
+          status: "any",
         })
       );
     }

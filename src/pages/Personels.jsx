@@ -23,7 +23,7 @@ const crumbs = [
 const Personels = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
-  const [filter, setFilter] = useState({ keyword: "", status: true });
+  const [filter, setFilter] = useState({ keyword: "", status: "any" });
 
   const {
     value: { personels, pagination },

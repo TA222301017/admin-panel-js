@@ -42,7 +42,7 @@ const EditKey = () => {
         id: keyId,
         keyId: data.get("key_id"),
         name: data.get("label"),
-        status: Boolean(data.get("status")),
+        status: data.get("status") === "true",
         description: data.get("description"),
       })
     ).then((action) => {

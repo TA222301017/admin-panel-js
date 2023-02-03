@@ -26,6 +26,7 @@ import {
   Brightness7Sharp,
   Brightness4Sharp,
   RuleSharp,
+  LocationOnSharp,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUser } from "../store/reducers/userSlice";
@@ -43,6 +44,11 @@ const navItems = [
     icon: <RuleSharp />,
     name: "Access Rule",
     path: "/access-rule",
+  },
+  {
+    icon: <LocationOnSharp />,
+    name: "Position Log",
+    path: "/position-log",
   },
   {
     icon: <AccessTimeSharp />,

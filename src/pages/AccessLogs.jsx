@@ -24,7 +24,7 @@ const AccessLogs = () => {
   const [limit, setLimit] = useState(20);
   const [filter, setFilter] = useState({
     keyword: "",
-    status: true,
+    status: "any",
     startDate: new Date(new Date().setHours(0, 0, 0, 0)),
     endDate: new Date(new Date().setHours(23, 59, 59, 0)),
   });
