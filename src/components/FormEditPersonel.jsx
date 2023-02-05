@@ -39,7 +39,9 @@ const FormEditPersonel = ({ personelData, handleSubmit }) => {
     dispatch(
       GET_KEYS({
         page: 1,
-        limit: 1000,
+        limit: -1,
+        keyword: "",
+        status: "any",
       })
     );
 

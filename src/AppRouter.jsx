@@ -40,9 +40,7 @@ const AppRouter = () => {
         <Suspense fallback={<LoaderCover show={true} />}>
           <Routes>
             <Route path="/" exact element={<Login />} />
-          </Routes>
 
-          <Routes>
             <Route path="/dashboard" exact element={<Dashboard />} />
 
             <Route path="/access-rule" exact element={<AccessRule />} />

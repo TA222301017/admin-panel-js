@@ -8,6 +8,8 @@ import DataTable from "../components/DataTable";
 import { useNavigate } from "react-router";
 import { EditSharp, LocationSearchingSharp } from "@mui/icons-material";
 import DataTableFilterForm from "../components/DataTableFilterForm";
+import * as XLSX from "xlsx";
+import { getKeysRequest } from "../store/consumer";
 
 const crumbs = [
   {
@@ -108,6 +110,21 @@ const Keys = () => {
     );
   };
 
+  const handleExport = () => {
+    getKeysRequest({
+      page: 1,
+      limit: -1,
+      status: filter.status,
+      keyword: filter.keyword,
+    }).then(({ data }) => {
+      const worksheet = XLSX.utils.json_to_sheet(data);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+      XLSX.writeFile(workbook, makeFilename("keys"));
+      dispatch(toastSuccess("Berhasil mengunduh"));
+    });
+  };
+
   useEffect(() => {
     dispatch(
       GET_KEYS({
@@ -126,7 +143,13 @@ const Keys = () => {
       breadcrumbs={crumbs}
     >
       <DataTableFilterForm handleSearch={handleSearch}>
-        <Button type="button" size="medium" variant="outlined" color="inherit">
+        <Button
+          type="button"
+          size="medium"
+          variant="outlined"
+          color="inherit"
+          onClick={handleExport}
+        >
           Export
         </Button>
 

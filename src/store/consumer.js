@@ -27,6 +27,15 @@ export const handleError = (err) => {
   }
 };
 
+export const checkLock = async ({ lockId }) => {
+  try {
+    let res = await http.get(`/device/lock/check/${lockId}`);
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
+
 export const loginRequest = async ({ username, password }) => {
   try {
     let res = await http.post(`/login`, { username, password });

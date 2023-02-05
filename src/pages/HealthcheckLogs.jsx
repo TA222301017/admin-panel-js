@@ -7,6 +7,10 @@ import Button from "@mui/material/Button";
 import { CheckSharp } from "@mui/icons-material";
 import DataTableFilterForm from "../components/DataTableFilterForm";
 import { GET_HEALTHCHECK_LOG } from "../store/reducers/logSlice";
+import { CHECK_LOCK } from "../store/reducers/lockSlice";
+import { toastSuccess } from "../store/reducers/toastSlice";
+import { getHealthcheckLogRequest } from "../store/consumer";
+import * as XLSX from "xlsx";
 
 const crumbs = [
   {
@@ -59,7 +63,26 @@ const HealthcheckLogs = () => {
       field: "actions",
       type: "actions",
       getActions: (params) => [
-        <GridActionsCellItem icon={<CheckSharp />} label="Check" showInMenu />,
+        <GridActionsCellItem
+          icon={<CheckSharp />}
+          label="Check"
+          onClick={() => {
+            dispatch(CHECK_LOCK({ lockId: params.row.device_id })).then(() => {
+              dispatch(toastSuccess("Pengecekan berhasil"));
+              dispatch(
+                GET_HEALTHCHECK_LOG({
+                  page: page,
+                  limit: limit,
+                  location: filter.keyword,
+                  status: filter.status,
+                  startDate: filter.startDate,
+                  endDate: filter.endDate,
+                })
+              );
+            });
+          }}
+          showInMenu
+        />,
       ],
     },
   ];
@@ -114,6 +137,23 @@ const HealthcheckLogs = () => {
     );
   };
 
+  const handleExport = () => {
+    getHealthcheckLogRequest({
+      page: 1,
+      limit: -1,
+      startDate: filter.startDate,
+      endDate: filter.endDate,
+      location: filter.keyword,
+      status: filter.status,
+    }).then(({ data }) => {
+      const worksheet = XLSX.utils.json_to_sheet(data);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+      XLSX.writeFile(workbook, makeFilename("healthcheck_log"));
+      dispatch(toastSuccess("Berhasil mengunduh"));
+    });
+  };
+
   useEffect(() => {
     dispatch(
       GET_HEALTHCHECK_LOG({
@@ -138,7 +178,13 @@ const HealthcheckLogs = () => {
         withDate
         keywordLabel="Location"
       >
-        <Button type="button" size="medium" variant="outlined" color="inherit">
+        <Button
+          type="button"
+          size="medium"
+          variant="outlined"
+          color="inherit"
+          onClick={handleExport}
+        >
           Export
         </Button>
       </DataTableFilterForm>

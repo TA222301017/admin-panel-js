@@ -14,6 +14,14 @@ export const timeToAPIDateString = (time) => {
   return `${year}-${month}-${day}T${hour}:${minute}:${second}${offset}`;
 };
 
+export const timeToDatePickerString = (time) => {
+  let date = time.toLocaleDateString();
+  let hour = time.getHours().toString().padStart(2, "0");
+  let minute = time.getMinutes().toString().padStart(2, "0");
+
+  return `${date} ${hour}:${minute}`;
+};
+
 export const timeStringToAPIDateString = (timeString) => {
   let d = new Date(timeString);
   return timeString(d);

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   DELETE_ACCESS_RULE,
-  GET_ACCESS_RULES,
   GET_ALL_ACCESS_RULES,
 } from "../store/reducers/accessRuleSlice";
 import { GridActionsCellItem } from "@mui/x-data-grid";
@@ -15,6 +14,8 @@ import DataTable from "../components/DataTable";
 import Modal from "@mui/material/Modal";
 import CardPersonel from "../components/CardPersonel";
 import LoggedInLayout from "../layouts/LoggedInLayout";
+import { getAllAccessRuleRequest } from "../store/consumer";
+import * as XLSX from "xlsx";
 
 const crumbs = [
   {
@@ -40,8 +41,8 @@ const AccessRule = () => {
 
   const [filter, setFilter] = useState({
     keyword: "",
-    startDate: new Date().toLocaleDateString() + " 00:00",
-    endDate: new Date().toLocaleDateString() + " 23:59",
+    startDate: new Date(new Date().toLocaleDateString() + " 00:00"),
+    endDate: new Date(new Date().toLocaleDateString() + " 23:59"),
   });
 
   const dispatch = useDispatch();
@@ -121,8 +122,8 @@ const AccessRule = () => {
       GET_ALL_ACCESS_RULES({
         page: 1,
         limit: pageSize,
-        startDate: new Date(filter.startDate),
-        endDate: new Date(filter.endDate),
+        startDate: filter.startDate,
+        endDate: filter.endDate,
         keyword: keyword,
       })
     );
@@ -150,13 +151,29 @@ const AccessRule = () => {
     );
   };
 
+  const handleExport = () => {
+    getAllAccessRuleRequest({
+      page: 1,
+      limit: -1,
+      startDate: filter.startDate,
+      endDate: filter.endDate,
+      keyword: keyword,
+    }).then(({ data }) => {
+      const worksheet = XLSX.utils.json_to_sheet(data);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+      XLSX.writeFile(workbook, makeFilename("access_rules"));
+      dispatch(toastSuccess("Berhasil mengunduh"));
+    });
+  };
+
   useEffect(() => {
     dispatch(
       GET_ALL_ACCESS_RULES({
         page: page,
         limit: limit,
-        startDate: new Date(filter.startDate),
-        endDate: new Date(filter.endDate),
+        startDate: filter.startDate,
+        endDate: filter.endDate,
         keyword: "",
       })
     );
@@ -169,7 +186,13 @@ const AccessRule = () => {
       breadcrumbs={crumbs}
     >
       <DataTableFilterForm withDate withoutStatus handleSearch={handleSearch}>
-        <Button type="button" size="medium" variant="outlined" color="inherit">
+        <Button
+          type="button"
+          size="medium"
+          variant="outlined"
+          color="inherit"
+          onClick={handleExport}
+        >
           Export
         </Button>
         <Button

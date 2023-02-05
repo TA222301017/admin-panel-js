@@ -7,6 +7,8 @@ import Button from "@mui/material/Button";
 import { CheckSharp } from "@mui/icons-material";
 import DataTableFilterForm from "../components/DataTableFilterForm";
 import { GET_ACCESS_LOG } from "../store/reducers/logSlice";
+import * as XLSX from "xlsx";
+import { getAccessLogRequest } from "../store/consumer";
 
 const crumbs = [
   {
@@ -51,13 +53,13 @@ const AccessLogs = () => {
         return new Date(params.value).toString();
       },
     },
-    {
-      field: "actions",
-      type: "actions",
-      getActions: (params) => [
-        <GridActionsCellItem icon={<CheckSharp />} label="Check" showInMenu />,
-      ],
-    },
+    // {
+    //   field: "actions",
+    //   type: "actions",
+    //   getActions: (params) => [
+    //     <GridActionsCellItem icon={<CheckSharp />} label="Check" showInMenu />,
+    //   ],
+    // },
   ];
 
   const handlePageChange = (pageNum) => {
@@ -116,6 +118,24 @@ const AccessLogs = () => {
     );
   };
 
+  const handleExport = () => {
+    getAccessLogRequest({
+      page: 1,
+      limit: -1,
+      startDate: filter.startDate,
+      endDate: filter.endDate,
+      location: filter.keyword,
+      personel: filter.keyword,
+      status: filter.status,
+    }).then(({ data }) => {
+      const worksheet = XLSX.utils.json_to_sheet(data);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+      XLSX.writeFile(workbook, makeFilename("access_log"));
+      dispatch(toastSuccess("Berhasil mengunduh"));
+    });
+  };
+
   useEffect(() => {
     dispatch(
       GET_ACCESS_LOG({
@@ -136,7 +156,13 @@ const AccessLogs = () => {
       breadcrumbs={crumbs}
     >
       <DataTableFilterForm withDate withoutStatus handleSearch={handleSearch}>
-        <Button type="button" size="medium" variant="outlined" color="inherit">
+        <Button
+          type="button"
+          size="medium"
+          variant="outlined"
+          color="inherit"
+          onClick={handleExport}
+        >
           Export
         </Button>
       </DataTableFilterForm>

@@ -14,7 +14,10 @@ import {
   ADD_ACCESS_RULE,
   EDIT_ACCESS_RULE,
 } from "../store/reducers/accessRuleSlice";
-import { timeToAPIDateString } from "../utils/formatTime";
+import {
+  timeToAPIDateString,
+  timeToDatePickerString,
+} from "../utils/formatTime";
 import { GET_PERSONELS } from "../store/reducers/personelSlice";
 
 const CardPersonel = ({
@@ -37,10 +40,14 @@ const CardPersonel = ({
   const dispatch = useDispatch();
 
   const [startDate, setStartDate] = useState(
-    new Date().toLocaleDateString() + " 00:00"
+    accessRuleIndex >= 0
+      ? timeToDatePickerString(new Date(accessRules[accessRuleIndex].starts_at))
+      : new Date().toLocaleDateString() + " 00:00"
   );
   const [endDate, setEndDate] = useState(
-    new Date().toLocaleDateString() + " 23:59"
+    accessRuleIndex >= 0
+      ? timeToDatePickerString(new Date(accessRules[accessRuleIndex].ends_at))
+      : new Date().toLocaleDateString() + " 23:59"
   );
   const [lockId, setLockId] = useState(
     accessRuleIndex >= 0 ? accessRules[accessRuleIndex].lock_id : 1
@@ -129,7 +136,12 @@ const CardPersonel = ({
                   value={personelId}
                   onChange={(e) => setPersonelId(e.target.value)}
                   inputProps={
-                    accessRule ? { defaultValue: accessRule.personel_id } : null
+                    accessRuleIndex >= 0
+                      ? {
+                          defaultValue:
+                            accessRules[accessRuleIndex].personel_id,
+                        }
+                      : null
                   }
                   disabled={accessRuleIndex >= 0}
                 >

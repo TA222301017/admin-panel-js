@@ -4,10 +4,14 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router";
 import { CheckSharp, EditSharp } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { GET_LOCKS } from "../store/reducers/lockSlice";
+import { CHECK_LOCK, GET_LOCKS } from "../store/reducers/lockSlice";
 import DataTable from "../components/DataTable";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 import DataTableFilterForm from "../components/DataTableFilterForm";
+import { toastSuccess } from "../store/reducers/toastSlice";
+import * as XLSX from "xlsx";
+import { makeFilename } from "../utils/exportFilename";
+import { getLocksRequest } from "../store/consumer";
 
 const crumbs = [
   {
@@ -35,7 +39,17 @@ const Locks = () => {
   const dispatch = useDispatch();
 
   const handleCheckLock = (id) => {
-    // dispatch(CHEC)
+    dispatch(CHECK_LOCK({ lockId: id })).then(() => {
+      dispatch(toastSuccess("Pengecekan berhasil"));
+      dispatch(
+        GET_LOCKS({
+          page: page,
+          limit: limit,
+          status: filter.status,
+          keyword: filter.keyword,
+        })
+      );
+    });
   };
 
   const columnDef = [
@@ -113,6 +127,21 @@ const Locks = () => {
     );
   };
 
+  const handleExport = () => {
+    getLocksRequest({
+      page: 1,
+      limit: -1,
+      status: filter.status,
+      keyword: filter.keyword,
+    }).then(({ data }) => {
+      const worksheet = XLSX.utils.json_to_sheet(data);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+      XLSX.writeFile(workbook, makeFilename("locks"));
+      dispatch(toastSuccess("Berhasil mengunduh"));
+    });
+  };
+
   useEffect(() => {
     dispatch(
       GET_LOCKS({
@@ -131,7 +160,13 @@ const Locks = () => {
       breadcrumbs={crumbs}
     >
       <DataTableFilterForm handleSearch={handleSearch}>
-        <Button type="button" size="medium" variant="outlined" color="inherit">
+        <Button
+          type="button"
+          size="medium"
+          variant="outlined"
+          color="inherit"
+          onClick={handleExport}
+        >
           Export
         </Button>
       </DataTableFilterForm>
