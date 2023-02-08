@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const http = axios.create({
-  baseURL: import.meta.env.PROD ? "/api" : import.meta.env.API_BASE_URL,
+  baseURL: import.meta.env.PROD ? "/api" : import.meta.env.VITE_API_BASE_URL,
   timeout: 30000,
   headers: {
     "content-type": "application/json",
@@ -10,6 +10,8 @@ const http = axios.create({
 
 http.interceptors.request.use(
   (config) => {
+    console.log(import.meta.env.PROD);
+    console.log(import.meta.env.API_BASE_URL);
     let token = localStorage.getItem("token");
 
     if (token !== "" && token) {

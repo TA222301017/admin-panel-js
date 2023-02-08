@@ -36,7 +36,7 @@ const AddPersonel = () => {
         personelId: data.get("personel_id"),
         roleId: Number(data.get("role_id")),
         keyId: Number(data.get("key_id")),
-        status: data.get("status"),
+        status: data.get("status") === "true",
         description: data.get("description"),
       })
     ).then((res) => {
