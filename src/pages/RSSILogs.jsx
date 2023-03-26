@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import LoggedInLayout from "../layouts/LoggedInLayout";
-import { GridActionsCellItem } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../components/DataTable";
+import CellLink from "../components/CellLink";
 import Button from "@mui/material/Button";
-import { CheckSharp } from "@mui/icons-material";
 import DataTableFilterForm from "../components/DataTableFilterForm";
-import { GET_RSSI_LOG } from "../store/reducers/logSlice";
+import { addRSSILog, GET_RSSI_LOG } from "../store/reducers/logSlice";
 import * as XLSX from "xlsx";
 import { getRSSILogRequest } from "../store/consumer";
+import { DownloadSharp } from "@mui/icons-material";
 
 const crumbs = [
   {
@@ -40,15 +40,54 @@ const RSSILogs = () => {
 
   const columnDef = [
     { field: "index", headerName: "No.", width: 10, flex: 0.2 },
-    { field: "personel", headerName: "Personel", flex: 0.5 },
-    { field: "lock", headerName: "Lock", flex: 0.5 },
-    { field: "key", headerName: "Key", flex: 0.5 },
+    {
+      field: "personel",
+      headerName: "Personel",
+      flex: 0.5,
+      renderCell: (params) => {
+        return (
+          <CellLink href={`/personel/edit/${params.row.personel_id}`}>
+            {params.value}
+          </CellLink>
+        );
+      },
+    },
+    {
+      field: "lock",
+      headerName: "Lock",
+      flex: 0.5,
+      renderCell: (params) => {
+        return (
+          <CellLink href={`/lock/edit/${params.row.lock_id}`}>
+            {params.value}
+          </CellLink>
+        );
+      },
+    },
+    {
+      field: "key",
+      headerName: "Key",
+      flex: 0.5,
+      renderCell: (params) => {
+        return (
+          <CellLink href={`/key/edit/${params.row.key_id}`}>
+            {params.value}
+          </CellLink>
+        );
+      },
+    },
     { field: "location", headerName: "Location", flex: 0.5 },
     {
       field: "rssi",
-      headerName: "RSSI",
+      headerName: "Jarak (approx.)",
       flex: 0.5,
-      valueFormatter: (params) => `${params.value}dB`,
+      valueFormatter: (params) => {
+        // 10^((Measured Power - Instant RSSI)/10*N)
+        let dist = Math.pow(10, (params.value + 10) / (10 * 2.4));
+        dist = Math.round(dist * 1000);
+        dist = dist / 1000;
+        return `${dist} m`;
+      },
     },
     {
       field: "timestamp",
@@ -142,6 +181,19 @@ const RSSILogs = () => {
         keyword: filter.keyword,
       })
     );
+
+    let stream = new EventSource(
+      import.meta.env.VITE_API_BASE_URL + "/log/rssi/stream"
+    );
+
+    stream.addEventListener("rssi", (e) => {
+      let rssiEvent = JSON.parse(e.data);
+      dispatch(addRSSILog(rssiEvent));
+    });
+
+    return () => {
+      stream.close();
+    };
   }, []);
 
   return (
@@ -157,6 +209,7 @@ const RSSILogs = () => {
           variant="outlined"
           color="inherit"
           onClick={handleExport}
+          startIcon={<DownloadSharp />}
         >
           Export
         </Button>

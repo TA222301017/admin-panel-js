@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import LoggedInLayout from "../layouts/LoggedInLayout";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router";
-import { CheckSharp, EditSharp } from "@mui/icons-material";
+import { CheckSharp, DownloadSharp, EditSharp } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { CHECK_LOCK, GET_LOCKS } from "../store/reducers/lockSlice";
 import DataTable from "../components/DataTable";
+import CellLink from "../components/CellLink";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 import DataTableFilterForm from "../components/DataTableFilterForm";
 import { toastSuccess } from "../store/reducers/toastSlice";
@@ -54,7 +55,18 @@ const Locks = () => {
 
   const columnDef = [
     { field: "index", headerName: "No.", width: 10, flex: 0.2 },
-    { field: "name", headerName: "Name", flex: 0.5 },
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 0.5,
+      renderCell: (params) => {
+        return (
+          <CellLink href={`/lock/edit/${params.row.id}`}>
+            {params.value}
+          </CellLink>
+        );
+      },
+    },
     { field: "ip_address", headerName: "IP Address", flex: 0.5 },
     { field: "location", headerName: "Location", flex: 0.8 },
     {
@@ -166,6 +178,7 @@ const Locks = () => {
           variant="outlined"
           color="inherit"
           onClick={handleExport}
+          startIcon={<DownloadSharp />}
         >
           Export
         </Button>

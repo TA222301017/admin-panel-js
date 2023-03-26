@@ -10,6 +10,7 @@ const DataTable = ({
   onPageChange,
   onPageSizeChange,
   loading,
+  toolbar = null,
 }) => {
   return (
     <DataGrid
@@ -25,6 +26,9 @@ const DataTable = ({
       onPageChange={onPageChange}
       onPageSizeChange={onPageSizeChange}
       rowsPerPageOptions={[10, 20, 50, 100]}
+      components={{
+        Toolbar: toolbar,
+      }}
     />
   );
 };

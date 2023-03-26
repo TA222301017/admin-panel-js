@@ -7,11 +7,9 @@ import store from "./store/store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <AppRouter />
-    </Provider>
-  </React.StrictMode>
+  <Provider store={store}>
+    <AppRouter />
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

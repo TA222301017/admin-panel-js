@@ -4,8 +4,9 @@ import { GridActionsCellItem } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../components/DataTable";
 import Button from "@mui/material/Button";
-import { CheckSharp } from "@mui/icons-material";
+import { CheckSharp, DownloadSharp, SearchSharp } from "@mui/icons-material";
 import DataTableFilterForm from "../components/DataTableFilterForm";
+import CellLink from "../components/CellLink";
 import { GET_HEALTHCHECK_LOG } from "../store/reducers/logSlice";
 import { CHECK_LOCK } from "../store/reducers/lockSlice";
 import { toastSuccess } from "../store/reducers/toastSlice";
@@ -43,7 +44,18 @@ const HealthcheckLogs = () => {
 
   const columnDef = [
     { field: "index", headerName: "No.", width: 10, flex: 0.2 },
-    { field: "device", headerName: "Lock", flex: 0.5 },
+    {
+      field: "device",
+      headerName: "Lock",
+      flex: 0.5,
+      renderCell: (params) => {
+        return (
+          <CellLink href={`/lock/edit/${params.row.lock_id}`}>
+            {params.value}
+          </CellLink>
+        );
+      },
+    },
     { field: "location", headerName: "Location", flex: 0.5 },
     {
       field: "timestamp",
@@ -62,9 +74,10 @@ const HealthcheckLogs = () => {
     {
       field: "actions",
       type: "actions",
+      headerName: "Check",
       getActions: (params) => [
         <GridActionsCellItem
-          icon={<CheckSharp />}
+          icon={<SearchSharp />}
           label="Check"
           onClick={() => {
             dispatch(CHECK_LOCK({ lockId: params.row.device_id })).then(() => {
@@ -81,7 +94,6 @@ const HealthcheckLogs = () => {
               );
             });
           }}
-          showInMenu
         />,
       ],
     },
@@ -184,6 +196,7 @@ const HealthcheckLogs = () => {
           variant="outlined"
           color="inherit"
           onClick={handleExport}
+          startIcon={<DownloadSharp />}
         >
           Export
         </Button>

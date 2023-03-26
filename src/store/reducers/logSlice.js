@@ -34,6 +34,22 @@ export const GET_RSSI_LOG = createAsyncThunk(
 export const logSlice = createSlice({
   name: "log",
   initialState,
+  reducers: {
+    addRSSILog: (state, { payload }) => {
+      state.value.rssi = [
+        payload,
+        ...state.value.rssi.slice(0, state.value.rssi.length - 1),
+      ];
+      state.value.pagination.total = state.value.pagination.total + 1;
+    },
+    addAccessLog: (state, { payload }) => {
+      state.value.access = [
+        payload,
+        ...state.value.access.slice(0, state.value.access.length - 1),
+      ];
+      state.value.pagination.total = state.value.pagination.total + 1;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(GET_ACCESS_LOG.pending, (state) => {
@@ -82,4 +98,5 @@ export const logSlice = createSlice({
   },
 });
 
+export const { addRSSILog, addAccessLog } = logSlice.actions;
 export default logSlice.reducer;

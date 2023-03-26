@@ -8,6 +8,7 @@ import Select from "@mui/material/Select";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { SearchSharp } from "@mui/icons-material";
 
 const DataTableFilterForm = ({
   handleSearch,
@@ -78,7 +79,13 @@ const DataTableFilterForm = ({
         </FormControl>
       )}
 
-      <Button type="submit" size="medium" variant="outlined" color="inherit">
+      <Button
+        type="submit"
+        size="medium"
+        variant="outlined"
+        color="inherit"
+        startIcon={<SearchSharp />}
+      >
         Cari
       </Button>
 

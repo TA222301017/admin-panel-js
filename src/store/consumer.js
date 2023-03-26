@@ -78,9 +78,9 @@ export const getAllAccessRuleRequest = async ({
   }
 };
 
-export const getAccessRuleRequest = async ({ personelId, page, limit }) => {
+export const getAccessRuleRequest = async ({ mapId, page, limit }) => {
   try {
-    let res = await http.get(`/access/${personelId}`, {
+    let res = await http.get(`/access/${mapId}`, {
       params: {
         page: page,
         limit: limit,
@@ -95,14 +95,14 @@ export const getAccessRuleRequest = async ({ personelId, page, limit }) => {
 
 export const addAccessRuleRequest = async ({
   lockId,
-  personelId,
+  mapId,
   startsAt,
   endsAt,
 }) => {
   try {
     let res = await http.post(`/access`, {
       lock_id: lockId,
-      personel_id: personelId,
+      personel_id: mapId,
       starts_at: startsAt,
       ends_at: endsAt,
     });
@@ -114,7 +114,7 @@ export const addAccessRuleRequest = async ({
 
 export const editAccessRuleRequest = async ({
   lockId,
-  personelId,
+  mapId,
   startsAt,
   endsAt,
   accessRuleId,
@@ -122,7 +122,7 @@ export const editAccessRuleRequest = async ({
   try {
     let res = await http.patch(`/access/${accessRuleId}`, {
       lock_id: lockId,
-      personel_id: personelId,
+      personel_id: mapId,
       starts_at: startsAt,
       ends_at: endsAt,
     });
@@ -406,6 +406,109 @@ export const editPersonelRequest = async ({
       status: status,
       description: description,
     });
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
+
+export const getMapsRequest = async ({ page, limit, keyword }) => {
+  try {
+    let res = await http.get(`/plan`, {
+      params: {
+        page: page,
+        limit: limit,
+        keyword: keyword,
+      },
+    });
+    if (res.data.data === null) res.data.data = [];
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
+
+export const getMapRequest = async ({ mapId }) => {
+  try {
+    let res = await http.get(`/plan/${mapId}`);
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
+
+export const addMapRequest = async ({ name, width, height, imageBase64 }) => {
+  try {
+    let res = await http.post(`/plan`, {
+      name,
+      width,
+      height,
+      image: imageBase64,
+    });
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
+
+export const editMapRequest = async ({
+  id,
+  name,
+  width,
+  height,
+  imageBase64,
+}) => {
+  try {
+    let res = await http.patch(`/plan/${id}`, {
+      name,
+      width,
+      height,
+      image: imageBase64,
+    });
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
+
+export const deleteMapRequest = async ({ mapId }) => {
+  try {
+    let res = await http.delete(`/plan/${mapId}`);
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
+
+export const addLockToMap = async ({ mapId, lockId }) => {
+  try {
+    let res = await http.post(`/plan/${mapId}/lock`, {
+      lock_id: lockId,
+      coord_x: 0,
+      coord_y: 0,
+    });
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
+
+export const editLockToMap = async ({ mapId, lockId, coordX, coordY }) => {
+  try {
+    let res = await http.patch(`/plan/${mapId}/lock/${lockId}`, {
+      lock_id: lockId,
+      coord_x: coordX,
+      coord_y: coordY,
+    });
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
+
+export const deleteLockToMap = async ({ mapId, lockId }) => {
+  try {
+    let res = await http.delete(`/plan/${mapId}/lock/${lockId}`);
     return res.data;
   } catch (err) {
     return handleError(err);

@@ -7,7 +7,7 @@ import {
   GET_ACCESS_RULES,
 } from "../store/reducers/accessRuleSlice";
 import { GridActionsCellItem } from "@mui/x-data-grid";
-import { DeleteForeverSharp, EditSharp } from "@mui/icons-material";
+import { AddSharp, DeleteForeverSharp, EditSharp } from "@mui/icons-material";
 import { toastError, toastSuccess } from "../store/reducers/toastSlice";
 import DataTableFilterForm from "./DataTableFilterForm";
 import DataTable from "./DataTable";
@@ -139,6 +139,7 @@ const AccessRuleTable = ({ personelId }) => {
             setModalOpen(true);
           }}
           color="inherit"
+          startIcon={<AddSharp />}
         >
           Tambah
         </Button>

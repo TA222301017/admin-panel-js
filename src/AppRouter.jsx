@@ -1,7 +1,42 @@
-import React, { useMemo, lazy, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useMemo, lazy, Suspense, forwardRef } from "react";
+import {
+  BrowserRouter as Router,
+  Link as RouterLink,
+  Routes,
+  Route,
+} from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useSelector } from "react-redux";
+
+import PropTypes from "prop-types";
+
+export const LinkBehavior = forwardRef((props, ref) => {
+  const { href, ...other } = props;
+  return (
+    <RouterLink
+      data-testid="custom-link"
+      ref={ref}
+      to={href || "/"}
+      pathname={href || "/"}
+      {...other}
+    />
+  );
+});
+
+LinkBehavior.propTypes = {
+  href: PropTypes.oneOfType([
+    PropTypes.shape({
+      hash: PropTypes.string,
+      pathname: PropTypes.string,
+      search: PropTypes.string,
+    }),
+    PropTypes.string,
+  ]).isRequired,
+};
+
+Router.propTypes = {
+  children: PropTypes.node,
+};
 
 import LoaderCover from "./components/LoaderCover";
 
@@ -20,6 +55,10 @@ const AddKey = lazy(() => import("./pages/AddKey"));
 const EditKey = lazy(() => import("./pages/EditKey"));
 const Keys = lazy(() => import("./pages/Keys"));
 const HealthcheckLogs = lazy(() => import("./pages/HealthcheckLogs"));
+const PositionGUI = lazy(() => import("./pages/PositionGUI"));
+const Maps = lazy(() => import("./pages/Maps"));
+const AddMap = lazy(() => import("./pages/AddMap"));
+const EditMap = lazy(() => import("./pages/EditMap"));
 
 const AppRouter = () => {
   const mode = useSelector((state) => state.color.value);
@@ -27,6 +66,13 @@ const AppRouter = () => {
   const theme = useMemo(
     () =>
       createTheme({
+        components: {
+          MuiLink: {
+            defaultProps: {
+              component: LinkBehavior,
+            },
+          },
+        },
         palette: {
           mode,
         },
@@ -66,6 +112,15 @@ const AppRouter = () => {
             <Route path="/key/add" exact element={<AddKey />} />
             <Route path="/key/edit/:keyId" exact element={<EditKey />} />
             <Route path="/key/position" exact element={<KeyPosition />} />
+
+            <Route path="/map" exact element={<Maps />} />
+            <Route path="/map/add" exact element={<AddMap />} />
+            <Route path="/map/edit/:mapId" exact element={<EditMap />} />
+            <Route
+              path="/map/positioning/:mapId"
+              exact
+              element={<PositionGUI />}
+            />
           </Routes>
         </Suspense>
       </Router>

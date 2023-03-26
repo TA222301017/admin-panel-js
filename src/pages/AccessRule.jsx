@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, Link } from "@mui/material";
 import React from "react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,7 +7,12 @@ import {
   GET_ALL_ACCESS_RULES,
 } from "../store/reducers/accessRuleSlice";
 import { GridActionsCellItem } from "@mui/x-data-grid";
-import { DeleteForeverSharp, EditSharp } from "@mui/icons-material";
+import {
+  AddSharp,
+  DeleteForeverSharp,
+  DownloadSharp,
+  EditSharp,
+} from "@mui/icons-material";
 import { toastError, toastSuccess } from "../store/reducers/toastSlice";
 import DataTableFilterForm from "../components/DataTableFilterForm";
 import DataTable from "../components/DataTable";
@@ -16,6 +21,7 @@ import CardPersonel from "../components/CardPersonel";
 import LoggedInLayout from "../layouts/LoggedInLayout";
 import { getAllAccessRuleRequest } from "../store/consumer";
 import * as XLSX from "xlsx";
+import CellLink from "../components/CellLink";
 
 const crumbs = [
   {
@@ -49,8 +55,30 @@ const AccessRule = () => {
 
   const columnDef = [
     { field: "index", headerName: "No.", width: 10, flex: 0.2 },
-    { field: "personel", headerName: "Personel", flex: 0.5 },
-    { field: "lock", headerName: "Lock", flex: 0.5 },
+    {
+      field: "personel",
+      headerName: "Personel",
+      flex: 0.5,
+      renderCell: (params) => {
+        return (
+          <CellLink href={`/personel/edit/${params.row.personel_id}`}>
+            {params.value}
+          </CellLink>
+        );
+      },
+    },
+    {
+      field: "lock",
+      headerName: "Lock",
+      flex: 0.5,
+      renderCell: (params) => {
+        return (
+          <CellLink href={`/lock/edit/${params.row.lock_id}`}>
+            {params.value}
+          </CellLink>
+        );
+      },
+    },
     { field: "location", headerName: "Location", flex: 0.5 },
     {
       field: "starts_at",
@@ -192,6 +220,7 @@ const AccessRule = () => {
           variant="outlined"
           color="inherit"
           onClick={handleExport}
+          startIcon={<DownloadSharp />}
         >
           Export
         </Button>
@@ -204,6 +233,7 @@ const AccessRule = () => {
             setModalOpen(true);
           }}
           color="inherit"
+          startIcon={<AddSharp />}
         >
           Tambah
         </Button>

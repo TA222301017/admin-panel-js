@@ -11,7 +11,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link as RouterLink } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
@@ -27,6 +27,7 @@ import {
   Brightness4Sharp,
   RuleSharp,
   LocationOnSharp,
+  MapSharp,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUser } from "../store/reducers/userSlice";
@@ -75,6 +76,11 @@ const navItems = [
     name: "Keys List",
     path: "/key",
   },
+  {
+    icon: <MapSharp />,
+    name: "Maps List",
+    path: "/map",
+  },
 ];
 
 const LoggedInLayout = ({ children, title, breadcrumbs, desc }) => {
@@ -106,16 +112,17 @@ const LoggedInLayout = ({ children, title, breadcrumbs, desc }) => {
         </Toolbar>
         <List>
           {navItems.map((item, index) => (
-            <ListItem key={index} disablePadding>
-              <ListItemButton
-                onClick={() => navigate(item.path)}
-                selected={location.pathname.startsWith(item.path)}
-                disableRipple
-              >
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.name} />
-              </ListItemButton>
-            </ListItem>
+            <ListItemButton
+              component={RouterLink}
+              key={index}
+              to={item.path}
+              selected={location.pathname.startsWith(item.path)}
+              disablePadding
+              disableRipple
+            >
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.name} />
+            </ListItemButton>
           ))}
           <ListItem disablePadding>
             <ListItemButton
@@ -160,7 +167,7 @@ const LoggedInLayout = ({ children, title, breadcrumbs, desc }) => {
         <Breadcrumbs separator="›" aria-label="breadcrumb">
           {breadcrumbs &&
             breadcrumbs.map((e, i) => (
-              <Link underline="hover" key={i} onClick={() => navigate(e.path)}>
+              <Link underline="hover" key={i} href={e.path}>
                 {e.name}
               </Link>
             ))}

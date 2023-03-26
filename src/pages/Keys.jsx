@@ -5,8 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from "@mui/material/Button";
 import { GET_KEYS } from "../store/reducers/keySlice";
 import DataTable from "../components/DataTable";
+import CellLink from "../components/CellLink";
 import { useNavigate } from "react-router";
-import { EditSharp, LocationSearchingSharp } from "@mui/icons-material";
+import {
+  AddSharp,
+  DownloadSharp,
+  EditSharp,
+  LocationSearchingSharp,
+} from "@mui/icons-material";
 import DataTableFilterForm from "../components/DataTableFilterForm";
 import * as XLSX from "xlsx";
 import { getKeysRequest } from "../store/consumer";
@@ -38,9 +44,31 @@ const Keys = () => {
 
   const columnDef = [
     { field: "index", headerName: "No.", width: 10, flex: 0.2 },
-    { field: "name", headerName: "Name", flex: 0.5 },
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 0.5,
+      renderCell: (params) => {
+        return (
+          <CellLink href={`/key/edit/${params.row.id}`}>
+            {params.value}
+          </CellLink>
+        );
+      },
+    },
+    {
+      field: "owner",
+      headerName: "Owner",
+      flex: 0.5,
+      renderCell: (params) => {
+        return (
+          <CellLink href={`/personel/edit/${params.row.owner_id}`}>
+            {params.value}
+          </CellLink>
+        );
+      },
+    },
     { field: "key_id", headerName: "Key ID", flex: 1 },
-    { field: "owner", headerName: "Owner", flex: 0.5 },
     {
       field: "status",
       type: "boolean",
@@ -50,19 +78,18 @@ const Keys = () => {
     {
       field: "actions",
       type: "actions",
+      headerName: "Actions",
       getActions: (params) => [
         <GridActionsCellItem
           icon={<EditSharp />}
           label="Edit"
           title="Edit"
           onClick={() => navigate(`/key/edit/${params.row.id}`)}
-          showInMenu
         />,
         <GridActionsCellItem
           icon={<LocationSearchingSharp />}
           label="Locate"
           onClick={() => navigate(`/key/location`)}
-          showInMenu
         />,
       ],
     },
@@ -149,6 +176,7 @@ const Keys = () => {
           variant="outlined"
           color="inherit"
           onClick={handleExport}
+          startIcon={<DownloadSharp />}
         >
           Export
         </Button>
@@ -159,6 +187,7 @@ const Keys = () => {
           variant="outlined"
           onClick={() => navigate("/key/add")}
           color="inherit"
+          startIcon={<AddSharp />}
         >
           Tambah
         </Button>
