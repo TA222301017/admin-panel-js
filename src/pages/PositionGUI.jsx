@@ -125,28 +125,10 @@ const PositionGUI = () => {
                     {map?.locks?.map((el, index) => (
                       <TableRow key={index}>
                         <TableCell>
-                          <span>
-                            {`${index + 1}. `}
-                            <CellLink href={`/lock/edit/${el.id}`}>
-                              {el.name}
-                            </CellLink>
-                            <span style={{ float: "right" }}>
-                              {/* <IconButton
-                                size="small"
-                                onClick={() =>
-                                  handleDeleteLockToMap(map.id, el.id)
-                                }
-                              >
-                                <DeleteSharp />
-                              </IconButton>
-                              <IconButton
-                                size="small"
-                                onClick={() => setSelectedLockId(el.id)}
-                              >
-                                <DragIndicatorSharp />
-                              </IconButton> */}
-                            </span>
-                          </span>
+                          {`${index + 1}. `}
+                          <CellLink href={`/lock/edit/${el.id}`}>
+                            {el.name}
+                          </CellLink>
                         </TableCell>
                       </TableRow>
                     ))}

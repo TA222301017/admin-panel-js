@@ -223,7 +223,12 @@ const RSSILogs = () => {
       desc="Tinjau riwayat posisi personel-personel dalam sistem"
       breadcrumbs={crumbs}
     >
-      <DataTableFilterForm withDate withoutStatus handleSearch={handleSearch}>
+      <DataTableFilterForm
+        withDate
+        withoutStatus
+        handleSearch={handleSearch}
+        keywordDefault={query.get("keyword")}
+      >
         <Button
           type="button"
           size="medium"

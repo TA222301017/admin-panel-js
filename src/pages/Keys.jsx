@@ -89,7 +89,8 @@ const Keys = () => {
         <GridActionsCellItem
           icon={<LocationSearchingSharp />}
           label="Locate"
-          onClick={() => navigate(`/key/location`)}
+          title="Locate"
+          onClick={() => navigate(`/position-log?keyword=${params.row.owner}`)}
         />,
       ],
     },

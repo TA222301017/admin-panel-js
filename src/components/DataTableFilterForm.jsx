@@ -13,6 +13,7 @@ import { SearchSharp } from "@mui/icons-material";
 const DataTableFilterForm = ({
   handleSearch,
   keywordLabel = "Keyword",
+  keywordDefault = "",
   withDate = false,
   withoutStatus = false,
   children,
@@ -61,6 +62,9 @@ const DataTableFilterForm = ({
         variant="outlined"
         size="small"
         name="keyword"
+        inputProps={{
+          defaultValue: keywordDefault,
+        }}
       />
 
       {!withoutStatus && (
