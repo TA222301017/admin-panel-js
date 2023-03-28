@@ -160,7 +160,7 @@ const LoggedInLayout = ({ children, title, breadcrumbs, desc }) => {
             <Brightness4Sharp fontSize="inherit" />
           )}
         </IconButton>
-        <Typography variant="h3">{title}</Typography>
+        <Typography variant="h4">{title}</Typography>
         <Typography variant="h7">{desc}</Typography>
         <br />
         <br />

@@ -8,7 +8,7 @@ import DataTable from "../components/DataTable";
 import CellLink from "../components/CellLink";
 import { addAccessLog, GET_ACCESS_LOG } from "../store/reducers/logSlice";
 import * as XLSX from "xlsx";
-import { getAccessLogRequest } from "../store/consumer";
+import { getAccessLogRequest, getAccessLogStream } from "../store/consumer";
 import { timeToPrettyTimeString } from "../utils/formatTime";
 import { FormLabel, IconButton, Switch, Toolbar } from "@mui/material";
 import { useRef } from "react";
@@ -169,10 +169,8 @@ const AccessLogs = () => {
     });
   };
 
-  const handleGoLive = () => {
-    let stream = new EventSource(
-      import.meta.env.VITE_API_BASE_URL + "/log/access/stream"
-    );
+  const handleGoLive = async () => {
+    let stream = await getAccessLogStream({ keyword: filter.keyword });
 
     streamRef.current = stream;
 

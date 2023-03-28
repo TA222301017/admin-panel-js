@@ -17,6 +17,7 @@ import {
 import DataTableFilterForm from "../components/DataTableFilterForm";
 import * as XLSX from "xlsx";
 import { getPersonelsRequest } from "../store/consumer";
+import { timeToPrettyTimeString } from "../utils/formatTime";
 
 const crumbs = [
   {
@@ -62,7 +63,7 @@ const Maps = () => {
       headerName: "Created At",
       flex: 0.4,
       valueFormatter: (params) => {
-        return new Date(params.value).toString();
+        return timeToPrettyTimeString(new Date(params.value));
       },
     },
     {

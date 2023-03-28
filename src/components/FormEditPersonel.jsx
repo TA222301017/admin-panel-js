@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { Grid, MenuItem } from "@mui/material";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
+import { Grid, MenuItem, TextField, Box, Tabs, Tab } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { GET_KEYS } from "../store/reducers/keySlice";
 import { GET_ROLES } from "../store/reducers/roleSlice";
 import TabPanel from "./TabPanel";
 import AccessRuleTable from "./AccessRuleTable";
+import SelectAutocomplete from "./SelectAutocomplete";
 
 const a11yProps = (index) => ({
   id: `simple-tab-${index}`,
@@ -118,22 +115,71 @@ const FormEditPersonel = ({ personelData, handleSubmit }) => {
                 </TextField>
               )}
 
-              {keyStatus === "fulfilled" && (
-                <TextField
-                  size="small"
-                  id="key_id"
-                  name="key_id"
-                  select
-                  label="Kunci"
-                  inputProps={{ defaultValue: personelData?.key_id }}
-                >
-                  {keys.map((el) => (
-                    <MenuItem key={el.id} value={el.id}>
-                      {el.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              )}
+              {
+                // keyStatus === "fulfilled" && (
+                <SelectAutocomplete
+                  name="key"
+                  label="Key"
+                  options={
+                    personelData
+                      ? keys.filter(
+                          (el) =>
+                            el.owner_id == 0 || el.owner_id == personelData.id
+                        )
+                      : keys.filter((el) => el.owner_id == 0)
+                  }
+                  loading={keyStatus === "pending"}
+                  defaultValue={personelData?.key}
+                  dataKey="name"
+                  fetcher={() =>
+                    dispatch(
+                      GET_KEYS({
+                        page: 1,
+                        limit: -1,
+                        keyword: "",
+                        status: "any",
+                      })
+                    )
+                  }
+                />
+                // <Autocomplete
+                //   options={keys.filter(
+                //     (el) => el.owner_id == 0 || el.owner_id == personelData?.id
+                //   )}
+                //   // getOptionLabel={(option) => option.name}
+                //   autoSelect
+                //   renderInput={(params) => (
+                //     <TextField
+                //       {...params}
+                //       select
+                //       id="key_id"
+                //       name="key_id"
+                //       label="Kunci"
+                //       inputProps={{ defaultValue: personelData?.key_id }}
+                //     />
+                //   )}
+                // />
+                // <TextField
+                //   size="small"
+                //   id="key_id"
+                //   name="key_id"
+                //   select
+                //   label="Kunci"
+                //   inputProps={{ defaultValue: personelData?.key_id }}
+                // >
+                //   {keys
+                //     .filter(
+                //       (el) =>
+                //         el.owner_id == 0 || el.owner_id == personelData?.id
+                //     )
+                //     .map((el) => (
+                //       <MenuItem key={el.id} value={el.id}>
+                //         {el.name}
+                //       </MenuItem>
+                //     ))}
+                // </TextField>
+                // )
+              }
 
               <TextField
                 size="small"

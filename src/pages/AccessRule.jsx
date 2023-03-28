@@ -22,6 +22,7 @@ import LoggedInLayout from "../layouts/LoggedInLayout";
 import { getAllAccessRuleRequest } from "../store/consumer";
 import * as XLSX from "xlsx";
 import CellLink from "../components/CellLink";
+import { timeToPrettyTimeString } from "../utils/formatTime";
 
 const crumbs = [
   {
@@ -85,7 +86,7 @@ const AccessRule = () => {
       headerName: "Starts At",
       flex: 0.5,
       valueFormatter: (params) => {
-        return new Date(params.value).toString();
+        return timeToPrettyTimeString(new Date(params.value));
       },
     },
     {
@@ -93,7 +94,7 @@ const AccessRule = () => {
       headerName: "Ends At",
       flex: 0.5,
       valueFormatter: (params) => {
-        return new Date(params.value).toString();
+        return timeToPrettyTimeString(new Date(params.value));
       },
     },
     {

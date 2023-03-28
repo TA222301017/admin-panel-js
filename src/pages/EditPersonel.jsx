@@ -28,6 +28,10 @@ const EditPersonel = () => {
     status,
   } = useSelector((state) => state.personel);
 
+  const {
+    value: { keys },
+  } = useSelector((state) => state.key);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { personelId } = useParams();
@@ -39,13 +43,18 @@ const EditPersonel = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    let s = keys.filter((el) => el.name === data.get("key"));
+    if (!s.length) {
+      return;
+    }
+
     dispatch(
       EDIT_PERSONEL({
         id: personelId,
         name: data.get("name"),
         personelId: data.get("personel_id"),
         roleId: Number(data.get("role_id")),
-        keyId: Number(data.get("key_id")),
+        keyId: s[0].id,
         status: data.get("status") === "true",
         description: data.get("description"),
       })

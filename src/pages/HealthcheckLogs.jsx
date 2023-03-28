@@ -12,6 +12,7 @@ import { CHECK_LOCK } from "../store/reducers/lockSlice";
 import { toastSuccess } from "../store/reducers/toastSlice";
 import { getHealthcheckLogRequest } from "../store/consumer";
 import * as XLSX from "xlsx";
+import { timeToPrettyTimeString } from "../utils/formatTime";
 
 const crumbs = [
   {
@@ -62,7 +63,7 @@ const HealthcheckLogs = () => {
       headerName: "Timestamp",
       flex: 1,
       valueFormatter: (params) => {
-        return new Date(params.value).toString();
+        return timeToPrettyTimeString(new Date(params.value));
       },
     },
     {

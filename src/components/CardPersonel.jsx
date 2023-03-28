@@ -19,6 +19,7 @@ import {
   timeToDatePickerString,
 } from "../utils/formatTime";
 import { GET_PERSONELS } from "../store/reducers/personelSlice";
+import SelectAutocomplete from "./SelectAutocomplete";
 
 const CardPersonel = ({
   accessRuleIndex = -1,
@@ -49,39 +50,58 @@ const CardPersonel = ({
       ? timeToDatePickerString(new Date(accessRules[accessRuleIndex].ends_at))
       : new Date().toLocaleDateString() + " 23:59"
   );
-  const [lockId, setLockId] = useState(
-    accessRuleIndex >= 0 ? accessRules[accessRuleIndex].lock_id : 1
-  );
-  const [personelId, setPersonelId] = useState(
-    accessRuleIndex >= 0 ? accessRules[accessRuleIndex].personel_id : 0
-  );
 
-  const simpanButton = () => {
-    if (accessRuleIndex === -1) {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+
+    let lockId = locks.filter((el) => el.name === data.get("lock"));
+    let personelId = personels.filter((el) => el.name === data.get("personel"));
+
+    if (accessRuleIndex < 0) {
+      if (lockId.length === 0) {
+        dispatch(toastError("Pilihan lock tidak valid"));
+        return;
+      }
+      lockId = lockId[0].id;
+
+      if (withPersonelSelection) {
+        if (personelId.length === 0) {
+          dispatch(toastError("Pilihan personel tidak valid"));
+          return;
+        }
+
+        personelId = personelId[0].id;
+      } else {
+        personelId = personel.id;
+      }
+
       dispatch(
         ADD_ACCESS_RULE({
           lockId: lockId,
-          personelId: withPersonelSelection ? personelId : personel.id,
-          startsAt: timeToAPIDateString(new Date(startDate)),
-          endsAt: timeToAPIDateString(new Date(endDate)),
+          personelId: personelId,
+          startsAt: timeToAPIDateString(new Date(data.get("startdate"))),
+          endsAt: timeToAPIDateString(new Date(data.get("enddate"))),
         })
       ).then((res) => {
         if (res.payload.error) {
           dispatch(toastError(res.payload.error));
         } else {
           dispatch(toastSuccess("Perubahan berhasil disimpan"));
-          setLockId(0);
           setStartDate(new Date().toLocaleDateString() + " 00:00");
           setEndDate(new Date().toLocaleDateString() + " 23:59");
         }
       });
     } else {
+      lockId = accessRules[accessRuleIndex].lock_id;
+      personelId = accessRules[accessRuleIndex].personel_id;
+
       dispatch(
         EDIT_ACCESS_RULE({
           accessRuleId: accessRules[accessRuleIndex].id,
-          startsAt: timeToAPIDateString(new Date(startDate)),
-          endsAt: timeToAPIDateString(new Date(endDate)),
           lockId: lockId,
+          startsAt: timeToAPIDateString(new Date(data.get("startdate"))),
+          endsAt: timeToAPIDateString(new Date(data.get("enddate"))),
         })
       ).then((res) => {
         if (res.payload.error) {
@@ -122,63 +142,52 @@ const CardPersonel = ({
         title={accessRuleIndex >= 0 ? "Edit Access Rule" : "Add Access Rule"}
       />
       <CardContent>
-        <Grid container spacing={2} direction="column" component="form">
+        <Grid
+          container
+          spacing={2}
+          direction="column"
+          component="form"
+          onSubmit={handleSubmit}
+        >
           <Grid item>
             <Grid item direction="column" xs>
-              {withPersonelSelection && personels.length && (
-                <TextField
-                  fullWidth
-                  id="personel_id"
-                  name="personel_id"
-                  select
+              {withPersonelSelection && (
+                <SelectAutocomplete
+                  disabled={accessRuleIndex >= 0}
+                  id="personel"
+                  name="personel"
                   label="Personel"
-                  size="small"
-                  value={personelId}
-                  onChange={(e) => setPersonelId(e.target.value)}
-                  inputProps={
+                  dataKey="name"
+                  options={personels}
+                  defaultValue={
                     accessRuleIndex >= 0
-                      ? {
-                          defaultValue:
-                            accessRules[accessRuleIndex].personel_id,
-                        }
+                      ? personels.filter(
+                          (el) =>
+                            el.id === accessRules[accessRuleIndex].personel_id
+                        )[0]?.name
                       : null
                   }
-                  disabled={accessRuleIndex >= 0}
-                >
-                  {personels.map((el, index) => (
-                    <MenuItem key={index} value={el.id}>
-                      {el.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
+                />
               )}
             </Grid>
           </Grid>
           <Grid item>
             <Grid item direction="column" xs>
-              {locks.length && (
-                <TextField
-                  fullWidth
-                  id="lock_id"
-                  name="lock_id"
-                  select
-                  label="Lokasi"
-                  size="small"
-                  value={lockId}
-                  onChange={(e) => setLockId(e.target.value)}
-                  inputProps={
-                    accessRuleIndex >= 0
-                      ? { defaultValue: accessRules[accessRuleIndex].lock_id }
-                      : null
-                  }
-                >
-                  {locks.map((el, index) => (
-                    <MenuItem key={index} value={el.id}>
-                      {el.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              )}
+              <SelectAutocomplete
+                disabled={accessRuleIndex >= 0}
+                id="lock"
+                name="lock"
+                label="Lock"
+                dataKey="name"
+                options={locks}
+                defaultValue={
+                  accessRuleIndex >= 0
+                    ? locks.filter(
+                        (el) => el.id === accessRules[accessRuleIndex].lock_id
+                      )[0]?.name
+                    : null
+                }
+              />
             </Grid>
           </Grid>
           <Grid item>
@@ -214,7 +223,8 @@ const CardPersonel = ({
               fullWidth
               variant="outlined"
               color="inherit"
-              onClick={() => simpanButton()}
+              type="submit"
+              // onClick={() => simpanButton()}
             >
               Simpan
             </Button>

@@ -56,6 +56,18 @@ const Personels = () => {
         );
       },
     },
+    {
+      field: "key",
+      headerName: "Key",
+      flex: 0.5,
+      renderCell: (params) => {
+        return (
+          <CellLink href={`/key/edit/${params.row.key_id}`}>
+            {params.value}
+          </CellLink>
+        );
+      },
+    },
     { field: "personel_id", headerName: "ID Number", flex: 0.8 },
     { field: "role", headerName: "Role", flex: 0.5 },
     {
@@ -77,7 +89,8 @@ const Personels = () => {
         <GridActionsCellItem
           icon={<LocationSearchingSharp />}
           label="Locate"
-          onClick={() => navigate(`/key/location`)}
+          title="Locate"
+          onClick={() => navigate(`/position-log?keyword=${params.row.name}`)}
         />,
       ],
     },

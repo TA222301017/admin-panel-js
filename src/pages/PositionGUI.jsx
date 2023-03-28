@@ -22,6 +22,7 @@ import { useParams } from "react-router-dom";
 import MapCanvas from "../components/MapCanvas";
 import LoggedInLayout from "../layouts/LoggedInLayout";
 import { GET_MAP } from "../store/reducers/mapSlice";
+import { getAccessLogStream, getRSSILogStream } from "../store/consumer";
 
 const sleep = (m) => new Promise((r) => setTimeout(r, m));
 
@@ -51,30 +52,28 @@ const PositionGUI = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    let rssiStream = new EventSource(
-      import.meta.env.VITE_API_BASE_URL + "/log/rssi/stream?map_id="
-    );
+    let accessStream, rssiStream;
 
-    let accessStream = new EventSource(
-      import.meta.env.VITE_API_BASE_URL + "/log/access/stream?map_id="
-    );
+    (async () => {
+      rssiStream = await getRSSILogStream({ keyword: "" });
+      accessStream = await getAccessLogStream({ keyword: "" });
+      accessStream.addEventListener("access", (e) => {
+        let data = JSON.parse(e.data);
+        let lockEl = document.getElementById(`lock-${data.lock_id}`);
 
-    accessStream.addEventListener("access", (e) => {
-      let data = JSON.parse(e.data);
-      let lockEl = document.getElementById(`lock-${data.lock_id}`);
-
-      let blink = async () => {
-        lockEl.setAttribute("fill", "rgb(0, 255, 0, 1)");
-        await sleep(250);
-        lockEl.setAttribute("fill", "rgb(255, 0, 0, 1)");
-        await sleep(250);
-        lockEl.setAttribute("fill", "rgb(0, 255, 0, 1)");
-        await sleep(250);
-        lockEl.setAttribute("fill", "rgb(255, 0, 0, 1)");
-      };
-      blink();
-    });
-    dispatch(GET_MAP({ mapId }));
+        let blink = async () => {
+          lockEl.setAttribute("fill", "rgb(0, 255, 0, 1)");
+          await sleep(250);
+          lockEl.setAttribute("fill", "rgb(255, 0, 0, 1)");
+          await sleep(250);
+          lockEl.setAttribute("fill", "rgb(0, 255, 0, 1)");
+          await sleep(250);
+          lockEl.setAttribute("fill", "rgb(255, 0, 0, 1)");
+        };
+        blink();
+      });
+      dispatch(GET_MAP({ mapId }));
+    })();
 
     return () => {
       rssiStream.close();

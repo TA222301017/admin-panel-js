@@ -78,7 +78,7 @@ export const getAllAccessRuleRequest = async ({
   }
 };
 
-export const getAccessRuleRequest = async ({ mapId, page, limit }) => {
+export const getAccessRuleRequest = async ({ personelId, page, limit }) => {
   try {
     let res = await http.get(`/access/${mapId}`, {
       params: {
@@ -95,14 +95,14 @@ export const getAccessRuleRequest = async ({ mapId, page, limit }) => {
 
 export const addAccessRuleRequest = async ({
   lockId,
-  mapId,
+  personelId,
   startsAt,
   endsAt,
 }) => {
   try {
     let res = await http.post(`/access`, {
       lock_id: lockId,
-      personel_id: mapId,
+      personel_id: personelId,
       starts_at: startsAt,
       ends_at: endsAt,
     });
@@ -114,7 +114,7 @@ export const addAccessRuleRequest = async ({
 
 export const editAccessRuleRequest = async ({
   lockId,
-  mapId,
+  personelId,
   startsAt,
   endsAt,
   accessRuleId,
@@ -122,7 +122,7 @@ export const editAccessRuleRequest = async ({
   try {
     let res = await http.patch(`/access/${accessRuleId}`, {
       lock_id: lockId,
-      personel_id: mapId,
+      personel_id: personelId,
       starts_at: startsAt,
       ends_at: endsAt,
     });
@@ -261,7 +261,13 @@ export const editLockRequest = async ({
   }
 };
 
-export const getKeysRequest = async ({ page, limit, status, keyword }) => {
+export const getKeysRequest = async ({
+  page,
+  limit,
+  status,
+  keyword,
+  notowned = false,
+}) => {
   try {
     let res = await http.get(`/device/key`, {
       params: {
@@ -269,6 +275,7 @@ export const getKeysRequest = async ({ page, limit, status, keyword }) => {
         limit: limit,
         status: status,
         keyword: keyword,
+        notowned: notowned,
       },
     });
     if (res.data.data === null) res.data.data = [];
@@ -522,4 +529,33 @@ export const dashboardRequest = async () => {
   } catch (err) {
     return handleError(err);
   }
+};
+
+export const getSSEToken = async () => {
+  try {
+    let res = await http.get(`/sse/token`);
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
+
+export const getAccessLogStream = async ({ keyword }) => {
+  let data = await getSSEToken();
+  let stream = new EventSource(
+    `${import.meta.env.VITE_API_BASE_URL}/sse/access?keyword=${keyword}&token=${
+      data.data
+    }`
+  );
+  return stream;
+};
+
+export const getRSSILogStream = async ({ keyword }) => {
+  let data = await getSSEToken();
+  let stream = new EventSource(
+    `${import.meta.env.VITE_API_BASE_URL}/sse/rssi?keyword=${keyword}&token=${
+      data.data
+    }`
+  );
+  return stream;
 };

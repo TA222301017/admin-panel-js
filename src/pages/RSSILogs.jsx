@@ -7,8 +7,12 @@ import Button from "@mui/material/Button";
 import DataTableFilterForm from "../components/DataTableFilterForm";
 import { addRSSILog, GET_RSSI_LOG } from "../store/reducers/logSlice";
 import * as XLSX from "xlsx";
-import { getRSSILogRequest } from "../store/consumer";
-import { DownloadSharp } from "@mui/icons-material";
+import { getRSSILogRequest, getRSSILogStream } from "../store/consumer";
+import { DownloadSharp, PlayArrowSharp, StopSharp } from "@mui/icons-material";
+import { timeToPrettyTimeString } from "../utils/formatTime";
+import { useRef } from "react";
+import { toastSuccess, toastInfo } from "../store/reducers/toastSlice";
+import useQueryParams from "../hooks/useQueryParams";
 
 const crumbs = [
   {
@@ -22,13 +26,18 @@ const crumbs = [
 ];
 
 const RSSILogs = () => {
+  const query = useQueryParams();
+
+  const [isLive, setIsLive] = useState(false);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
   const [filter, setFilter] = useState({
-    keyword: "",
+    keyword: query.get("keyword"),
     startDate: new Date(new Date().setHours(0, 0, 0, 0)),
     endDate: new Date(new Date().setHours(23, 59, 59, 0)),
   });
+
+  const streamRef = useRef(null);
 
   const {
     value: { rssi, pagination },
@@ -94,16 +103,9 @@ const RSSILogs = () => {
       headerName: "Timestamp",
       flex: 1,
       valueFormatter: (params) => {
-        return new Date(params.value).toString();
+        return timeToPrettyTimeString(new Date(params.value));
       },
     },
-    // {
-    //   field: "actions",
-    //   type: "actions",
-    //   getActions: (params) => [
-    //     <GridActionsCellItem icon={<CheckSharp />} label="Check" showInMenu />,
-    //   ],
-    // },
   ];
 
   const handlePageChange = (pageNum) => {
@@ -171,6 +173,24 @@ const RSSILogs = () => {
     });
   };
 
+  const handleGoLive = async () => {
+    let stream = await getRSSILogStream({ keyword: filter.keyword });
+
+    streamRef.current = stream;
+
+    stream.addEventListener("rssi", (e) => {
+      dispatch(addAccessLog(JSON.parse(e.data)));
+    });
+
+    dispatch(toastInfo("Menampilkan data live..."));
+  };
+
+  const handleStopLive = () => {
+    streamRef.current.close();
+
+    dispatch(toastInfo("Menampilkan data historis"));
+  };
+
   useEffect(() => {
     dispatch(
       GET_RSSI_LOG({
@@ -182,14 +202,15 @@ const RSSILogs = () => {
       })
     );
 
-    let stream = new EventSource(
-      import.meta.env.VITE_API_BASE_URL + "/log/rssi/stream"
-    );
+    let stream;
 
-    stream.addEventListener("rssi", (e) => {
-      let rssiEvent = JSON.parse(e.data);
-      dispatch(addRSSILog(rssiEvent));
-    });
+    (async () => {
+      stream = await getRSSILogStream({ keyword: "" });
+      stream.addEventListener("rssi", (e) => {
+        let rssiEvent = JSON.parse(e.data);
+        dispatch(addRSSILog(rssiEvent));
+      });
+    })();
 
     return () => {
       stream.close();
@@ -212,6 +233,24 @@ const RSSILogs = () => {
           startIcon={<DownloadSharp />}
         >
           Export
+        </Button>
+
+        <Button
+          type="button"
+          size="medium"
+          variant="outlined"
+          color="inherit"
+          onClick={() => {
+            setIsLive(!isLive);
+            if (isLive) {
+              handleStopLive();
+            } else {
+              handleGoLive();
+            }
+          }}
+          startIcon={isLive ? <StopSharp /> : <PlayArrowSharp />}
+        >
+          {isLive ? "Stop" : "Live"}
         </Button>
       </DataTableFilterForm>
       <DataTable

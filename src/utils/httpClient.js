@@ -1,4 +1,7 @@
 import axios from "axios";
+import { createBrowserHistory } from "history";
+
+const history = createBrowserHistory();
 
 const http = axios.create({
   baseURL: import.meta.env.PROD ? "/api" : import.meta.env.VITE_API_BASE_URL,
@@ -10,14 +13,12 @@ const http = axios.create({
 
 http.interceptors.request.use(
   (config) => {
-    console.log(import.meta.env.PROD);
-    console.log(import.meta.env.API_BASE_URL);
     let token = localStorage.getItem("token");
 
     if (token !== "" && token) {
       config.headers = {
         ...config.headers,
-        authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       };
     }
 
@@ -40,6 +41,8 @@ http.interceptors.response.use(
 
     if (error?.response?.status === 401 && !config?.sent) {
       localStorage.removeItem("token");
+      // history.push("/");
+      // window.history.pushState({}, "", "/");
       window.location.href = "/";
     }
 
