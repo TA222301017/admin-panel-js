@@ -13,6 +13,7 @@ import { timeToPrettyTimeString } from "../utils/formatTime";
 import { useRef } from "react";
 import { toastSuccess, toastInfo } from "../store/reducers/toastSlice";
 import useQueryParams from "../hooks/useQueryParams";
+import { extimateDistanceFromRSSI } from "../utils/rssi";
 
 const crumbs = [
   {
@@ -90,13 +91,7 @@ const RSSILogs = () => {
       field: "rssi",
       headerName: "Jarak (approx.)",
       flex: 0.5,
-      valueFormatter: (params) => {
-        // 10^((Measured Power - Instant RSSI)/10*N)
-        let dist = Math.pow(10, (params.value + 10) / (10 * 2.4));
-        dist = Math.round(dist * 1000);
-        dist = dist / 1000;
-        return `${dist} m`;
-      },
+      valueFormatter: (params) => `${extimateDistanceFromRSSI(params.value)} m`,
     },
     {
       field: "timestamp",

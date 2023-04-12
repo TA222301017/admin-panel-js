@@ -10,8 +10,80 @@ import { useDispatch, useSelector } from "react-redux";
 import placeholderImage from "../../map-placeholder.jpg";
 import { EDIT_LOCK_TO_MAP } from "../store/reducers/mapSlice";
 import { toastSuccess, toastError } from "../store/reducers/toastSlice";
+import { extimateDistanceFromRSSI } from "../utils/rssi";
+
+function groupRssiData(data) {
+  const groupedData = data.reduce((acc, curr) => {
+    const id = curr.personel_id;
+    const lockId = curr.lock_id;
+    const timestamp = curr.timestamp;
+
+    if (!acc[id]) {
+      acc[id] = {};
+    }
+
+    if (!acc[id][lockId] || acc[id][lockId].timestamp < timestamp) {
+      acc[id][lockId] = curr;
+    }
+
+    return acc;
+  }, {});
+
+  for (let id in groupedData) {
+    groupedData[id] = Object.values(groupedData[id]);
+  }
+
+  return groupedData;
+}
+
+function findCircleIntersection(x1, y1, r1, x2, y2, r2, x3, y3, r3) {
+  const d12 = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+  const d23 = Math.sqrt(Math.pow(x3 - x2, 2) + Math.pow(y3 - y2, 2));
+  const d31 = Math.sqrt(Math.pow(x1 - x3, 2) + Math.pow(y1 - y3, 2));
+
+  // Calculate angles between circles using the Law of Cosines
+  const a1 = Math.acos(
+    (Math.pow(d12, 2) + Math.pow(r1, 2) - Math.pow(r2, 2)) / (2 * d12 * r1)
+  );
+  const a2 = Math.acos(
+    (Math.pow(d23, 2) + Math.pow(r2, 2) - Math.pow(r3, 2)) / (2 * d23 * r2)
+  );
+  const a3 = Math.acos(
+    (Math.pow(d31, 2) + Math.pow(r3, 2) - Math.pow(r1, 2)) / (2 * d31 * r3)
+  );
+
+  // Calculate intersection points
+  const p1 = [
+    x1 + r1 * Math.cos(Math.atan2(y2 - y1, x2 - x1) + a1),
+    y1 + r1 * Math.sin(Math.atan2(y2 - y1, x2 - x1) + a1),
+  ];
+  const p2 = [
+    x2 + r2 * Math.cos(Math.atan2(y3 - y2, x3 - x2) + a2),
+    y2 + r2 * Math.sin(Math.atan2(y3 - y2, x3 - x2) + a2),
+  ];
+  const p3 = [
+    x3 + r3 * Math.cos(Math.atan2(y1 - y3, x1 - x3) + a3),
+    y3 + r3 * Math.sin(Math.atan2(y1 - y3, x1 - x3) + a3),
+  ];
+
+  return [p1, p2, p3];
+}
+
+function findIncenter(x1, y1, x2, y2, x3, y3) {
+  // Calculate the length of each side of the triangle
+  const a = Math.sqrt(Math.pow(x2 - x3, 2) + Math.pow(y2 - y3, 2));
+  const b = Math.sqrt(Math.pow(x1 - x3, 2) + Math.pow(y1 - y3, 2));
+  const c = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+
+  // Calculate the coordinates of the incenter
+  const x = (a * x1 + b * x2 + c * x3) / (a + b + c);
+  const y = (a * y1 + b * y2 + c * y3) / (a + b + c);
+
+  return [x, y];
+}
 
 const MapCanvas = ({
+  rssiData = null,
   imageURL,
   imageData,
   mapData,
@@ -132,6 +204,79 @@ const MapCanvas = ({
             xlinkHref={imageURL ? imageURL : placeholderImage}
             onMouseMove={handleLockDrag}
           />
+
+          {rssiData && mapData
+            ? Object.keys(groupRssiData(rssiData)).map((personelId, index) => {
+                let personelFootprint = groupRssiData(rssiData)[personelId];
+                if (personelFootprint?.length >= 3) {
+                  let { coord_x: x1, coord_y: y1 } = mapData.locks.find(
+                    (e) => e.id === personelFootprint[0].lock_id
+                  );
+                  let { coord_x: x2, coord_y: y2 } = mapData.locks.find(
+                    (e) => e.id === personelFootprint[1].lock_id
+                  );
+                  let { coord_x: x3, coord_y: y3 } = mapData.locks.find(
+                    (e) => e.id === personelFootprint[2].lock_id
+                  );
+                  let r1 =
+                    (extimateDistanceFromRSSI(personelFootprint[0].rssi - 60) *
+                      mapData.image_width) /
+                    mapData.width;
+                  let r2 =
+                    (extimateDistanceFromRSSI(personelFootprint[1].rssi - 60) *
+                      mapData.image_width) /
+                    mapData.width;
+                  let r3 =
+                    (extimateDistanceFromRSSI(personelFootprint[2].rssi - 60) *
+                      mapData.image_width) /
+                    mapData.width;
+                  let [p1, p2, p3] = findCircleIntersection(
+                    x1,
+                    y1,
+                    r1,
+                    x2,
+                    y2,
+                    r2,
+                    x3,
+                    y3,
+                    r3
+                  );
+                  let [x, y] = findIncenter(
+                    p1[0],
+                    p1[1],
+                    p2[0],
+                    p2[1],
+                    p3[0],
+                    p3[1]
+                  );
+
+                  return (
+                    <g>
+                      <circle
+                        key={index}
+                        id={`personel-${personelId}`}
+                        cx={`${x}`}
+                        cy={`${y}`}
+                        stroke-width="2"
+                        r="12"
+                        fill="rgb(255, 0, 255, 1)"
+                      />
+                      <text
+                        x={`${x}`}
+                        y={`${y}`}
+                        text-anchor="middle"
+                        stroke="#ff"
+                        stroke-width="2px"
+                        dy=".3em"
+                      >
+                        {personelId}
+                      </text>
+                    </g>
+                  );
+                }
+                return null;
+              })
+            : null}
           {mapData?.locks
             ? mapData.locks.map((el, index) => (
                 <g lockId={`${el.id}`} onClick={handleLockClick} key={index}>
