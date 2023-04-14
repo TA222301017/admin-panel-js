@@ -13,6 +13,8 @@ import DataTableFilterForm from "./DataTableFilterForm";
 import DataTable from "./DataTable";
 import Modal from "@mui/material/Modal";
 import CardPersonel from "./CardPersonel";
+import { timeToPrettyTimeString } from "../utils/formatTime";
+import CellLink from "./CellLink";
 
 const AccessRuleTable = ({ personelId }) => {
   const {
@@ -30,23 +32,32 @@ const AccessRuleTable = ({ personelId }) => {
 
   const columnDef = [
     { field: "index", headerName: "No.", width: 10, flex: 0.2 },
-    { field: "lock", headerName: "Lock", flex: 0.5 },
+    {
+      field: "lock",
+      headerName: "Lock",
+      flex: 0.5,
+      renderCell: (params) => {
+        return (
+          <CellLink href={`/lock/edit/${params.row.lock_id}`}>
+            {params.value}
+          </CellLink>
+        );
+      },
+    },
     { field: "location", headerName: "Location", flex: 0.5 },
     {
       field: "starts_at",
       headerName: "Starts At",
       flex: 1,
-      valueFormatter: (params) => {
-        return new Date(params.value).toString();
-      },
+      valueFormatter: (params) =>
+        timeToPrettyTimeString(new Date(params.value)),
     },
     {
       field: "ends_at",
       headerName: "Ends At",
       flex: 1,
-      valueFormatter: (params) => {
-        return new Date(params.value).toString();
-      },
+      valueFormatter: (params) =>
+        timeToPrettyTimeString(new Date(params.value)),
     },
     {
       field: "actions",
@@ -116,7 +127,9 @@ const AccessRuleTable = ({ personelId }) => {
         page: 1,
         limit: limit,
       })
-    );
+    ).then(() => {
+      toastSuccess("Berhasil mengambil data terbaru");
+    });
   };
 
   useEffect(() => {

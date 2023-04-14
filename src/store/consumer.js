@@ -80,7 +80,7 @@ export const getAllAccessRuleRequest = async ({
 
 export const getAccessRuleRequest = async ({ personelId, page, limit }) => {
   try {
-    let res = await http.get(`/access/${mapId}`, {
+    let res = await http.get(`/access/${personelId}`, {
       params: {
         page: page,
         limit: limit,
