@@ -259,14 +259,14 @@ const MapCanvas = ({
                         cy={`${y}`}
                         stroke-width="2"
                         r="12"
-                        fill="rgb(255, 0, 255, 1)"
+                        fill="rgb(0, 0, 0, 1)"
                       />
                       <text
                         x={`${x}`}
                         y={`${y}`}
                         text-anchor="middle"
-                        stroke="#ff"
-                        stroke-width="2px"
+                        stroke="#ffffff"
+                        stroke-width="1px"
                         dy=".3em"
                       >
                         {personelId}
@@ -325,8 +325,8 @@ const MapCanvas = ({
                         : el.coord_y
                     }`}
                     text-anchor="middle"
-                    stroke="#ff"
-                    stroke-width="2px"
+                    stroke="#ffffff"
+                    stroke-width="1px"
                     dy=".3em"
                   >
                     {index + 1}

@@ -294,10 +294,17 @@ export const getKeyRequest = async ({ keyId }) => {
   }
 };
 
-export const addKeyRequest = async ({ keyId, name, status, description }) => {
+export const addKeyRequest = async ({
+  keyId,
+  name,
+  status,
+  description,
+  aesKey,
+}) => {
   try {
     let res = await http.post(`/device/key`, {
       key_id: keyId,
+      aes_key: aesKey,
       name: name,
       status: status,
       description: description,
@@ -311,6 +318,7 @@ export const addKeyRequest = async ({ keyId, name, status, description }) => {
 export const editKeyRequest = async ({
   id,
   keyId,
+  aesKey,
   name,
   status,
   description,
@@ -318,6 +326,7 @@ export const editKeyRequest = async ({
   try {
     let res = await http.patch(`/device/key/${id}`, {
       key_id: keyId,
+      aes_key: aesKey,
       name: name,
       status: status,
       description: description,

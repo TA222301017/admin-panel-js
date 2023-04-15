@@ -38,6 +38,7 @@ const AddKey = () => {
     dispatch(
       ADD_KEY({
         keyId: data.get("key_id"),
+        aesKey: data.get("aes_key"),
         name: data.get("label"),
         status: data.get("status") === "true",
         description: data.get("description"),

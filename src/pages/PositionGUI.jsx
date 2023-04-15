@@ -244,7 +244,7 @@ const PositionGUI = () => {
                         el ? (
                           <TableRow key={index}>
                             <TableCell>
-                              {`${index + 1}. `}
+                              {`${el.split(",")[0]}. `}
                               <CellLink
                                 href={`/personel/edit/${el.split(",")[0]}`}
                               >
