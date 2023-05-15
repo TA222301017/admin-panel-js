@@ -24,7 +24,7 @@
     "xlsx": "^0.18.5"
   },
   "scripts": {
-    "start": "vite",
+    "start": "vite --host",
     "build": "vite build --base=/static",
     "serve": "vite preview"
   },

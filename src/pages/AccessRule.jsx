@@ -23,6 +23,7 @@ import { getAllAccessRuleRequest } from "../store/consumer";
 import * as XLSX from "xlsx";
 import CellLink from "../components/CellLink";
 import { timeToPrettyTimeString } from "../utils/formatTime";
+import { makeFilename } from "../utils/exportFilename";
 
 const crumbs = [
   {

@@ -18,6 +18,7 @@ import DataTableFilterForm from "../components/DataTableFilterForm";
 import * as XLSX from "xlsx";
 import { getPersonelsRequest } from "../store/consumer";
 import { timeToPrettyTimeString } from "../utils/formatTime";
+import { makeFilename } from "../utils/exportFilename";
 
 const crumbs = [
   {

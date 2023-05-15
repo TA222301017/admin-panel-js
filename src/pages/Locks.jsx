@@ -69,17 +69,17 @@ const Locks = () => {
     },
     {
       headerName: "Map",
-      flex: 0.5,
+      flex: 0.3,
       renderCell: (params) => {
         return (
-          <CellLink href={`/map/edit/${params.row.plan.id}`}>
-            {params.row.plan.name}
+          <CellLink href={`/map/edit/${params.row?.plan?.id}`}>
+            {params.row?.plan?.name}
           </CellLink>
         );
       },
     },
     { field: "location", headerName: "Location", flex: 0.5 },
-    { field: "ip_address", headerName: "IP Address", flex: 0.5 },
+    { field: "lock_id", headerName: "Lock ID", flex: 0.8 },
     {
       field: "status",
       type: "boolean",

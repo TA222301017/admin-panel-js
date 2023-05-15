@@ -37,36 +37,58 @@ function groupRssiData(data) {
 }
 
 function findCircleIntersection(x1, y1, r1, x2, y2, r2, x3, y3, r3) {
-  const d12 = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-  const d23 = Math.sqrt(Math.pow(x3 - x2, 2) + Math.pow(y3 - y2, 2));
-  const d31 = Math.sqrt(Math.pow(x1 - x3, 2) + Math.pow(y1 - y3, 2));
-
-  // Calculate angles between circles using the Law of Cosines
-  const a1 = Math.acos(
-    (Math.pow(d12, 2) + Math.pow(r1, 2) - Math.pow(r2, 2)) / (2 * d12 * r1)
-  );
-  const a2 = Math.acos(
-    (Math.pow(d23, 2) + Math.pow(r2, 2) - Math.pow(r3, 2)) / (2 * d23 * r2)
-  );
-  const a3 = Math.acos(
-    (Math.pow(d31, 2) + Math.pow(r3, 2) - Math.pow(r1, 2)) / (2 * d31 * r3)
-  );
-
-  // Calculate intersection points
-  const p1 = [
-    x1 + r1 * Math.cos(Math.atan2(y2 - y1, x2 - x1) + a1),
-    y1 + r1 * Math.sin(Math.atan2(y2 - y1, x2 - x1) + a1),
+  let delta_p1 = [
+    0, 0, -1, 1, 1, 1, -1, -1, -1, 1, 1, 1, 0, 0, 0, -1, -1, -1, 0, 0, 0, 1, 1,
+    1, -1, -1, -1,
   ];
-  const p2 = [
-    x2 + r2 * Math.cos(Math.atan2(y3 - y2, x3 - x2) + a2),
-    y2 + r2 * Math.sin(Math.atan2(y3 - y2, x3 - x2) + a2),
+  let delta_p2 = [
+    0, 0, 1, 0, 1, -1, 0, -1, 1, 0, -1, 1, 0, -1, 1, 0, -1, 1, 0, -1, 1, 0, -1,
+    1, 0, -1, 1,
   ];
-  const p3 = [
-    x3 + r3 * Math.cos(Math.atan2(y1 - y3, x1 - x3) + a3),
-    y3 + r3 * Math.sin(Math.atan2(y1 - y3, x1 - x3) + a3),
+  let delta_p3 = [
+    0, -1, 0, -1, 0, 1, 0, -1, 1, 0, -1, 1, 0, -1, 1, 0, -1, 1, 0, -1, 1, 0, -1,
+    1, 0, -1, 1,
   ];
+  for (let i = 0; i < delta_p1.length; i++) {
+    const d12 = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    const d23 = Math.sqrt(Math.pow(x3 - x2, 2) + Math.pow(y3 - y2, 2));
+    const d31 = Math.sqrt(Math.pow(x1 - x3, 2) + Math.pow(y1 - y3, 2));
 
-  return [p1, p2, p3];
+    let R1 = r1 + delta_p1[i];
+    let R2 = r2 + delta_p2[i];
+    let R3 = r3 + delta_p3[i];
+
+    // Calculate angles between circles using the Law of Cosines
+    const a1 = Math.acos(
+      (Math.pow(d12, 2) + Math.pow(R1, 2) - Math.pow(R2, 2)) / (2 * d12 * R1)
+    );
+    const a2 = Math.acos(
+      (Math.pow(d23, 2) + Math.pow(R2, 2) - Math.pow(R3, 2)) / (2 * d23 * R2)
+    );
+    const a3 = Math.acos(
+      (Math.pow(d31, 2) + Math.pow(R3, 2) - Math.pow(R1, 2)) / (2 * d31 * R3)
+    );
+
+    // Calculate intersection points
+    const p1 = [
+      x1 + r1 * Math.cos(Math.atan2(y2 - y1, x2 - x1) + a1),
+      y1 + r1 * Math.sin(Math.atan2(y2 - y1, x2 - x1) + a1),
+    ];
+    const p2 = [
+      x2 + r2 * Math.cos(Math.atan2(y3 - y2, x3 - x2) + a2),
+      y2 + r2 * Math.sin(Math.atan2(y3 - y2, x3 - x2) + a2),
+    ];
+    const p3 = [
+      x3 + r3 * Math.cos(Math.atan2(y1 - y3, x1 - x3) + a3),
+      y3 + r3 * Math.sin(Math.atan2(y1 - y3, x1 - x3) + a3),
+    ];
+
+    if (p1 && p2 && p3) {
+      return [p1, p2, p3];
+    }
+  }
+
+  return [undefined, undefined, undefined];
 }
 
 function findIncenter(x1, y1, x2, y2, x3, y3) {
@@ -207,74 +229,81 @@ const MapCanvas = ({
 
           {rssiData && mapData
             ? Object.keys(groupRssiData(rssiData)).map((personelId, index) => {
-                let personelFootprint = groupRssiData(rssiData)[personelId];
-                if (personelFootprint?.length >= 3) {
-                  let { coord_x: x1, coord_y: y1 } = mapData.locks.find(
-                    (e) => e.id === personelFootprint[0].lock_id
-                  );
-                  let { coord_x: x2, coord_y: y2 } = mapData.locks.find(
-                    (e) => e.id === personelFootprint[1].lock_id
-                  );
-                  let { coord_x: x3, coord_y: y3 } = mapData.locks.find(
-                    (e) => e.id === personelFootprint[2].lock_id
-                  );
-                  let r1 =
-                    (extimateDistanceFromRSSI(personelFootprint[0].rssi - 60) *
-                      mapData.image_width) /
-                    mapData.width;
-                  let r2 =
-                    (extimateDistanceFromRSSI(personelFootprint[1].rssi - 60) *
-                      mapData.image_width) /
-                    mapData.width;
-                  let r3 =
-                    (extimateDistanceFromRSSI(personelFootprint[2].rssi - 60) *
-                      mapData.image_width) /
-                    mapData.width;
-                  let [p1, p2, p3] = findCircleIntersection(
-                    x1,
-                    y1,
-                    r1,
-                    x2,
-                    y2,
-                    r2,
-                    x3,
-                    y3,
-                    r3
-                  );
-                  let [x, y] = findIncenter(
-                    p1[0],
-                    p1[1],
-                    p2[0],
-                    p2[1],
-                    p3[0],
-                    p3[1]
-                  );
+                try {
+                  let personelFootprint = groupRssiData(rssiData)[personelId];
+                  if (personelFootprint?.length >= 3) {
+                    let { coord_x: x1, coord_y: y1 } = mapData.locks.find(
+                      (e) => e.id === personelFootprint[0].lock_id
+                    );
+                    let { coord_x: x2, coord_y: y2 } = mapData.locks.find(
+                      (e) => e.id === personelFootprint[1].lock_id
+                    );
+                    let { coord_x: x3, coord_y: y3 } = mapData.locks.find(
+                      (e) => e.id === personelFootprint[2].lock_id
+                    );
+                    let r1 =
+                      (extimateDistanceFromRSSI(personelFootprint[0].rssi) *
+                        svgCanvasRef.current?.getBoundingClientRect().width) /
+                      mapData.width;
+                    let r2 =
+                      (extimateDistanceFromRSSI(personelFootprint[1].rssi) *
+                        svgCanvasRef.current?.getBoundingClientRect().width) /
+                      mapData.width;
+                    let r3 =
+                      (extimateDistanceFromRSSI(personelFootprint[2].rssi) *
+                        svgCanvasRef.current?.getBoundingClientRect().width) /
+                      mapData.width;
+                    let [p1, p2, p3] = findCircleIntersection(
+                      x1,
+                      y1,
+                      r1,
+                      x2,
+                      y2,
+                      r2,
+                      x3,
+                      y3,
+                      r3
+                    );
+                    let [x, y] = findIncenter(
+                      p1[0],
+                      p1[1],
+                      p2[0],
+                      p2[1],
+                      p3[0],
+                      p3[1]
+                    );
 
-                  return (
-                    <g>
-                      <circle
-                        key={index}
-                        id={`personel-${personelId}`}
-                        cx={`${x}`}
-                        cy={`${y}`}
-                        stroke-width="2"
-                        r="12"
-                        fill="rgb(0, 0, 0, 1)"
-                      />
-                      <text
-                        x={`${x}`}
-                        y={`${y}`}
-                        text-anchor="middle"
-                        stroke="#ffffff"
-                        stroke-width="1px"
-                        dy=".3em"
-                      >
-                        {personelId}
-                      </text>
-                    </g>
-                  );
+                    console.log("HUU", x, y);
+
+                    return (
+                      <g>
+                        <circle
+                          key={index}
+                          id={`personel-${personelId}`}
+                          cx={`${x}`}
+                          cy={`${y}`}
+                          stroke-width="2"
+                          r="12"
+                          fill="rgb(0, 0, 0, 1)"
+                        />
+                        <text
+                          x={`${x}`}
+                          y={`${y}`}
+                          text-anchor="middle"
+                          stroke="#ffffff"
+                          stroke-width="1px"
+                          dy=".3em"
+                        >
+                          {personelId}
+                        </text>
+                      </g>
+                    );
+                  }
+                  return null;
+                } catch (err) {
+                  console.log(err);
+                  return null;
                 }
-                return null;
               })
             : null}
           {mapData?.locks
@@ -309,7 +338,11 @@ const MapCanvas = ({
                           : el.coord_y
                       }`}
                       stroke-width="2"
-                      r={`${(3 * mapData.image_width) / mapData.width}`}
+                      r={`${
+                        (6 *
+                          svgCanvasRef.current?.getBoundingClientRect().width) /
+                        mapData.width
+                      }`}
                       fill="rgb(0, 0, 128, 0.15)"
                     />
                   )}

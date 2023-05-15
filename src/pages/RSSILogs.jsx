@@ -14,6 +14,7 @@ import { useRef } from "react";
 import { toastSuccess, toastInfo } from "../store/reducers/toastSlice";
 import useQueryParams from "../hooks/useQueryParams";
 import { extimateDistanceFromRSSI } from "../utils/rssi";
+import { makeFilename } from "../utils/exportFilename";
 
 const crumbs = [
   {
@@ -169,21 +170,23 @@ const RSSILogs = () => {
   };
 
   const handleGoLive = async () => {
-    let stream = await getRSSILogStream({ keyword: filter.keyword });
+    if (streamRef.current == null) {
+      streamRef.current = await getRSSILogStream({ keyword: filter.keyword });
 
-    streamRef.current = stream;
+      streamRef.current.addEventListener("rssi", (e) => {
+        dispatch(addRSSILog(JSON.parse(e.data)));
+      });
 
-    stream.addEventListener("rssi", (e) => {
-      dispatch(addAccessLog(JSON.parse(e.data)));
-    });
-
-    dispatch(toastInfo("Menampilkan data live..."));
+      dispatch(toastInfo("Menampilkan data live..."));
+    }
   };
 
   const handleStopLive = () => {
     streamRef.current.close();
 
     dispatch(toastInfo("Menampilkan data historis"));
+
+    streamRef.current = null;
   };
 
   useEffect(() => {
@@ -197,18 +200,10 @@ const RSSILogs = () => {
       })
     );
 
-    let stream;
-
-    (async () => {
-      stream = await getRSSILogStream({ keyword: "" });
-      stream.addEventListener("rssi", (e) => {
-        let rssiEvent = JSON.parse(e.data);
-        dispatch(addRSSILog(rssiEvent));
-      });
-    })();
-
     return () => {
-      stream.close();
+      if (streamRef.current != null) {
+        streamRef.current.close();
+      }
     };
   }, []);
 

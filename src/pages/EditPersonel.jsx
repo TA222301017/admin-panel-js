@@ -44,9 +44,6 @@ const EditPersonel = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     let s = keys.filter((el) => el.name === data.get("key"));
-    if (!s.length) {
-      return;
-    }
 
     dispatch(
       EDIT_PERSONEL({
@@ -54,7 +51,7 @@ const EditPersonel = () => {
         name: data.get("name"),
         personelId: data.get("personel_id"),
         roleId: Number(data.get("role_id")),
-        keyId: s[0].id,
+        keyId: !s.length ? 0 : s[0].id,
         status: data.get("status") === "true",
         description: data.get("description"),
       })

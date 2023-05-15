@@ -13,6 +13,7 @@ import { toastSuccess } from "../store/reducers/toastSlice";
 import { getHealthcheckLogRequest } from "../store/consumer";
 import * as XLSX from "xlsx";
 import { timeToPrettyTimeString } from "../utils/formatTime";
+import { makeFilename } from "../utils/exportFilename";
 
 const crumbs = [
   {

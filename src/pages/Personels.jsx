@@ -16,6 +16,7 @@ import {
 import DataTableFilterForm from "../components/DataTableFilterForm";
 import * as XLSX from "xlsx";
 import { getPersonelsRequest } from "../store/consumer";
+import { makeFilename } from "../utils/exportFilename";
 
 const crumbs = [
   {
