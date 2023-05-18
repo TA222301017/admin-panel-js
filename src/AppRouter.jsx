@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useSelector } from "react-redux";
+import { blue } from "@mui/material/colors";
 
 import PropTypes from "prop-types";
 
@@ -74,7 +75,7 @@ const AppRouter = () => {
           },
         },
         palette: {
-          mode,
+          mode: mode,
         },
       }),
     [mode]

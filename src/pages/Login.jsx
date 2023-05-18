@@ -1,12 +1,8 @@
 import * as React from "react";
-import { Box } from "@mui/material";
-import Avatar from "@mui/material/Avatar";
+import { Box, Paper, Snackbar, Alert } from "@mui/material";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -14,13 +10,13 @@ import Copyright from "../components/Copyright";
 import { useDispatch, useSelector } from "react-redux";
 import { LOGIN } from "../store/reducers/userSlice";
 import { toastSuccess } from "../store/reducers/toastSlice";
-import { useEffect } from "react";
+import { toastClose } from "../store/reducers/toastSlice";
 import { useNavigate } from "react-router";
 
 const theme = createTheme();
 
 export default function SignIn() {
-  const { user, status, error } = useSelector((state) => state.user);
+  const toast = useSelector((state) => state.toast);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -46,58 +42,71 @@ export default function SignIn() {
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "primary" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Login
-          </Typography>
+        <Paper elevation={3} style={{ padding: "20px", marginTop: "80px" }}>
           <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
           >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="username"
-              label="Username"
-              name="username"
-              autoComplete="username"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+            <Typography component="h1" variant="h5">
+              Login
+            </Typography>
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              noValidate
+              sx={{ mt: 1 }}
             >
-              Sign In
-            </Button>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Masuk
+              </Button>
+            </Box>
           </Box>
-        </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+          <Copyright sx={{ mt: 4 }} />
+        </Paper>
       </Container>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        autoHideDuration={5000}
+        onClose={() => dispatch(toastClose())}
+        open={toast.show}
+        key="topcenter"
+      >
+        <Alert
+          severity={toast.variant}
+          sx={{ width: "100%" }}
+          onClose={() => dispatch(toastClose())}
+        >
+          {toast.value}
+        </Alert>
+      </Snackbar>
     </ThemeProvider>
   );
 }

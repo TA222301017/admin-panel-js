@@ -71,7 +71,7 @@ const AddMap = () => {
 
   return (
     <LoggedInLayout
-      title="Add Map"
+      title="Tambah Denah"
       desc="Tambahkan denah dalam sistem Anda"
       breadcrumbs={crumbs}
     >

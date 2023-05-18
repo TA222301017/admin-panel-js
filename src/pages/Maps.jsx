@@ -77,12 +77,14 @@ const Maps = () => {
           icon={<EditSharp />}
           label="Edit"
           title="Edit"
+          color="success"
           onClick={() => navigate(`/map/edit/${params.row.id}`)}
         />,
         <GridActionsCellItem
           icon={<DeleteSharp />}
           label="Delete"
           title="Delete"
+          color="error"
           onClick={() => {
             dispatch(
               DELETE_MAP({
@@ -171,7 +173,7 @@ const Maps = () => {
 
   return (
     <LoggedInLayout
-      title="Maps List"
+      title="Kelola Denah"
       desc="Kelola denah-denah dalam sistem Anda"
       breadcrumbs={crumbs}
     >
@@ -179,8 +181,8 @@ const Maps = () => {
         <Button
           type="button"
           size="medium"
-          variant="outlined"
-          color="inherit"
+          variant="contained"
+          color="primary"
           onClick={handleExport}
           startIcon={<DownloadSharp />}
         >
@@ -190,9 +192,9 @@ const Maps = () => {
         <Button
           type="button"
           size="medium"
-          variant="outlined"
           onClick={() => navigate("/map/add")}
-          color="inherit"
+          variant="contained"
+          color="primary"
           startIcon={<AddSharp />}
         >
           Tambah

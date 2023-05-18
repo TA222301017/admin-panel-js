@@ -209,7 +209,7 @@ const AccessLogs = () => {
 
   return (
     <LoggedInLayout
-      title="Access Logs"
+      title="Log Akses"
       desc="Tinjau riwayat akses yang tercatat dalam sistem"
       breadcrumbs={crumbs}
     >
@@ -217,8 +217,8 @@ const AccessLogs = () => {
         <Button
           type="button"
           size="medium"
-          variant="outlined"
-          color="inherit"
+          variant="contained"
+          color="primary"
           onClick={handleExport}
           startIcon={<DownloadSharp />}
         >
@@ -227,8 +227,8 @@ const AccessLogs = () => {
         <Button
           type="button"
           size="medium"
-          variant="outlined"
-          color="inherit"
+          variant="contained"
+          color="primary"
           onClick={() => {
             setIsLive(!isLive);
             if (isLive) {

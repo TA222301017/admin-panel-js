@@ -73,7 +73,7 @@ const EditPersonel = () => {
     >
       <LoaderCover show={status === "pending"} />
 
-      {status === "fulfilled" && (
+      {status !== "pending" && (
         <FormEditPersonel handleSubmit={handleSubmit} personelData={personel} />
       )}
     </LoggedInLayout>

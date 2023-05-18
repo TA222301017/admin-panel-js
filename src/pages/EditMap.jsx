@@ -85,13 +85,13 @@ const EditMap = () => {
 
   return (
     <LoggedInLayout
-      title="Edit Map"
+      title="Edit Denah"
       desc="Ubah data denah dalam sistem Anda"
       breadcrumbs={crumbs(mapId)}
     >
       <LoaderCover show={status === "pending"} />
 
-      {status === "fulfilled" && (
+      {status !== "pending" && (
         <>
           <Grid container spacing={2} style={{ paddingTop: "10px" }}>
             <Grid item xs={8}>

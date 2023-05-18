@@ -55,7 +55,7 @@ const AddKey = () => {
 
   return (
     <LoggedInLayout
-      title="Add Key"
+      title="Daftar Kunci"
       desc="Daftarkan kunci baru ke dalam sistem"
       breadcrumbs={crumbs}
     >

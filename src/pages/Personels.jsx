@@ -9,6 +9,7 @@ import CellLink from "../components/CellLink";
 import { useNavigate } from "react-router";
 import {
   AddSharp,
+  DeleteSharp,
   DownloadSharp,
   EditSharp,
   LocationSearchingSharp,
@@ -70,7 +71,7 @@ const Personels = () => {
       },
     },
     { field: "personel_id", headerName: "ID Number", flex: 0.8 },
-    { field: "role", headerName: "Role", flex: 0.5 },
+    { field: "role", headerName: "Role", flex: 0.2 },
     {
       field: "status",
       type: "boolean",
@@ -80,17 +81,27 @@ const Personels = () => {
     {
       field: "actions",
       type: "actions",
+      flex: 0.4,
       getActions: (params) => [
         <GridActionsCellItem
           icon={<EditSharp />}
           label="Edit"
           title="Edit"
+          color="success"
           onClick={() => navigate(`/personel/edit/${params.row.id}`)}
+        />,
+        <GridActionsCellItem
+          icon={<DeleteSharp />}
+          label="Delete"
+          title="Delete"
+          color="error"
+          onClick={() => navigate(`/position-log?keyword=${params.row.name}`)}
         />,
         <GridActionsCellItem
           icon={<LocationSearchingSharp />}
           label="Locate"
           title="Locate"
+          color="info"
           onClick={() => navigate(`/position-log?keyword=${params.row.name}`)}
         />,
       ],
@@ -167,7 +178,7 @@ const Personels = () => {
 
   return (
     <LoggedInLayout
-      title="Personel List"
+      title="Kelola Personel"
       desc="Kelola personel-personel yang menggunakan sistem Anda"
       breadcrumbs={crumbs}
     >
@@ -175,8 +186,8 @@ const Personels = () => {
         <Button
           type="button"
           size="medium"
-          variant="outlined"
-          color="inherit"
+          variant="contained"
+          color="primary"
           onClick={handleExport}
           startIcon={<DownloadSharp />}
         >
@@ -186,9 +197,9 @@ const Personels = () => {
         <Button
           type="button"
           size="medium"
-          variant="outlined"
           onClick={() => navigate("/personel/add")}
-          color="inherit"
+          variant="contained"
+          color="primary"
           startIcon={<AddSharp />}
         >
           Tambah

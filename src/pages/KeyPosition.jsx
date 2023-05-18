@@ -19,7 +19,7 @@ const crumbs = [
 const KeyPosition = () => {
   return (
     <LoggedInLayout
-      title="Key Position"
+      title="Posisi Key"
       desc="Cari lokasi terbaru dari kunci-kunci dalam sistem Anda"
       breadcrumbs={crumbs}
     >

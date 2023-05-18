@@ -209,7 +209,7 @@ const RSSILogs = () => {
 
   return (
     <LoggedInLayout
-      title="Position Logs"
+      title="Log Posisi"
       desc="Tinjau riwayat posisi personel-personel dalam sistem"
       breadcrumbs={crumbs}
     >
@@ -222,8 +222,8 @@ const RSSILogs = () => {
         <Button
           type="button"
           size="medium"
-          variant="outlined"
-          color="inherit"
+          variant="contained"
+          color="primary"
           onClick={handleExport}
           startIcon={<DownloadSharp />}
         >
@@ -233,8 +233,8 @@ const RSSILogs = () => {
         <Button
           type="button"
           size="medium"
-          variant="outlined"
-          color="inherit"
+          variant="contained"
+          color="primary"
           onClick={() => {
             setIsLive(!isLive);
             if (isLive) {

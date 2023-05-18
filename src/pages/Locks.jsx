@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import LoggedInLayout from "../layouts/LoggedInLayout";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router";
-import { CheckSharp, DownloadSharp, EditSharp } from "@mui/icons-material";
+import {
+  CheckBoxSharp,
+  CheckSharp,
+  DownloadSharp,
+  EditSharp,
+  SpeedSharp,
+} from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { CHECK_LOCK, GET_LOCKS } from "../store/reducers/lockSlice";
 import DataTable from "../components/DataTable";
@@ -91,17 +97,18 @@ const Locks = () => {
       type: "actions",
       getActions: (params) => [
         <GridActionsCellItem
+          color="success"
           icon={<EditSharp />}
           label="Edit"
           title="Edit"
           onClick={() => navigate(`/lock/edit/${params.row.id}`)}
-          showInMenu
         />,
         <GridActionsCellItem
-          icon={<CheckSharp />}
+          icon={<SpeedSharp />}
           label="Check"
+          title="Check"
+          color="info"
           onClick={() => handleCheckLock(params.row.id)}
-          showInMenu
         />,
       ],
     },
@@ -178,7 +185,7 @@ const Locks = () => {
 
   return (
     <LoggedInLayout
-      title="Locks"
+      title="Kelola Lock"
       desc="Kelola lock-lock dalam sistem Anda"
       breadcrumbs={crumbs}
     >
@@ -186,8 +193,8 @@ const Locks = () => {
         <Button
           type="button"
           size="medium"
-          variant="outlined"
-          color="inherit"
+          variant="contained"
+          color="primary"
           onClick={handleExport}
           startIcon={<DownloadSharp />}
         >

@@ -85,12 +85,14 @@ const Keys = () => {
           icon={<EditSharp />}
           label="Edit"
           title="Edit"
+          color="success"
           onClick={() => navigate(`/key/edit/${params.row.id}`)}
         />,
         <GridActionsCellItem
           icon={<LocationSearchingSharp />}
           label="Locate"
           title="Locate"
+          color="info"
           onClick={() => navigate(`/position-log?keyword=${params.row.owner}`)}
         />,
       ],
@@ -167,16 +169,16 @@ const Keys = () => {
 
   return (
     <LoggedInLayout
-      title="Keys List"
-      desc="Kelola kunci-kunci dalam sistem Anda"
+      title="Kelola Key"
+      desc="Kelola key-key dalam sistem Anda"
       breadcrumbs={crumbs}
     >
       <DataTableFilterForm handleSearch={handleSearch}>
         <Button
           type="button"
           size="medium"
-          variant="outlined"
-          color="inherit"
+          variant="contained"
+          color="primary"
           onClick={handleExport}
           startIcon={<DownloadSharp />}
         >
@@ -186,9 +188,9 @@ const Keys = () => {
         <Button
           type="button"
           size="medium"
-          variant="outlined"
           onClick={() => navigate("/key/add")}
-          color="inherit"
+          variant="contained"
+          color="primary"
           startIcon={<AddSharp />}
         >
           Tambah

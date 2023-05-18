@@ -253,6 +253,7 @@ const MapCanvas = ({
                       (extimateDistanceFromRSSI(personelFootprint[2].rssi) *
                         svgCanvasRef.current?.getBoundingClientRect().width) /
                       mapData.width;
+                    console.log(r1, r2, r3);
                     let [p1, p2, p3] = findCircleIntersection(
                       x1,
                       y1,
@@ -280,8 +281,8 @@ const MapCanvas = ({
                         <circle
                           key={index}
                           id={`personel-${personelId}`}
-                          cx={`${x}`}
-                          cy={`${y}`}
+                          cx={`${isNaN(x) ? -100 : x}`}
+                          cy={`${isNaN(y) ? -100 : y}`}
                           stroke-width="2"
                           r="12"
                           fill="rgb(0, 0, 0, 1)"

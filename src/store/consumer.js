@@ -16,9 +16,9 @@ const apiCallError = {
 };
 
 export const handleError = (err) => {
-  if (err.response.data?.msg) {
+  if (err.response.data?.error) {
     console.log(err);
-    store.dispatch(toastError(err.response.data.msg));
+    store.dispatch(toastError(err.response.data.error));
     throw new Error(err);
   } else {
     console.log(err);

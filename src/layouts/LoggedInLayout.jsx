@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Paper } from "@mui/material";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
 import Toolbar from "@mui/material/Toolbar";
@@ -43,43 +43,43 @@ const navItems = [
   },
   {
     icon: <RuleSharp />,
-    name: "Access Rule",
+    name: "Peraturan Akses",
     path: "/access-rule",
   },
   {
-    icon: <LocationOnSharp />,
-    name: "Position Log",
-    path: "/position-log",
-  },
-  {
-    icon: <AccessTimeSharp />,
-    name: "Access Log",
-    path: "/access-log",
-  },
-  {
-    icon: <HealthAndSafetySharp />,
-    name: "Healthcheck Logs",
-    path: "/healthcheck-log",
-  },
-  {
     icon: <LockSharp />,
-    name: "Lock List",
+    name: "Kelola Lock",
     path: "/lock",
   },
   {
     icon: <PersonSharp />,
-    name: "Personel List",
+    name: "Kelola Personel",
     path: "/personel",
   },
   {
     icon: <KeySharp />,
-    name: "Keys List",
+    name: "Kelola Key",
     path: "/key",
   },
   {
     icon: <MapSharp />,
-    name: "Maps List",
+    name: "Kelola Denah",
     path: "/map",
+  },
+  {
+    icon: <LocationOnSharp />,
+    name: "Log Posisi",
+    path: "/position-log",
+  },
+  {
+    icon: <AccessTimeSharp />,
+    name: "Log Akses",
+    path: "/access-log",
+  },
+  {
+    icon: <HealthAndSafetySharp />,
+    name: "Log Healthcheck",
+    path: "/healthcheck-log",
   },
 ];
 
@@ -92,23 +92,30 @@ const LoggedInLayout = ({ children, title, breadcrumbs, desc }) => {
   const color = useSelector((state) => state.color.value);
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex" }} style={{ minHeight: "100vh" }}>
       <CssBaseline />
       <Drawer
+        PaperProps={{
+          elevation: 3,
+        }}
         sx={{
           width: drawerWidth,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
+            backgroundColor: "",
             width: drawerWidth,
             boxSizing: "border-box",
           },
         }}
+        style={{ backgroundColor: "rgb(0, 0, 0, 0)" }}
         variant="permanent"
         anchor="left"
         color="primary"
       >
         <Toolbar>
-          <Typography variant="h5">TA222301017</Typography>
+          <Typography variant="h5" fontWeight="semibold">
+            BlueGuard
+          </Typography>
         </Toolbar>
         <List>
           {navItems.map((item, index) => (
@@ -143,7 +150,11 @@ const LoggedInLayout = ({ children, title, breadcrumbs, desc }) => {
       </Drawer>
       <Box
         component="main"
-        sx={{ flexGrow: 1, bgcolor: "background.default", p: 5 }}
+        sx={{
+          flexGrow: 1,
+          bgcolor: color === "dark" ? "background.default" : "#fafafa",
+          p: 5,
+        }}
       >
         <IconButton
           onClick={() => {

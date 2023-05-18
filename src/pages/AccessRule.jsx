@@ -106,6 +106,7 @@ const AccessRule = () => {
           icon={<EditSharp />}
           label="Edit"
           title="Edit"
+          color="success"
           onClick={() => {
             setAccessRuleIndex(params.id - 1);
             setModalOpen(true);
@@ -114,6 +115,8 @@ const AccessRule = () => {
         <GridActionsCellItem
           icon={<DeleteForeverSharp />}
           label="Delete"
+          title="Delete"
+          color="error"
           onClick={() => {
             dispatch(
               DELETE_ACCESS_RULE({
@@ -211,7 +214,7 @@ const AccessRule = () => {
 
   return (
     <LoggedInLayout
-      title="Access Rule"
+      title="Kelola Peraturan Akses"
       desc="Kelola peraturan akses yang berlaku dalam sistem Anda"
       breadcrumbs={crumbs}
     >
@@ -219,8 +222,8 @@ const AccessRule = () => {
         <Button
           type="button"
           size="medium"
-          variant="outlined"
-          color="inherit"
+          variant="contained"
+          color="primary"
           onClick={handleExport}
           startIcon={<DownloadSharp />}
         >
@@ -229,12 +232,12 @@ const AccessRule = () => {
         <Button
           type="button"
           size="medium"
-          variant="outlined"
           onClick={() => {
             setAccessRuleIndex(-1);
             setModalOpen(true);
           }}
-          color="inherit"
+          variant="contained"
+          color="primary"
           startIcon={<AddSharp />}
         >
           Tambah

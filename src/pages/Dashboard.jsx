@@ -28,8 +28,7 @@ const Dashboard = () => {
   return (
     <LoggedInLayout
       title="Dashboard"
-      desc="Selamat datang di Admin Panels Sistem TA222301017"
-      // breadcrumbs={crumbs}
+      desc="Selamat datang di Admin Panel BlueGuard"
     >
       <LoaderCover show={status === "pending"} />
 

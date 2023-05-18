@@ -67,6 +67,7 @@ const AccessRuleTable = ({ personelId }) => {
           icon={<EditSharp />}
           label="Edit"
           title="Edit"
+          color="success"
           onClick={() => {
             setAccessRuleIndex(params.id - 1);
             setModalOpen(true);
@@ -75,6 +76,8 @@ const AccessRuleTable = ({ personelId }) => {
         <GridActionsCellItem
           icon={<DeleteForeverSharp />}
           label="Delete"
+          title="Delete"
+          color="error"
           onClick={() => {
             dispatch(
               DELETE_ACCESS_RULE({
@@ -146,12 +149,12 @@ const AccessRuleTable = ({ personelId }) => {
     <>
       <DataTableFilterForm handleSearch={handleSearch} withoutStatus>
         <Button
-          variant="outlined"
           onClick={() => {
             setAccessRuleIndex(-1);
             setModalOpen(true);
           }}
-          color="inherit"
+          variant="contained"
+          color="primary"
           startIcon={<AddSharp />}
         >
           Tambah

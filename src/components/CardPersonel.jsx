@@ -139,7 +139,11 @@ const CardPersonel = ({
   return (
     <Card variant="outlined" style={{ marginTop: 0 }}>
       <CardHeader
-        title={accessRuleIndex >= 0 ? "Edit Access Rule" : "Add Access Rule"}
+        title={
+          accessRuleIndex >= 0
+            ? "Ubah Peraturan Akses"
+            : "Tambah Peraturan Akses"
+        }
       />
       <CardContent>
         <Grid
@@ -195,6 +199,7 @@ const CardPersonel = ({
               <Grid item xs={6}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateTimePicker
+                    label="Waktu Awal"
                     value={startDate}
                     onChange={setStartDate}
                     ampm={false}
@@ -207,6 +212,7 @@ const CardPersonel = ({
               <Grid item xs={6}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateTimePicker
+                    label="Waktu Akhir"
                     value={endDate}
                     onChange={setEndDate}
                     ampm={false}
@@ -219,13 +225,7 @@ const CardPersonel = ({
             </Grid>
           </Grid>
           <Grid item>
-            <Button
-              fullWidth
-              variant="outlined"
-              color="inherit"
-              type="submit"
-              // onClick={() => simpanButton()}
-            >
+            <Button fullWidth variant="contained" color="primary" type="submit">
               Simpan
             </Button>
           </Grid>

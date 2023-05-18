@@ -13,7 +13,7 @@ const crumbs = [
     path: "/dashboard",
   },
   {
-    name: "Personels",
+    name: "Personel",
     path: "/personel",
   },
   {
@@ -42,7 +42,7 @@ const AddPersonel = () => {
         name: data.get("name"),
         personelId: data.get("personel_id"),
         roleId: Number(data.get("role_id")),
-        keyId: s[0].id,
+        keyId: !s.length ? 0 : s[0].id,
         status: data.get("status") === "true",
         description: data.get("description"),
       })
@@ -58,7 +58,7 @@ const AddPersonel = () => {
 
   return (
     <LoggedInLayout
-      title="Add Personel"
+      title="Daftar Personel"
       desc="Daftarkan personel baru ke dalam sistem"
       breadcrumbs={crumbs}
     >

@@ -1,5 +1,6 @@
 import React from "react";
 import { DataGrid } from "@mui/x-data-grid";
+import { Paper } from "@mui/material";
 
 const DataTable = ({
   columns,
@@ -13,23 +14,25 @@ const DataTable = ({
   toolbar = null,
 }) => {
   return (
-    <DataGrid
-      autoHeight
-      getRowId={(row) => row.index}
-      paginationMode="server"
-      rowCount={total}
-      loading={loading}
-      rows={rows}
-      columns={columns}
-      pageSize={limit}
-      page={page}
-      onPageChange={onPageChange}
-      onPageSizeChange={onPageSizeChange}
-      rowsPerPageOptions={[10, 20, 50, 100]}
-      components={{
-        Toolbar: toolbar,
-      }}
-    />
+    <Paper elevation={3}>
+      <DataGrid
+        autoHeight
+        getRowId={(row) => row.index}
+        paginationMode="server"
+        rowCount={total}
+        loading={loading}
+        rows={rows}
+        columns={columns}
+        pageSize={limit}
+        page={page}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
+        rowsPerPageOptions={[10, 20, 50, 100]}
+        components={{
+          Toolbar: toolbar,
+        }}
+      />
+    </Paper>
   );
 };
 

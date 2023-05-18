@@ -82,8 +82,8 @@ const CardLock = ({
           <Grid item>
             <Button
               fullWidth
-              variant="outlined"
-              color="inherit"
+              variant="contained"
+              color="primary"
               onClick={() => simpanButton()}
               startIcon={<AddSharp />}
             >

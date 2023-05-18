@@ -64,7 +64,7 @@ const EditLock = () => {
     >
       <LoaderCover show={status === "pending"} />
 
-      {status === "fulfilled" && (
+      {status !== "pending" && (
         <FormEditLock lockData={lock} handleSubmit={handleSubmit} />
       )}
     </LoggedInLayout>

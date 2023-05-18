@@ -91,14 +91,20 @@ const PositionGUI = () => {
         blink();
       });
 
+      let buffer = [];
       rssiStream.addEventListener("rssi", (e) => {
         let data = JSON.parse(e.data);
         data.timestamp = new Date(data.timestamp).getTime();
+        buffer = [data, ...buffer];
         console.log(data.timestamp);
-        setRssiData((p) => {
-          return [data, ...p];
-        });
       });
+
+      setInterval(() => {
+        setRssiData((p) => {
+          return [...buffer, ...p];
+        });
+        buffer = [];
+      }, 15000);
 
       dispatch(GET_MAP({ mapId }));
     })();
@@ -111,7 +117,7 @@ const PositionGUI = () => {
 
   return (
     <LoggedInLayout
-      title="Map Positioning"
+      title="Amati Denah"
       desc="Lihat keadaan denah secara langsung"
       breadcrumbs={crumbs(mapId)}
     >

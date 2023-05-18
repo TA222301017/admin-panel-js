@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
-import { Grid, MenuItem, TextField, Box, Tabs, Tab } from "@mui/material";
+import {
+  Grid,
+  MenuItem,
+  TextField,
+  Box,
+  Tabs,
+  Tab,
+  Paper,
+} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { GET_KEYS } from "../store/reducers/keySlice";
 import { GET_ROLES } from "../store/reducers/roleSlice";
@@ -46,7 +54,10 @@ const FormEditPersonel = ({ personelData, handleSubmit }) => {
   }, []);
 
   return (
-    <>
+    <Paper
+      elevation={3}
+      style={{ padding: "0 20px 20px 20px", marginTop: "40px" }}
+    >
       <Tabs
         value={tabIndex}
         onChange={handleTabChange}
@@ -76,8 +87,7 @@ const FormEditPersonel = ({ personelData, handleSubmit }) => {
                 display: "flex",
                 flexFlow: "column wrap",
                 gap: "20px",
-                paddingTop: 0,
-                marginTop: "60px",
+                marginTop: "20px",
               }}
             >
               <TextField
@@ -142,43 +152,6 @@ const FormEditPersonel = ({ personelData, handleSubmit }) => {
                     )
                   }
                 />
-                // <Autocomplete
-                //   options={keys.filter(
-                //     (el) => el.owner_id == 0 || el.owner_id == personelData?.id
-                //   )}
-                //   // getOptionLabel={(option) => option.name}
-                //   autoSelect
-                //   renderInput={(params) => (
-                //     <TextField
-                //       {...params}
-                //       select
-                //       id="key_id"
-                //       name="key_id"
-                //       label="Kunci"
-                //       inputProps={{ defaultValue: personelData?.key_id }}
-                //     />
-                //   )}
-                // />
-                // <TextField
-                //   size="small"
-                //   id="key_id"
-                //   name="key_id"
-                //   select
-                //   label="Kunci"
-                //   inputProps={{ defaultValue: personelData?.key_id }}
-                // >
-                //   {keys
-                //     .filter(
-                //       (el) =>
-                //         el.owner_id == 0 || el.owner_id == personelData?.id
-                //     )
-                //     .map((el) => (
-                //       <MenuItem key={el.id} value={el.id}>
-                //         {el.name}
-                //       </MenuItem>
-                //     ))}
-                // </TextField>
-                // )
               }
 
               <TextField
@@ -217,8 +190,8 @@ const FormEditPersonel = ({ personelData, handleSubmit }) => {
 
               <Button
                 type="submit"
-                variant="outlined"
-                color="inherit"
+                variant="contained"
+                color="primary"
                 fullWidth
               >
                 SIMPAN
@@ -230,7 +203,7 @@ const FormEditPersonel = ({ personelData, handleSubmit }) => {
       <TabPanel value={tabIndex} index={1}>
         <AccessRuleTable personelId={personelData?.id} />
       </TabPanel>
-    </>
+    </Paper>
   );
 };
 
