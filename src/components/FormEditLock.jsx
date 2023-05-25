@@ -54,6 +54,9 @@ const FormEditLock = ({ lockData, handleSubmit }) => {
               name="location"
               label="Location"
               helperText="Berisikan Lokasi Lock"
+              InputLabelProps={{
+                shrink: true,
+              }}
               inputProps={{ defaultValue: lockData.location }}
             />
 

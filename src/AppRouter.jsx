@@ -5,13 +5,13 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
-import { blue } from "@mui/material/colors";
 
 import PropTypes from "prop-types";
 
 export const LinkBehavior = forwardRef((props, ref) => {
+  const theme = useTheme();
   const { href, ...other } = props;
   return (
     <RouterLink
@@ -19,6 +19,7 @@ export const LinkBehavior = forwardRef((props, ref) => {
       ref={ref}
       to={href || "/"}
       pathname={href || "/"}
+      style={{ color: theme.palette.success }}
       {...other}
     />
   );
@@ -40,6 +41,7 @@ Router.propTypes = {
 };
 
 import LoaderCover from "./components/LoaderCover";
+import { CssBaseline } from "@mui/material";
 
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const AccessLogs = lazy(() => import("./pages/AccessLogs"));
@@ -55,15 +57,14 @@ const EditPersonel = lazy(() => import("./pages/EditPersonel"));
 const AddKey = lazy(() => import("./pages/AddKey"));
 const EditKey = lazy(() => import("./pages/EditKey"));
 const Keys = lazy(() => import("./pages/Keys"));
-const HealthcheckLogs = lazy(() => import("./pages/HealthcheckLogs"));
 const PositionGUI = lazy(() => import("./pages/PositionGUI"));
 const Maps = lazy(() => import("./pages/Maps"));
 const AddMap = lazy(() => import("./pages/AddMap"));
 const EditMap = lazy(() => import("./pages/EditMap"));
+const HealthcheckLogs = lazy(() => import("./pages/HealthcheckLogs"));
 
 const AppRouter = () => {
   const mode = useSelector((state) => state.color.value);
-
   const theme = useMemo(
     () =>
       createTheme({
@@ -71,6 +72,37 @@ const AppRouter = () => {
           MuiLink: {
             defaultProps: {
               component: LinkBehavior,
+            },
+          },
+          MuiCssBaseline: {
+            styleOverrides: {
+              body: {
+                scrollbarColor:
+                  mode === "dark" ? "#6b6b6b #2b2b2b" : "#fefefe #f2f2f2",
+                "&::-webkit-scrollbar, & *::-webkit-scrollbar": {
+                  backgroundColor: mode === "dark" ? "#2b2b2b" : "#f2f2f2",
+                },
+                "&::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb": {
+                  borderRadius: 8,
+                  backgroundColor: mode === "dark" ? "#6b6b6b" : "#cbcbcb",
+                  minHeight: 24,
+                },
+                "&::-webkit-scrollbar-thumb:focus, & *::-webkit-scrollbar-thumb:focus":
+                  {
+                    backgroundColor: "#959595",
+                  },
+                "&::-webkit-scrollbar-thumb:active, & *::-webkit-scrollbar-thumb:active":
+                  {
+                    backgroundColor: "#959595",
+                  },
+                "&::-webkit-scrollbar-thumb:hover, & *::-webkit-scrollbar-thumb:hover":
+                  {
+                    backgroundColor: "#959595",
+                  },
+                "&::-webkit-scrollbar-corner, & *::-webkit-scrollbar-corner": {
+                  backgroundColor: mode === "dark" ? "#2b2b2b" : "#f2f2f2",
+                },
+              },
             },
           },
         },
@@ -83,8 +115,9 @@ const AppRouter = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Router>
-        <Suspense fallback={<LoaderCover show={true} />}>
+      <CssBaseline />
+      <Suspense fallback={<LoaderCover show={true} />}>
+        <Router>
           <Routes>
             <Route path="/" exact element={<Login />} />
 
@@ -123,8 +156,8 @@ const AppRouter = () => {
               element={<PositionGUI />}
             />
           </Routes>
-        </Suspense>
-      </Router>
+        </Router>
+      </Suspense>
     </ThemeProvider>
     // <div>
     //   <div className="border">

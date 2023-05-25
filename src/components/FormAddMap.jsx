@@ -106,8 +106,12 @@ const FormAddMap = ({
             >
               <TextField
                 size="small"
-                label="Map Name"
+                label="Nama Denah"
                 name="name"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                placeholder="Lantai X"
                 inputProps={{ defaultValue: mapData?.name }}
               />
               <Grid container spacing={2}>
@@ -117,6 +121,10 @@ const FormAddMap = ({
                     label="Lebar"
                     name="width"
                     type="number"
+                    placeholder="3.00"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                     inputProps={{
                       defaultValue: mapData?.width,
                       min: "0",
@@ -135,6 +143,10 @@ const FormAddMap = ({
                     label="Tinggi"
                     type="number"
                     name="height"
+                    placeholder="4.00"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                     inputProps={{
                       defaultValue: mapData?.height,
                       step: "0.01",

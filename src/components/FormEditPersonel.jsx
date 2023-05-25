@@ -96,6 +96,10 @@ const FormEditPersonel = ({ personelData, handleSubmit }) => {
                 id="name"
                 name="name"
                 label="Nama"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                placeholder="Budi Budiman"
                 inputProps={{ defaultValue: personelData?.name }}
               />
 
@@ -105,6 +109,10 @@ const FormEditPersonel = ({ personelData, handleSubmit }) => {
                 id="personel_id"
                 name="personel_id"
                 label="No. KTP"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                placeholder="307020109089001"
                 inputProps={{ defaultValue: personelData?.personel_id }}
               />
 

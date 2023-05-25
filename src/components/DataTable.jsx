@@ -12,11 +12,12 @@ const DataTable = ({
   onPageSizeChange,
   loading,
   toolbar = null,
+  autoHeight = false,
 }) => {
   return (
-    <Paper elevation={3}>
+    <Paper elevation={3} style={{ height: "65%", minHeight: "150px" }}>
       <DataGrid
-        autoHeight
+        autoHeight={autoHeight}
         getRowId={(row) => row.index}
         paginationMode="server"
         rowCount={total}

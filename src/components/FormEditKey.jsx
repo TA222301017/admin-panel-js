@@ -31,7 +31,11 @@ const FormEditKey = ({ keyData, handleSubmit }) => {
               name="label"
               label="Label"
               helperText="Berisikan Label Kunci"
+              placeholder="Kunci XXX"
               inputProps={{ defaultValue: keyData?.name }}
+              InputLabelProps={{
+                shrink: true,
+              }}
               autoFocus={true}
             />
             <FormControl sx={{ minWidth: 150 }} size="small" fullWidth>
@@ -53,7 +57,10 @@ const FormEditKey = ({ keyData, handleSubmit }) => {
               id="key_id"
               name="key_id"
               label="Key ID"
-              helperText="Berisikan ID Kunci"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              placeholder="DEADBEEFDEADBEEFDEADBEEFDEADBEEF"
               inputProps={{ defaultValue: keyData?.key_id }}
             />
             <TextField
@@ -63,7 +70,10 @@ const FormEditKey = ({ keyData, handleSubmit }) => {
               id="aes_key"
               name="aes_key"
               label="AES Key"
-              helperText="Berisikan AES Key Kunci"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              placeholder="DEADBEEFDEADBEEFDEADBEEFDEADBEEF"
               inputProps={{ defaultValue: keyData?.aes_key }}
             />
           </Grid>

@@ -161,19 +161,22 @@ const AccessRuleTable = ({ personelId }) => {
         </Button>
       </DataTableFilterForm>
 
-      <DataTable
-        page={page - 1}
-        limit={limit}
-        total={pagination.total}
-        onPageChange={handlePageChange}
-        onPageSizeChange={handlePageSizeChange}
-        loading={status === "pending"}
-        columns={columnDef}
-        rows={accessRules.map((el, i) => ({
-          ...el,
-          index: (page - 1) * limit + i + 1,
-        }))}
-      />
+      <div style={{ height: "max-content" }}>
+        <DataTable
+          autoHeight
+          page={page - 1}
+          limit={limit}
+          total={pagination.total}
+          onPageChange={handlePageChange}
+          onPageSizeChange={handlePageSizeChange}
+          loading={status === "pending"}
+          columns={columnDef}
+          rows={accessRules.map((el, i) => ({
+            ...el,
+            index: (page - 1) * limit + i + 1,
+          }))}
+        />
+      </div>
 
       <Modal
         open={modalOpen}

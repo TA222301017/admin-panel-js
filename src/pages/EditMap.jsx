@@ -93,8 +93,12 @@ const EditMap = () => {
 
       {status !== "pending" && (
         <>
-          <Grid container spacing={2} style={{ paddingTop: "10px" }}>
-            <Grid item xs={8}>
+          <Grid
+            container
+            spacing={2}
+            style={{ marginTop: "10px", paddingTop: 0 }}
+          >
+            <Grid item xs={8} style={{ paddingTop: 0 }}>
               <MapCanvas
                 mapData={map}
                 imageURL={import.meta.env.VITE_APP_BASE_URL + map.image_url}
@@ -103,7 +107,7 @@ const EditMap = () => {
                 setSelectedLockId={setSelectedLockId}
               />
             </Grid>
-            <Grid item xs={4} direction="column">
+            <Grid item xs={4} direction="column" style={{ paddingTop: 0 }}>
               <FormAddMap
                 mapData={map}
                 handleImageLoad={handleImageLoad}

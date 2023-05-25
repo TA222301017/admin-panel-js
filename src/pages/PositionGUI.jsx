@@ -104,7 +104,7 @@ const PositionGUI = () => {
           return [...buffer, ...p];
         });
         buffer = [];
-      }, 15000);
+      }, 3000);
 
       dispatch(GET_MAP({ mapId }));
     })();
@@ -121,15 +121,15 @@ const PositionGUI = () => {
       desc="Lihat keadaan denah secara langsung"
       breadcrumbs={crumbs(mapId)}
     >
-      <Grid container spacing={2} style={{ paddingTop: "10px" }}>
-        <Grid item xs={8}>
+      <Grid container spacing={2} style={{ marginTop: "10px" }}>
+        <Grid item xs={8} style={{ paddingTop: 0 }}>
           <MapCanvas
             rssiData={rssiData}
             mapData={map}
             imageURL={import.meta.env.VITE_APP_BASE_URL + map.image_url}
           />
         </Grid>
-        <Grid item xs={4} direction="column">
+        <Grid item xs={4} direction="column" style={{ paddingTop: 0 }}>
           <Card>
             <CardHeader
               title="Map Menu"

@@ -4,13 +4,14 @@ import {
   ZoomInSharp,
   DragHandleSharp,
 } from "@mui/icons-material";
-import { IconButton, ButtonGroup } from "@mui/material";
+import { IconButton, ButtonGroup, Paper } from "@mui/material";
 import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import placeholderImage from "../../map-placeholder.jpg";
 import { EDIT_LOCK_TO_MAP } from "../store/reducers/mapSlice";
 import { toastSuccess, toastError } from "../store/reducers/toastSlice";
 import { extimateDistanceFromRSSI } from "../utils/rssi";
+import { useEffect } from "react";
 
 function groupRssiData(data) {
   const groupedData = data.reduce((acc, curr) => {
@@ -200,8 +201,21 @@ const MapCanvas = ({
     }
   };
 
+  const [mapHeight, setMapHeight] = useState(300);
+  useEffect(() => {
+    console.log(mapData);
+    setMapHeight(svgCanvasRef.current?.getBBox().height);
+  }, []);
+
   return (
-    <div style={{ position: "relative" }}>
+    <Paper
+      elevation={3}
+      style={{
+        position: "relative",
+        height: svgCanvasRef.current?.getBBox().height / scaling.x,
+        width: "100%",
+      }}
+    >
       <svg
         style={{
           cursor: mode === "DRAG" ? "grab" : "cursor",
@@ -212,7 +226,7 @@ const MapCanvas = ({
         ref={svgCanvasRef}
         draggable
         width="100%"
-        height={800}
+        height={svgCanvasRef.current?.getBBox().height / scaling.x}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
@@ -278,6 +292,33 @@ const MapCanvas = ({
 
                     return (
                       <g>
+                        <circle
+                          // key={index}
+                          // id={`personel-${personelId}`}
+                          cx={`${x1}`}
+                          cy={`${y1}`}
+                          stroke-width="2"
+                          r={`${r1}`}
+                          fill="rgb(0, 0, 0, 0.3)"
+                        />
+                        <circle
+                          // key={index}
+                          // id={`personel-${personelId}`}
+                          cx={`${x2}`}
+                          cy={`${y2}`}
+                          stroke-width="2"
+                          r={`${r2}`}
+                          fill="rgb(0, 0, 0, 0.3)"
+                        />
+                        <circle
+                          // key={index}
+                          // id={`personel-${personelId}`}
+                          cx={`${x3}`}
+                          cy={`${y3}`}
+                          stroke-width="2"
+                          r={`${r3}`}
+                          fill="rgb(0, 0, 0, 0.3)"
+                        />
                         <circle
                           key={index}
                           id={`personel-${personelId}`}
@@ -414,7 +455,7 @@ const MapCanvas = ({
           <RestoreSharp />
         </IconButton>
       </ButtonGroup>
-    </div>
+    </Paper>
   );
 };
 

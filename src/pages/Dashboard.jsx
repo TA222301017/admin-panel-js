@@ -39,6 +39,7 @@ const Dashboard = () => {
               title={"Keys"}
               value={dashboard.key_cnt}
               icon={<KeySharp />}
+              path="/key"
             />
           </Grid>
           <Grid item xs={3} md={4}>
@@ -46,6 +47,7 @@ const Dashboard = () => {
               title={"Locks"}
               value={dashboard.lock_cnt}
               icon={<LockSharp />}
+              path="/lock"
             />
           </Grid>
           <Grid item xs={3} md={4}>
@@ -53,6 +55,7 @@ const Dashboard = () => {
               title={"Personel"}
               value={dashboard.personel_cnt}
               icon={<PersonSharp />}
+              path="/personel"
             />
           </Grid>
         </Grid>

@@ -17,7 +17,6 @@ const SelectAutocomplete = ({
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    console.log(options);
     fetcher();
   }, []);
 

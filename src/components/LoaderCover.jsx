@@ -1,6 +1,6 @@
 import React from "react";
 import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
+import LinearProgress from "@mui/material/LinearProgress";
 
 const LoaderCover = ({ show, i = 0 }) => {
   return (
@@ -9,7 +9,7 @@ const LoaderCover = ({ show, i = 0 }) => {
       sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 + i }}
       open={show}
     >
-      <CircularProgress color="inherit" size={80} />
+      <LinearProgress color="inherit" />
     </Backdrop>
   );
 };

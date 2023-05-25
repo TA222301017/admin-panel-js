@@ -75,11 +75,11 @@ const AddMap = () => {
       desc="Tambahkan denah dalam sistem Anda"
       breadcrumbs={crumbs}
     >
-      <Grid container spacing={3} style={{ paddingTop: "10px" }}>
-        <Grid item xs={8}>
+      <Grid container spacing={3} style={{ marginTop: "10px" }}>
+        <Grid item xs={8} style={{ paddingTop: 0 }}>
           <MapCanvas imageData={mapImageData} />
         </Grid>
-        <Grid item xs={4} direction="column">
+        <Grid item xs={4} direction="column" style={{ paddingTop: 0 }}>
           <FormAddMap
             handleImageLoad={handleImageLoad}
             handleSubmit={handleSubmit}

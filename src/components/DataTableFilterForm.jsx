@@ -65,6 +65,10 @@ const DataTableFilterForm = ({
           variant="outlined"
           size="small"
           name="keyword"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          placeholder={`${keywordLabel}...`}
           inputProps={{
             defaultValue: keywordDefault,
           }}
