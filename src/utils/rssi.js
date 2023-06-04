@@ -78,3 +78,31 @@ export const extimateDistanceFromRSSI = (rssi) => {
   // [-64.25885507   3.60937541]
   return Math.pow(10, (-64.25885507 - rssi) / (10 * 3.60937541));
 };
+
+export const triangulate = (xa, xb, xc, ya, yb, yc, ra, rb, rc) => {
+  var A = 2 * (xa - xc);
+  var B = 2 * (ya - yc);
+  var C = 2 * (xb - xc);
+  var D = 2 * (yb - yc);
+
+  var E =
+    Math.pow(xa, 2) -
+    Math.pow(xc, 2) +
+    Math.pow(ya, 2) -
+    Math.pow(yc, 2) +
+    Math.pow(rc, 2) -
+    Math.pow(ra, 2);
+  var F =
+    Math.pow(xb, 2) -
+    Math.pow(xc, 2) +
+    Math.pow(yb, 2) -
+    Math.pow(yc, 2) +
+    Math.pow(rc, 2) -
+    Math.pow(rb, 2);
+
+  // Equations
+  var x = (D * E - B * F) / (A * D - B * C);
+  var y = (A * F - C * E) / (A * D - B * C);
+
+  return { x, y };
+};

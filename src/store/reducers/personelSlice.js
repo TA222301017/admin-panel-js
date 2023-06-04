@@ -5,6 +5,7 @@ import {
   getPersonelRequest,
   addPersonelRequest,
   editPersonelRequest,
+  deletePersonelRequest,
   getAccessRuleRequest,
   getRolesRequest,
 } from "../consumer";
@@ -42,6 +43,11 @@ export const ADD_PERSONEL = createAsyncThunk(
 export const EDIT_PERSONEL = createAsyncThunk(
   "personel/EDIT_PERSONEL",
   editPersonelRequest
+);
+
+export const DELETE_PERSONEL = createAsyncThunk(
+  "personel/DELETE_PERSONEL",
+  deletePersonelRequest
 );
 
 export const personelSlice = createSlice({
@@ -99,6 +105,24 @@ export const personelSlice = createSlice({
       state.error = action.payload.error;
     });
     builder.addCase(EDIT_PERSONEL.rejected, (state) => {
+      state.status = "failed";
+    });
+
+    builder.addCase(DELETE_PERSONEL.pending, (state) => {
+      state.status = "pending";
+      state.error = "";
+    });
+    builder.addCase(DELETE_PERSONEL.fulfilled, (state, action) => {
+      state.status = "fulfilled";
+      state.error = action.payload.error;
+      if (!action.payload.error) {
+        state.value.personels = state.value.personels.filter((el) => {
+          state.value.pagination.total -= 1;
+          return el.id !== action.meta.arg.personelId;
+        });
+      }
+    });
+    builder.addCase(DELETE_PERSONEL.rejected, (state) => {
       state.status = "failed";
     });
   },

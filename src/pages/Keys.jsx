@@ -3,12 +3,13 @@ import LoggedInLayout from "../layouts/LoggedInLayout";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "@mui/material/Button";
-import { GET_KEYS } from "../store/reducers/keySlice";
+import { DELETE_KEY, GET_KEYS } from "../store/reducers/keySlice";
 import DataTable from "../components/DataTable";
 import CellLink from "../components/CellLink";
 import { useNavigate } from "react-router";
 import {
   AddSharp,
+  DeleteSharp,
   DownloadSharp,
   EditSharp,
   LocationSearchingSharp,
@@ -17,6 +18,7 @@ import DataTableFilterForm from "../components/DataTableFilterForm";
 import * as XLSX from "xlsx";
 import { getKeysRequest } from "../store/consumer";
 import { makeFilename } from "../utils/exportFilename";
+import { toastError, toastSuccess } from "../store/reducers/toastSlice";
 
 const crumbs = [
   {
@@ -69,7 +71,7 @@ const Keys = () => {
         );
       },
     },
-    { field: "key_id", headerName: "Key ID", flex: 1 },
+    { field: "key_id", headerName: "Key ID", flex: 0.5 },
     {
       field: "status",
       type: "boolean",
@@ -80,6 +82,7 @@ const Keys = () => {
       field: "actions",
       type: "actions",
       headerName: "Actions",
+      flex: 0.3,
       getActions: (params) => [
         <GridActionsCellItem
           icon={<EditSharp />}
@@ -87,6 +90,21 @@ const Keys = () => {
           title="Edit"
           color="success"
           onClick={() => navigate(`/key/edit/${params.row.id}`)}
+        />,
+        <GridActionsCellItem
+          icon={<DeleteSharp />}
+          label="Edit"
+          title="Edit"
+          color="error"
+          onClick={() =>
+            dispatch(DELETE_KEY({ keyId: params.row.id }))
+              .then(() => {
+                dispatch(toastSuccess("Berhasil menghapus data"));
+              })
+              .catch(() => {
+                dispatch(toastError("Gagal menghapus data"));
+              })
+          }
         />,
         <GridActionsCellItem
           icon={<LocationSearchingSharp />}

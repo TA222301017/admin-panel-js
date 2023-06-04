@@ -101,10 +101,10 @@ const PositionGUI = () => {
 
       setInterval(() => {
         setRssiData((p) => {
-          return [...buffer, ...p];
+          return [...buffer];
         });
         buffer = [];
-      }, 3000);
+      }, 5000);
 
       dispatch(GET_MAP({ mapId }));
     })();

@@ -1,5 +1,12 @@
 import * as React from "react";
-import { Box, Divider, IconButton, Paper, useTheme } from "@mui/material";
+import {
+  Box,
+  Divider,
+  IconButton,
+  Paper,
+  SpeedDialIcon,
+  useTheme,
+} from "@mui/material";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
 import Toolbar from "@mui/material/Toolbar";
@@ -11,6 +18,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import SpeedDial from "@mui/material/SpeedDial";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
 import { useLocation, useNavigate, Link as RouterLink } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Snackbar from "@mui/material/Snackbar";
@@ -149,18 +158,26 @@ const LoggedInLayout = ({ children, title, breadcrumbs, desc }) => {
         <Toolbar style={{ float: "bottom" }}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="40"
-            viewBox="0 0 180 270"
-            version="1.1"
-            rotate="90"
+            viewBox="0 0 240.51 311.07"
+            style={{ width: 30, height: 30 }}
           >
-            <path
-              d="M 24 68.964 L 24 116.950 40.250 117.225 L 56.500 117.500 56.756 194.665 L 57.012 271.830 63.474 272.165 C 67.028 272.349, 74.450 272.358, 79.968 272.184 L 90 271.867 90 264.951 L 90 258.035 114.750 257.767 L 139.500 257.500 139.500 234.500 L 139.500 211.500 125.250 211.223 L 111 210.945 111 218.473 L 111 226 100.500 226 L 90 226 90 206 C 90 190.703, 90.294 185.984, 91.250 185.932 C 91.938 185.895, 102.480 185.893, 114.678 185.928 C 126.876 185.964, 137.563 185.721, 138.428 185.389 C 139.794 184.865, 140 181.786, 140 161.893 C 140 140.805, 139.862 138.990, 138.250 138.872 C 135.296 138.657, 128.907 138.640, 119.750 138.824 L 111 139 111 146.500 L 111 154 100.500 154 L 90 154 90 135.500 L 90 117 99.010 117 L 108.019 117 107.760 69.250 L 107.500 21.500 65.750 21.239 L 24 20.978 24 68.964 M 51.558 50.775 C 51.251 51.082, 51 59.583, 51 69.667 L 51 88 66.022 88 L 81.044 88 80.772 69.250 L 80.500 50.500 66.308 50.358 C 58.503 50.280, 51.866 50.468, 51.558 50.775 M 101.492 130.250 C 101.248 130.938, 100.924 134.425, 100.774 138 L 100.500 144.500 96.750 144.810 C 93.337 145.093, 93 145.385, 93 148.060 L 93 151 100.500 151 L 108 151 108 143.534 L 108 136.068 118.750 135.784 L 129.500 135.500 129.813 132.250 L 130.127 129 116.032 129 C 105.660 129, 101.820 129.330, 101.492 130.250 M 101 209.500 L 101 217 97 217 C 93.086 217, 93 217.076, 93 220.544 L 93 224.088 100.250 223.794 L 107.500 223.500 107.792 215.750 L 108.084 208 119.042 208 L 130 208 130 205 L 130 202 115.500 202 L 101 202 101 209.500"
-              stroke="none"
-              fill={color === "dark" ? "#fff" : "#000"}
-              fill-rule="evenodd"
-            />
+            <defs>
+              <style>
+                .cls-1{`{fill:${color === "dark" ? "#fff" : "#000"};}`}
+              </style>
+            </defs>
+            <g id="Layer_2" data-name="Layer 2">
+              <g id="Layer_1-2" data-name="Layer 1">
+                <path
+                  class="cls-1"
+                  d="M208.18,109.28h-1.7v-23A86.23,86.23,0,0,0,120.25,0h0A86.23,86.23,0,0,0,34,86.23v23H32.33A32.32,32.32,0,0,0,0,141.6V278.74a32.32,32.32,0,0,0,32.33,32.33H208.18a32.33,32.33,0,0,0,32.33-32.33V141.6A32.33,32.33,0,0,0,208.18,109.28Zm-56.77,28.33a5.63,5.63,0,0,0-2.86,5.47c.08,35.72,0,71.44.09,107.17a6.6,6.6,0,0,1-2,5.32c-6,5.76-11.75,11.75-17.72,17.52-3.43,3.32-5.55,3.45-8.81.24-8-7.91-15.9-16-24.18-24.38l14.34-13.5L95.65,221.71l14.06-13.85L95.86,194.71c5-4.88,9.56-9.33,14.34-14-1.14-1.19-2-2.06-2.8-2.9-4.7-4.71-9.45-9.37-14.06-14.17a5.45,5.45,0,0,1-1.42-3.35q-.19-9.31,0-18.65a3.63,3.63,0,0,0-2-3.59,54.38,54.38,0,0,1-23.2-28.47C61.7,95.59,62,81.61,68,68c7.74-17.31,21-28.47,39.44-32.57,21.36-4.74,39.93,1.06,55,17.08a52.81,52.81,0,0,1,14.75,39.41C176.56,111.43,167.87,126.86,151.41,137.61Z"
+                />
+                <path
+                  class="cls-1"
+                  d="M120.31,56.23a9.42,9.42,0,0,0-9.17,9.47A9.53,9.53,0,0,0,120.5,75c5.23,0,9.85-4.36,9.62-9.43C129.88,60.2,126.15,56.22,120.31,56.23Z"
+                />
+              </g>
+            </g>
           </svg>
 
           <Typography variant="h5" fontWeight="bold">
@@ -228,16 +245,44 @@ const LoggedInLayout = ({ children, title, breadcrumbs, desc }) => {
           p: 5,
         }}
       >
-        <Paper elevation={3} style={{ float: "right", borderRadius: "50%" }}>
-          <IconButton
-            onClick={() => {
-              dispatch(toggleColor());
+        <Paper>
+          <SpeedDial
+            style={{ position: "absolute", right: 30 }}
+            ariaLabel="Settings"
+            icon={<SpeedDialIcon icon={<SettingsSharp />} />}
+            direction="left"
+            FabProps={{
+              sx: {
+                color: "inherit",
+              },
+              disableFocusRipple: true,
+              disableRipple: true,
+              style: {
+                backgroundColor: color === "dark" ? "#2b2b2b" : "#fafafa",
+              },
             }}
-            color={theme.palette.text.primary}
-            size="large"
           >
-            <SettingsSharp fontSize="inherit" />
-          </IconButton>
+            <SpeedDialAction
+              // tooltipOpen
+              icon={
+                color === "light" ? <Brightness7Sharp /> : <Brightness4Sharp />
+              }
+              tooltipTitle={`${color === "light" ? "Dark" : "Light"} Mode`}
+              onClick={() => {
+                dispatch(toggleColor());
+              }}
+            />
+            <SpeedDialAction
+              // tooltipOpen
+              tooltipTitle={"Logout"}
+              icon={<LogoutIcon />}
+              onClick={() => {
+                localStorage.removeItem("token");
+                dispatch(clearUser());
+                navigate("/");
+              }}
+            />
+          </SpeedDial>
         </Paper>
         <Typography
           variant="h4"

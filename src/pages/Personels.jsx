@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import LoggedInLayout from "../layouts/LoggedInLayout";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
-import { GET_PERSONELS } from "../store/reducers/personelSlice";
+import {
+  DELETE_PERSONEL,
+  GET_PERSONELS,
+} from "../store/reducers/personelSlice";
 import Button from "@mui/material/Button";
 import DataTable from "../components/DataTable";
 import CellLink from "../components/CellLink";
@@ -18,6 +21,7 @@ import DataTableFilterForm from "../components/DataTableFilterForm";
 import * as XLSX from "xlsx";
 import { getPersonelsRequest } from "../store/consumer";
 import { makeFilename } from "../utils/exportFilename";
+import { toastError, toastSuccess } from "../store/reducers/toastSlice";
 
 const crumbs = [
   {
@@ -95,7 +99,15 @@ const Personels = () => {
           label="Delete"
           title="Delete"
           color="error"
-          onClick={() => navigate(`/position-log?keyword=${params.row.name}`)}
+          onClick={() =>
+            dispatch(DELETE_PERSONEL({ personelId: params.row.id }))
+              .then(() => {
+                dispatch(toastSuccess("Berhasil menghapus data"));
+              })
+              .catch(() => {
+                dispatch(toastError("Gagal menghapus data"));
+              })
+          }
         />,
         <GridActionsCellItem
           icon={<LocationSearchingSharp />}

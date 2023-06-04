@@ -337,6 +337,15 @@ export const editKeyRequest = async ({
   }
 };
 
+export const deleteKeyRequest = async ({ keyId }) => {
+  try {
+    let res = await http.delete(`/device/key/${keyId}`);
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
+
 export const checkLocksRequest = async () => {
   try {
     let res = await http.get(`/device/lock/check`);
@@ -422,6 +431,15 @@ export const editPersonelRequest = async ({
       status: status,
       description: description,
     });
+    return res.data;
+  } catch (err) {
+    return handleError(err);
+  }
+};
+
+export const deletePersonelRequest = async ({ personelId }) => {
+  try {
+    let res = await http.delete(`/personel/${personelId}`);
     return res.data;
   } catch (err) {
     return handleError(err);

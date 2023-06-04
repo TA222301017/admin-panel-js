@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import placeholderImage from "../../map-placeholder.jpg";
 import { EDIT_LOCK_TO_MAP } from "../store/reducers/mapSlice";
 import { toastSuccess, toastError } from "../store/reducers/toastSlice";
-import { extimateDistanceFromRSSI } from "../utils/rssi";
+import { extimateDistanceFromRSSI, triangulate } from "../utils/rssi";
 import { useEffect } from "react";
 
 function groupRssiData(data) {
@@ -203,7 +203,6 @@ const MapCanvas = ({
 
   const [mapHeight, setMapHeight] = useState(300);
   useEffect(() => {
-    console.log(mapData);
     setMapHeight(svgCanvasRef.current?.getBBox().height);
   }, []);
 
@@ -268,31 +267,24 @@ const MapCanvas = ({
                         svgCanvasRef.current?.getBoundingClientRect().width) /
                       mapData.width;
                     console.log(r1, r2, r3);
-                    let [p1, p2, p3] = findCircleIntersection(
+
+                    const { x, y } = triangulate(
                       x1,
-                      y1,
-                      r1,
                       x2,
-                      y2,
-                      r2,
                       x3,
+                      y1,
+                      y2,
                       y3,
+                      r1,
+                      r2,
                       r3
-                    );
-                    let [x, y] = findIncenter(
-                      p1[0],
-                      p1[1],
-                      p2[0],
-                      p2[1],
-                      p3[0],
-                      p3[1]
                     );
 
                     console.log("HUU", x, y);
 
                     return (
                       <g>
-                        <circle
+                        {/* <circle
                           // key={index}
                           // id={`personel-${personelId}`}
                           cx={`${x1}`}
@@ -318,7 +310,7 @@ const MapCanvas = ({
                           stroke-width="2"
                           r={`${r3}`}
                           fill="rgb(0, 0, 0, 0.3)"
-                        />
+                        /> */}
                         <circle
                           key={index}
                           id={`personel-${personelId}`}

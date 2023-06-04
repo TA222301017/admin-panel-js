@@ -5,6 +5,7 @@ import {
   getKeyRequest,
   getKeysRequest,
   addKeyRequest,
+  deleteKeyRequest,
 } from "../consumer";
 
 const initialState = {
@@ -27,6 +28,8 @@ export const GET_KEY = createAsyncThunk("key/GET_KEY", getKeyRequest);
 export const EDIT_KEY = createAsyncThunk("key/EDIT_KEY", editKeyRequest);
 
 export const ADD_KEY = createAsyncThunk("key/ADD_KEY", addKeyRequest);
+
+export const DELETE_KEY = createAsyncThunk("key/DELETE_KEY", deleteKeyRequest);
 
 export const keySlice = createSlice({
   name: "key",
@@ -70,6 +73,24 @@ export const keySlice = createSlice({
       state.error = action.payload.error;
     });
     builder.addCase(EDIT_KEY.rejected, (state) => {
+      state.status = "failed";
+    });
+
+    builder.addCase(DELETE_KEY.pending, (state) => {
+      state.status = "pending";
+      state.error = "";
+    });
+    builder.addCase(DELETE_KEY.fulfilled, (state, action) => {
+      state.status = "fulfilled";
+      state.error = action.payload.error;
+      if (!action.payload.error) {
+        state.value.keys = state.value.keys.filter((el) => {
+          state.value.pagination.total -= 1;
+          return el.id !== action.meta.arg.keyId;
+        });
+      }
+    });
+    builder.addCase(DELETE_KEY.rejected, (state) => {
       state.status = "failed";
     });
 
